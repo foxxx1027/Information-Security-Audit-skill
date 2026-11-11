@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-domain-parameter-validation-gate",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "VPN 对端发来一组自定义 DH 参数，跑是能跑通，直接收下有没有雷？",
+      "expected_behavior": "应激活 stallings-domain-parameter-validation-gate, 并把对端参数过校验闸门(判别式/安全素数/成员检查)",
+      "notes": "正面场景: 对端 DH 参数直收吗, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "ECC 库收到对端公钥就直接做 ECDH，没做在曲线检查，invalid curve 怎么防？",
+      "expected_behavior": "应激活 stallings-domain-parameter-validation-gate, 并补公钥群成员校验+小子群防线",
+      "notes": "正面场景: point validation, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "Miller-Rabin 素性测试跑几轮算够？341、2047 那种骗底数的反例怎么避？",
+      "expected_behavior": "应激活 stallings-domain-parameter-validation-gate, 并按概率判定边界设计轮数与随机底数",
+      "notes": "正面场景: 素性测试可靠性, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "nginx 的 ssl_ciphers 怎么配才能在 SSL Labs 上拿 A+ 评级？",
+      "expected_behavior": "不应激活本 skill, 因为是配置评级调优, 无参数校验对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: TLS/密码话语, 实为配置调优"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "RSA-3072 和 ECC-256 到底哪个强？跨体制怎么换算等效位数？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-hardness-dependency-audit (难题层强度换算, 本 skill 管参数与输入层闸门)",
+      "notes": "跨 skill 混淆诱饵: A2 明列'难题选对了参数错了照样破'"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "ECDH 的共享密钥直接截前 16 字节当 AES 密钥用，不过 KDF 行不行？",
+      "expected_behavior": "应激活 stallings-domain-parameter-validation-gate, 因为'ECDH 输出过 KDF'正是其校验闸门清单项 (expected: stallings-domain-parameter-validation-gate)",
+      "notes": "边界: 像密钥使用问题, 实为输入侧闸门清单"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

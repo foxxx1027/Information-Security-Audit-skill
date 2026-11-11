@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-mechanism-to-search-terms",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "接手一个 Node.js 加 MongoDB 的项目要系统排查 NoSQL 注入，PHP 那套危险函数清单完全用不上，搜索词该怎么来？",
+      "expected_behavior": "应激活 caudit-mechanism-to-search-terms, 从注入机理现场推导该栈的检索词, 不搬现成清单",
+      "notes": "正面场景: 跨栈自建检索词"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "想给团队写一份 SSRF 的白盒审计 checklist，从机理到检索关键字该怎么梳理？",
+      "expected_behavior": "应激活 caudit-mechanism-to-search-terms, 机理→搜索词→回溯判可控性→判过滤充分性的三步法梳理",
+      "notes": "正面场景: 写白盒 checklist"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "SSTI 在代码里怎么搜？总不能只搜一个 render 吧，检索词应该从哪里推导出来？",
+      "expected_behavior": "应激活 caudit-mechanism-to-search-terms, 由模板引擎的解析机理推导 sink 与搜索词",
+      "notes": "正面场景: 新漏洞类型迁移"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "log4j 那个漏洞的原理是什么？给我们组做个分享吧。",
+      "expected_behavior": "不应激活任何本册技能, 漏洞原理科普分享, 不是对自有代码的白盒检索",
+      "notes": "诱饵: 漏洞机理话题但无检索对象"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这套商城代码我想重点挖越权、订单状态绕过这类业务逻辑漏洞，该怎么入手？",
+      "expected_behavior": "不应激活 caudit-mechanism-to-search-terms, 应激活 caudit-logic-vuln-audit (逻辑漏洞无关键字可搜, 走应然/实然对照)",
+      "notes": "跨skill混淆诱饵: 按漏洞类型二选一的分水岭"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "同事给了我一份 PHP 的危险函数清单，我项目是 Python 的，直接拿去 grep 行得通吗？",
+      "expected_behavior": "应激活 caudit-mechanism-to-search-terms: 机理变则搜索词变, 跨语言清单不可直接移植, 应由本栈机理重新推导检索词",
+      "notes": "边界: 手里已有清单, 但迁移场景仍需回到机理推导"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-api-relay-architecture",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们做了站库分离、又拆了微服务，老板问拖库风险是不是小多了，我该怎么评估这种说法？",
+      "expected_behavior": "应激活 caudit-api-relay-architecture, 先跑反迷思判别式: 应用仍持全权库口令直连则物理分离对拖库零增益, 收益取决于权限收口与访问路径",
+      "notes": "正面场景: 站库分离/微服务安全收益评审"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "要做防拖库专项：怎么让一次拖库变慢、变可见？数据库账号权限应该怎么收？",
+      "expected_behavior": "应激活 caudit-api-relay-architecture, 方向是数据访问经 API 层收口(受限凭证/逐接口权限)+调用画像阈值(QPS/行数/扫描模式)异常熔断告警",
+      "notes": "正面场景: 防拖库专项设计"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "规划监控告警体系，数据库访问异常这种观测能力，应该内建在应用架构里还是靠外挂设备？",
+      "expected_behavior": "应激活 caudit-api-relay-architecture, 论证调用画像阈值是架构自带能力, 监控是收口层的副产品兼作入侵检测",
+      "notes": "正面场景: 观测能力归属架构还是外挂"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "微服务拆分之后链路追踪老是丢 span，Skywalking 和 Jaeger 选哪个好？",
+      "expected_behavior": "不应激活任何本册技能, APM 链路追踪的运维选型, 与访问收口安全架构无关",
+      "notes": "诱饵: 微服务话题但为可观测性运维"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "多租户系统每个查询都要记得带 tenant_id，漏加一个 where 条件就串数据了，能从结构上根治吗？",
+      "expected_behavior": "不应激活 caudit-api-relay-architecture, 应激活 caudit-trust-tier-isolation (考点是数据模型层的结构隔离, 不是访问路径收口)",
+      "notes": "跨skill混淆诱饵: 同为架构治理, 但切的是数据分域"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "领导拍板要上数据中台，主要为了统一报表口径，顺带问一句安全性是不是也会跟着提升？",
+      "expected_behavior": "边界判定: none。为报表/性能驱动的架构迁移, 无拖库与访问收口语境, 本册技能不应激活, 直接回答'安全不会自动提升'即可",
+      "notes": "边界: 架构话题但属纯性能/报表决策(技能明确排除)"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

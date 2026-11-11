@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-structural-security-bound",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "structural-bound-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "自研轻量分组密码，S 盒规格和扩散层怎么定？轮数怎么从活动 S 盒数推出而不是拍脑袋？",
+      "expected_behavior": "应激活 stinson-structural-security-bound, 宽轨道策略：扩散层迫使差分/线性特征激活更多活动 S 盒，轮数由最小活动 S 盒数×单盒最大界推出",
+      "notes": "正面场景: 定制密码结构规格（A2 #3）"
+    },
+    {
+      "id": "structural-bound-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "方案书说 S 盒是随机生成的、目前无已知攻击，这个声明的可评估性怎么审？",
+      "expected_behavior": "应激活 stinson-structural-security-bound, 区分『无已知攻击』与『有可证界的无攻击』：随机 S 盒无结构论证则不可审计，要求给出差分均匀度/线性偏差界",
+      "notes": "正面场景: 随机 S 盒声明评审（A2 #2）"
+    },
+    {
+      "id": "structural-bound-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "查表混淆器做结构强度评审，差分均匀度和线性偏差多少算及格线？",
+      "expected_behavior": "应激活 stinson-structural-security-bound, S 盒差分均匀度/线性偏差逼近理论界的判据，与轮数论证联动",
+      "notes": "正面场景: 混淆表结构审计（A2 #1）"
+    },
+    {
+      "id": "structural-bound-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "TLS 握手的加解密占了多少首字节延迟？网关侧怎么压下来？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 性能优化，无结构强度对象",
+      "notes": "诱饵: 密码话题的性能层"
+    },
+    {
+      "id": "structural-bound-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "4096 位密钥的自研算法被频率分析打穿了，从哪条线开始查问题？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-keysize-not-security — 攻击者视角的结构缺陷击穿大密钥（四查总框架）；本 skill 是设计者视角的可证下界",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-keysize-not-security): 同一结构线的攻防两面"
+    },
+    {
+      "id": "structural-bound-edge-01",
+      "type": "edge_case",
+      "prompt": "AES-128 才 10 轮，为什么不设计成 32 轮求个保险？轮数到底是怎么定的？",
+      "expected_behavior": "应激活 stinson-structural-security-bound (expected: 本 skill) — 解释 AES 为什么可信：10 轮由宽轨道的最小活动 S 盒数与目标安全界推出并留裕度，轮数不是越多越保险而是有论证依据",
+      "notes": "边界: 对标准算法轮数的『加固直觉』，仍属结构安全界论证（A2 #4 解释 AES 为什么可信）"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

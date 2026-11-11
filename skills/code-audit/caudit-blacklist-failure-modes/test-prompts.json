@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-blacklist-failure-modes",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们把常见的注入关键字都禁了，匹配到就替换成空，这样防注入靠谱吗？",
+      "expected_behavior": "应激活 caudit-blacklist-failure-modes, 按四类失效模式推演(枚举不全/等价变体/替换为空后语义重建/检测与解析语义错位)给出设计否定",
+      "notes": "正面场景: 关键字黑名单+替换为空"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "评审方案是把后台一批危险函数和危险扩展名封禁掉，我怎么向管理层解释补关键字永远补不完？",
+      "expected_behavior": "应激活 caudit-blacklist-failure-modes, 用等价能力推演论证封禁清单追不上变体",
+      "notes": "正面场景: 向管理层论证黑名单不可行"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "富文本过滤器要拦 script 标签和 on 开头的事件属性，这种黑名单一般会被怎么绕过？",
+      "expected_behavior": "应激活 caudit-blacklist-failure-modes, 对该封禁清单做失效模式与等价变体推演",
+      "notes": "正面场景: 富文本黑名单绕过评估"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们要拉一份行业违禁词清单做内容审核，哪里有比较全的现成词库？",
+      "expected_behavior": "不应激活任何本册技能, 内容审核运营的词库搜集, 不是安全防御设计的失效分析",
+      "notes": "诱饵: 同提'违禁词清单'但为内容运营"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "cron 表达式这种没法穷举所有合法值的参数，白名单应该怎么做才不误杀？",
+      "expected_behavior": "不应激活 caudit-blacklist-failure-modes, 应激活 caudit-whitelist-spectrum (问的是替代方案怎么建设, 不是黑名单为何失败)",
+      "notes": "跨skill混淆诱饵: 黑名单论证的建设侧对偶"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "上传功能封了 php、asp、jsp 后缀，我又把 phtml、php5、pht 都补上了，这回是不是就稳了？",
+      "expected_behavior": "应激活 caudit-blacklist-failure-modes: 补条目仍是黑名单, 应按等价变体推演说明永远追不全, 引导换白名单",
+      "notes": "边界: 看似修复收敛, 实为黑名单补词, 仍需失效模式否定"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

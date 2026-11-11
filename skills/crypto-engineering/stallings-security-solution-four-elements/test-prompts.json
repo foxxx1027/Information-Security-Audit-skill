@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-security-solution-four-elements",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "投标书里密码部分就一句'采用 AES-256'，评审怎么问出缺的另外三样？",
+      "expected_behavior": "应激活 stallings-security-solution-four-elements, 并按算法/密钥产生/分发/协议四栏查缺",
+      "notes": "正面场景: 用了 AES 还缺什么, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "算法都定成国密 SM 系了，密钥产生、分发、协议时序这三栏怎么补齐？",
+      "expected_behavior": "应激活 stallings-security-solution-four-elements, 并补全其余三栏的完备性清单",
+      "notes": "正面场景: 算法已定补三栏, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "WEP 被骂了二十年，到底是算法的锅还是另外哪一栏的锅？",
+      "expected_behavior": "应激活 stallings-security-solution-four-elements, 并按四栏归因定位问题栏",
+      "notes": "正面场景: WEP 型归因, A2 情境 3"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "机房门禁和监控的年度检测要外包，验收标准怎么写？",
+      "expected_behavior": "不应激活本 skill, 因为是物理安防外包验收, 无密码方案四栏对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 方案验收话语, 实为物理安防采购"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "威胁清单和机制列表要做覆盖矩阵，防的攻击和提供的服务对不对得上？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-attack-service-mechanism-alignment (方案与威胁/需求的外部对齐, 本 skill 查方案内部缺件)",
+      "notes": "跨 skill 混淆诱饵: A2 明列'四栏齐全但防错攻击'"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "车联网 V2X 立项评审，算法定了标准 SM2，密码部分还要审什么？",
+      "expected_behavior": "应激活 stallings-security-solution-four-elements, 因为'算法定标准, 成败在其余三栏'正是 A2 情境 4 (expected: stallings-security-solution-four-elements)",
+      "notes": "边界: 像 PKI 选型题, 实为四栏完备性评审"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

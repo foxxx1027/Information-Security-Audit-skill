@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-environment-threat-rewrite",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "核心系统从自建机房搬上公有云，威胁模型是整个重推还是打补丁？",
+      "expected_behavior": "应激活 stallings-environment-threat-rewrite, 并用免费保障盘点逐项确认丢失并显式补回",
+      "notes": "正面场景: 上云重推, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "要接外部 LLM API 处理用户数据，原来内网那些默认保障还剩几条成立？",
+      "expected_behavior": "应激活 stallings-environment-threat-rewrite, 并盘点第三方引入后丢失的隐式假设",
+      "notes": "正面场景: 引入第三方服务, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "设备从机房挪到车载环境部署，旧的物理边界假设还成立吗？",
+      "expected_behavior": "应激活 stallings-environment-threat-rewrite, 并复核环境迁移后的旧安全假设",
+      "notes": "正面场景: 边缘/车载迁移, A2 情境 3"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "同一个 VPC 里把测试环境换成预发环境，安全组规则要跟着动吗？",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'同信任域内的增量配置变更'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 环境变更话语, 增量配置非环境迁移"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "证书体系全押在一家根 CA 上，这家被攻陷了会波及多大范围？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-trust-topology-blast-radius (背书者集中度与爆炸半径, 本 skill 是环境变更触发的全量重推流程)",
+      "notes": "跨 skill 混淆诱饵: A2 明列重推中调用那个处理信任项"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "只是做了容器化改造，机房没换网络没换，威胁模型也要重做吗？",
+      "expected_behavior": "应激活 stallings-environment-threat-rewrite, 因为部署形态变化(IDC→容器化)正是 A2 明列的环境迁移情境 (expected: stallings-environment-threat-rewrite)",
+      "notes": "边界: '什么都没换'的直觉, 实为部署形态变化"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

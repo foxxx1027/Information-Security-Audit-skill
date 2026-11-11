@@ -1,0 +1,52 @@
+{
+  "skill": "isms-combined-audit-admission",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "集团要我们一次进场把信息安全、质量和环境三个体系一起审掉，先怎么判断这种合并审核能不能做？",
+      "expected_behavior": "应激活 isms-combined-audit-admission, 走三条件硬门槛（共同实施范围/共同关注点/确已整合实施）做 go/no-go 判定",
+      "notes": "正面场景：多体系结合审核可行性判定"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "等保测评机构和 ISO 认证审核组商量同一段时间进驻我们公司，两个活动能不能合成一次审？",
+      "expected_behavior": "应激活 isms-combined-audit-admission, 先做评审机制同构前置判定（测评机制与周期性第三方管理体系审核不同构，只能整合实施与协调进场，不能结合审核）",
+      "notes": "正面场景：机制不同构的判定"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "认证机构销售说三个标准捆在一起审人天直接砍四成，这话能不能信，底线到底在哪？",
+      "expected_behavior": "应激活 isms-combined-audit-admission, 说明时间削减比例是整合度的函数不是常数，且每一标准每一项要求须分别提供充分信任",
+      "notes": "正面场景：人天削减话术与质量底线"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "只有 27001 一个体系的监督审核，明年的人日预算怎么估？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 单体系审核策划不存在结合审核准入问题",
+      "notes": "诱饵：单体系策划"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "结合审核立项已经批了，客户在问卷里声称两个体系的文件早就整合成一套了，策划阶段怎么核实这个说法？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-combined-audit-planning-calibration",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-combined-audit-planning-calibration）：过了准入门槛之后的策划校准，不是可行性判定"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "两家认证机构一家审 27001 一家审 20000-1，商量好同一周进场、共用会议室互相配合，这算不算结合审核？",
+      "expected_behavior": "期望 none：两个审核机构合作的联合/协调进场不等于结合审核，不进入结合审核准入判定流程（仅可作概念澄清，不激活技能）",
+      "notes": "边界：联合审核≠结合审核的概念排除情形"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

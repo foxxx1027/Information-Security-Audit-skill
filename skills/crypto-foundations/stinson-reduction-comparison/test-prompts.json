@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-reduction-comparison",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "reduction-comparison-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "厂商白皮书说『我们的构造至少和 AES 一样安全』，这句话有没有说谎？怎么验证？",
+      "expected_behavior": "应激活 stinson-reduction-comparison, 验证蕴含声明要写黑盒转译：给定破新构造的黑盒能否拼出破 AES 的算法，写不出则声明无依据",
+      "notes": "正面场景: 『至少和 X 一样安全』核实（A2 #1）"
+    },
+    {
+      "id": "reduction-comparison-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "DDH 和 CDH 这两个假设谁更强？蕴含方向怎么排？判定方法是什么？",
+      "expected_behavior": "应激活 stinson-reduction-comparison, 用归约方向排假设强弱：DDH→CDH 的转译构造存在则 DDH 不弱于 CDH，按可构造转译排强弱",
+      "notes": "正面场景: 假设链强弱排序（A2 #4）"
+    },
+    {
+      "id": "reduction-comparison-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "UF-CMA 和 SUF-CMA 两个签名安全定义，谁蕴含谁？归约证明的骨架长什么样？",
+      "expected_behavior": "应激活 stinson-reduction-comparison, 构造两定义间的黑盒转译写出证明骨架（SUF-CMA 的更强查询能力可模拟 UF-CMA 环境）",
+      "notes": "正面场景: 两个安全定义的蕴含验证（A2 #2）"
+    },
+    {
+      "id": "reduction-comparison-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "归并排序和快速排序都说是 O(n log n)，复杂度上还分优劣吗？怎么比较？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 算法复杂度分析，无安全归约对象",
+      "notes": "诱饵: 『归约/比较』字面相近的普通算法分析"
+    },
+    {
+      "id": "reduction-comparison-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这篇论文的安全性证明是 random oracle 模型下给的，现实部署要不要担心？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-proof-coverage-audit — 审一个已有证明的模型边界（ROM）；本 skill 是构造性质间的转译",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-proof-coverage-audit): 读证明 vs 写转译之分"
+    },
+    {
+      "id": "reduction-comparison-edge-01",
+      "type": "edge_case",
+      "prompt": "如果量子计算机能多项式时间解离散对数，那基于 DL 的一整条归约蕴含链还成立吗？",
+      "expected_behavior": "应激活 stinson-reduction-comparison (expected: 本 skill) — 归约传递以底层假设成立为前提：DL 假设塌缩则所有『至少和 DL 一样安全』的蕴含声明同时失效——这正是归约结构的条件性，属本 skill 判定",
+      "notes": "边界: 量子背景叙事，核心仍是蕴含关系的成立条件"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

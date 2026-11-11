@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-type-context-defense",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "所有 id 参数明明都 addslashes 了，还是被数字型注入打穿了，问题出在哪？",
+      "expected_behavior": "应激活 caudit-type-context-defense, 数值语境转义无效, 必须类型锁定(intval/参数绑定)+失败拒绝不回退",
+      "notes": "正面场景: 数字型注入打穿转义"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "排序参数 order by 的列名用 in_array 白名单判断再拼接，为什么还能被绕过？",
+      "expected_behavior": "应激活 caudit-type-context-defense, 松散比较/校验语义与解析器不一致的推演, 比较须严格且比较前规范化",
+      "notes": "正面场景: in_array 白名单绕过"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "strconv.Atoi 失败的时候返回 0 继续往下跑，这种兜底写法有没有安全问题？",
+      "expected_behavior": "应激活 caudit-type-context-defense, 校验失败必须拒绝, 不得回退默认值",
+      "notes": "正面场景: 解析失败回退默认值"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "Go 的 strconv 和 spf13/cast 性能差多少？热点路径上该用哪个？",
+      "expected_behavior": "不应激活任何本册技能, 库性能选型, 不是校验语义安全",
+      "notes": "诱饵: 类型转换函数但为性能比较"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "数据统一转义之后又过了一层 urldecode 再进查询，会不会把转义废掉？",
+      "expected_behavior": "不应激活 caudit-type-context-defense, 应激活 caudit-escape-as-last-step (考点是转义在管线里的位置, 不是武器选择)",
+      "notes": "跨skill混淆诱饵: 武器选择 vs 持枪姿势"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "富文本编辑器保存的内容要原样展示，直接 htmlspecialchars 会把标签全转义掉，这种情况该怎么设计校验？",
+      "expected_behavior": "边界判定: 应激活 caudit-whitelist-spectrum。输出到 HTML 的富文本属输出编码/允许集语境(本技能明确排除), 应走白名单三形态里的允许集设计",
+      "notes": "边界: 与本技能相邻但属 XSS 输出语境与允许集设计"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-choke-point-first",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "接手了一套一百多万行的遗留 PHP 系统，审计人手就三个，从哪儿下手性价比最高？",
+      "expected_behavior": "应激活 caudit-choke-point-first, 先找收口点(统一DB访问层/统一取参过滤/统一输出模板), 有收口则审一处覆盖多数路径",
+      "notes": "正面场景: 大型遗留系统的审计切入点"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "这套系统所有 SQL 都经过一个统一的查询封装函数，我把大部分精力花在读透这个函数上值不值？",
+      "expected_behavior": "应激活 caudit-choke-point-first, 确认收口后优先读透它并产出收口覆盖表(处理什么/不处理什么/已知绕过)",
+      "notes": "正面场景: 有收口先审收口"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "这套老 CMS 每个文件都自己拼 SQL、自己取参数，完全没有公共过滤层，审计报告里这一条该怎么定性？",
+      "expected_behavior": "应激活 caudit-choke-point-first, 无收口本身即最高风险信号, 应把'建立收口'列为架构级修复而非罗列单点漏洞",
+      "notes": "正面场景: 无收口的风险定性"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我看下这段统一的数据库连接代码是不是写错了：connect($host,$user,$pass) 好像少了超时参数。",
+      "expected_behavior": "不应激活任何本册技能, 具体代码调试问题, 不是审计切入点决策",
+      "notes": "诱饵: 提'统一数据库层'但为编码排错"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "刚入职接手一个没有任何文档的 Spring 老项目做安全评审，第一周应该按什么顺序读代码？",
+      "expected_behavior": "不应激活 caudit-choke-point-first, 应激活 caudit-structured-full-read (问的是通读的顺序与读法, 不是收口点的战略取舍)",
+      "notes": "跨skill混淆诱饵: 同为'从哪开始', 但要的是通读法"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们八十万行的系统之前没有任何统一层，老板问能不能先花两周把公共过滤层建起来再谈别的，这个建议合理吗？",
+      "expected_behavior": "应激活 caudit-choke-point-first: '建立收口列为架构级修复'正是本技能对无收口系统的核心结论, 应给出建收口的价值论证",
+      "notes": "边界: 从审计切入引申到修复优先级, 判断核心仍是收口缺失的战略定性"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

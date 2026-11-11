@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-collusion-threshold-verification",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "collusion-threshold-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "3-of-5 多签钱包上线前，团队只演示了任意 3 个份额能恢复密钥，验收清单还应该强制测什么？",
+      "expected_behavior": "应激活 stinson-collusion-threshold-verification, 双验证的另一半：任意 t-1 份零信息必须显式测试，只演示恢复不算验收",
+      "notes": "正面场景: 门限系统验收（A2 #2）"
+    },
+    {
+      "id": "collusion-threshold-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们的密钥分片是同一个助记词按固定规则派生出来的 5 份，这样门限还是 3 吗？怎么验证？",
+      "expected_behavior": "应激活 stinson-collusion-threshold-verification, 检查份额独立性：同源派生使实际门限塌缩，需显式验证 t-1 份的剩余熵",
+      "notes": "正面场景: 同源派生份额的独立性审计（A2 #1）"
+    },
+    {
+      "id": "collusion-threshold-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "群组密钥体系里成员退出后没有整体换钥，离任成员理论上还能解开多少历史和未来消息？怎么评估？",
+      "expected_behavior": "应激活 stinson-collusion-threshold-verification, 审计组播注销机制：退出成员+合谋者能否凑满门限、re-keying 是否换全新密钥",
+      "notes": "正面场景: 组密钥注销/re-keying 审计（A2 #3）"
+    },
+    {
+      "id": "collusion-threshold-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "审批流要改成任意 3 个主管里 2 人通过就能放款，RBAC 权限矩阵和工作流引擎怎么配？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 业务访问控制的法定人数规则，无密码学份额结构",
+      "notes": "诱饵: 『2-of-3』句式相同但对象是权限矩阵（description 明确排除 RBAC）"
+    },
+    {
+      "id": "collusion-threshold-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "怎么严格证明任意 2 个分片合起来对秘密一无所知？这种『零信息』的论证标准套路是什么？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-simulatability-zero-knowledge — t-1 零信息的证明用模拟器/相容构造判据；本 skill 是消费该判据做验收的总框架",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-simulatability-zero-knowledge): 同一个门限话题，问『怎么证明零信息』时归模拟判据"
+    },
+    {
+      "id": "collusion-threshold-edge-01",
+      "type": "edge_case",
+      "prompt": "供应商方案书写『任意 3 片恢复、任意 2 片统计上不可读』，『统计上不可读』这个措辞我能验收吗？",
+      "expected_behavior": "应激活 stinson-collusion-threshold-verification (expected: 本 skill) — 模糊声明显式化：必须写成信息论零信息（无界敌手）或明示计算假设，并要求份额独立性证明，『统计上不可读』不可验收",
+      "notes": "边界: 安全声明的措辞审计，属本 skill 的门限验收义务"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

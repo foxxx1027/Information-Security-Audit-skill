@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-pseudorandomness-criterion",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "pseudorandomness-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "自研密钥生成器把 NIST SP 800-22 随机性测试全跑绿了，可以验收放行吗？",
+      "expected_behavior": "应激活 stinson-pseudorandomness-criterion, 统计测试全绿只是必要条件：验收对象改为『预测器不存在（下一比特测试）+种子链路可审计』",
+      "notes": "正面场景: 随机性检测套件验收（A2 #1）"
+    },
+    {
+      "id": "pseudorandomness-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "审计一个 CSPRNG：熵源是 ADC 底噪加系统时间，重启后状态从上次快照恢复，验收标准怎么定？",
+      "expected_behavior": "应激活 stinson-pseudorandomness-criterion, 审种子链路：熵源质量、状态持久化、重启/快照后的可预测窗口，逐项定验收标准",
+      "notes": "正面场景: 种子链路审计（A2 #2）"
+    },
+    {
+      "id": "pseudorandomness-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "方案是把几个弱随机源的输出异或混在一起，分布看着挺均匀，这达到密码学随机了吗？",
+      "expected_behavior": "应激活 stinson-pseudorandomness-criterion, 分布均匀≠不可预测：异或混合至少一个源强才安全（种子即密钥），需按预测器判据评估",
+      "notes": "正面场景: 多弱源混合方案评审（A2 #3）"
+    },
+    {
+      "id": "pseudorandomness-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "蒙特卡洛模拟想要更快的随机数生成，C 的 rand() 够用吗？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 统计模拟的随机性需求（description 明确排除），rand() 的统计质量够模拟用",
+      "notes": "诱饵: 随机数质量话题但无对抗者"
+    },
+    {
+      "id": "pseudorandomness-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "ECDSA 签名的随机数 k 如果哪天重复了，会直接泄露私钥吗？该上 RFC 6979 吗？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-nonce-reuse-failure-checklist — k 复用的代数崩溃与确定性 nonce 方案是一次性值复用清单；本 skill 管输出可预测的判据",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-nonce-reuse-failure-checklist): 签名 k 的复用灾难 vs 生成器质量，两个判据"
+    },
+    {
+      "id": "pseudorandomness-edge-01",
+      "type": "edge_case",
+      "prompt": "/dev/urandom 在系统刚启动、熵池不足时就被读走了，这算『输出可预测』还是『值被复用』？两类问题怎么分？",
+      "expected_behavior": "应激活 stinson-pseudorandomness-criterion (expected: 本 skill) — 熵池不足的早读属于种子链路可预测窗口问题（预测器判据）；『值被复用』是另一 skill 的复用灾难清单——判据分界即本 skill 的核心",
+      "notes": "边界: 可预测 vs 复用两个概念的分界，本身是伪随机判据的应用"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

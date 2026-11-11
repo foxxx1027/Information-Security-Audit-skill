@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-side-channel-mitigation-ladder",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "共享主机上 RSA 解密的耗时随密钥变化，用盲化还是恒定时间实现？",
+      "expected_behavior": "应激活 stallings-side-channel-mitigation-ladder, 并按缓解阶梯(盲化>恒定时间>随机延时)排序选型",
+      "notes": "正面场景: 计时泄露缓解选型, A2 情境 3"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "硬件钱包的 CRT 加速要不要配故障注入校验？",
+      "expected_behavior": "应激活 stallings-side-channel-mitigation-ladder, 并给 CRT 加速配 fault injection 校验",
+      "notes": "正面场景: fault injection, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "查表实现的 AES 消掉了时间差却引出缓存侧信道，升级路径是什么？",
+      "expected_behavior": "应激活 stallings-side-channel-mitigation-ladder, 并按查表→位切片→硬件指令排升级路径",
+      "notes": "正面场景: cache side channel, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "画密码学协议的时序图用什么工具好？PlantUML 还是 Mermaid？",
+      "expected_behavior": "不应激活本 skill, 因为是制图工具选型, 无实现侧信道对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 时序话语, 实为画图工具"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "消息长度指纹和压缩比在协议层怎么泄露？padding 怎么设计？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-metadata-length-side-channel (协议可观测面, 本 skill 管实现层微观测)",
+      "notes": "跨 skill 混淆诱饵: A2 明列观测介质不同"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "给运算加上随机延时抖动，能不能挡住计时攻击？",
+      "expected_behavior": "应激活 stallings-side-channel-mitigation-ladder, 因为随机延时在阶梯中的定位(样本足够可被平均抵消)正是其排序判据 (expected: stallings-side-channel-mitigation-ladder)",
+      "notes": "边界: 单一手段提问, 考点是缓解阶梯次序"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

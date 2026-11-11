@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-verdict-tiers",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "安全审计这块只覆盖了一半的服务器组件，这项判符合还是不符合？",
+      "expected_behavior": "应激活 mlps-verdict-tiers, 做了但没做全落部分符合，必须写明缺口位置",
+      "notes": "正面: 部分覆盖的分档"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "“做了但没做全”的情况结论怎么写才规范？能不能给个面子分？",
+      "expected_behavior": "应激活 mlps-verdict-tiers, 部分符合必须写明缺口位置而非给面子分，配 0–5 分制避免二值信息损失",
+      "notes": "正面: 部分符合纪律"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "环境里根本没这个业务，这条写“不适用”还是“不符合”？有什么讲究？",
+      "expected_behavior": "应激活 mlps-verdict-tiers, 不适用必须说明原因否则不得跳过，区分不适用与不符合",
+      "notes": "正面: 不适用的条件"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "统计 200 个测评项里不符合项的占比，做个饼图放汇报里。",
+      "expected_behavior": "不应激活本 skill, 数据统计与图表制作，非判定档位",
+      "notes": "诱饵: 测评项话题但为统计作图"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "每一项的单项分都出来了，最终那个“基本符合”的档是怎么聚合出来的？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-score-aggregation-chain（0–5 原始分聚合成控制点/层面/系统得分与结论）",
+      "notes": "跨 skill 混淆诱饵: 单项档位 vs 聚合算术"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "这一项证据暂时拿不齐，客户又催着出结论，“进一步跟踪”这个档能不能先用上？",
+      "expected_behavior": "应激活 mlps-verdict-tiers, 进一步跟踪是挂起状态而非通过，须写明补证条件",
+      "notes": "边界: 证据不足时的挂起档"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

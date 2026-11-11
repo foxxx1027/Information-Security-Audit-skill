@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-encrypt-authenticate-composition",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "encrypt-authenticate-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "IoT 遥测方案是 AES-CBC 加密、报文尾部附 CRC32 防篡改，这个设计能过安全评审吗？",
+      "expected_behavior": "应激活 stinson-encrypt-authenticate-composition, 按三闸门判：CRC 无密钥不构成认证，自定义拼接默认视为可伪造，应换 MAC/AEAD",
+      "notes": "正面场景: 加密+CRC 防篡改方案评审（A2 #1）"
+    },
+    {
+      "id": "encrypt-authenticate-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "代码审查发现自定义 MAC 写的是 Hash(key‖msg)，而且消息支持后缀拼接，这有什么具体攻击？",
+      "expected_behavior": "应激活 stinson-encrypt-authenticate-composition, 长度扩展攻击分析：Merkle-Damgård 构造下 Hash(key‖msg) 可延长，HMAC 内外垫的存在理由",
+      "notes": "正面场景: 自定义 MAC 审查（A2 #2）"
+    },
+    {
+      "id": "encrypt-authenticate-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "消息保护协议要同时做机密性和认证，先签名后加密还是先加密后签名？各该覆盖哪些字段？",
+      "expected_behavior": "应激活 stinson-encrypt-authenticate-composition, 拼接顺序（sign-then-encrypt）与各层覆盖域的组合审计",
+      "notes": "正面场景: 签名/加密顺序设计（A2 #3）"
+    },
+    {
+      "id": "encrypt-authenticate-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "网站的 HTTPS 证书又过期了，这次写个 acme 自动续期加到期告警的脚本。",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 证书运维自动化，不是密码组合结构问题",
+      "notes": "诱饵: 加密/证书词面的运维任务"
+    },
+    {
+      "id": "encrypt-authenticate-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "老板嫌一层 AES 不稳，想再叠一层 Serpent 做双重加密，两把钥从一个主密钥派生，强度怎么算？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-composition-not-amplification — 同类组件叠加的增益核算（幂等/独立/密钥同源），不是加密与认证的分工拼接",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-composition-not-amplification): 加密+MAC 是分工（本 skill），AES+Serpent 是叠加（兄弟 skill）"
+    },
+    {
+      "id": "encrypt-authenticate-edge-01",
+      "type": "edge_case",
+      "prompt": "把 CRC32 换成 SHA-256 附在加密报文尾部，是不是就能防篡改了？",
+      "expected_behavior": "应激活 stinson-encrypt-authenticate-composition (expected: 本 skill) — 无密钥摘要仍不构成 MAC：主动攻击者改完消息可重算 SHA-256，结构问题不在摘要强度而在缺密钥；应走 MAC/AEAD 闸门",
+      "notes": "边界: 『换强哈希』的直觉修复，掩盖了『谁持有密钥』的结构缺失"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

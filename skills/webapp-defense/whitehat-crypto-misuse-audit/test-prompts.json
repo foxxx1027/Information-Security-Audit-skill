@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-crypto-misuse-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们的接口签名就是把参数按顺序拼起来加上 secret 做一层 md5，网上教程都这么写，有什么问题？",
+      "expected_behavior": "应激活 whitehat-crypto-misuse-audit, 按失败点清单审计：裸哈希拼接签名的长度扩展、secret 保护、未用 HMAC 认证等问题",
+      "notes": "正面: 裸哈希拼接签名的误用审计"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "生成密码重置 token 的时候我用当前时间戳 md5 一下，这样够随机吗？",
+      "expected_behavior": "应激活 whitehat-crypto-misuse-audit, 指出时间戳可预测，随机源必须用安全随机数生成器",
+      "notes": "正面: 随机源误用（时间戳当随机数）"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "同事写了个 AES 加密工具类，IV 固定写死在代码里，这样加密还有意义吗？",
+      "expected_behavior": "应激活 whitehat-crypto-misuse-audit, 按乘法模型逐项审计：IV 复用、模式选择、认证缺失、密钥硬编码",
+      "notes": "正面: IV 固定复用的乘法失效"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "国密 SM4 和 AES-256-GCM 各自的优劣是什么，我们该选哪个？",
+      "expected_behavior": "不应激活本 skill, 因为这是算法选型对比，不是对具体实现的误用审计; 属选型咨询, 无需调用书中任何技能",
+      "notes": "诱饵: 密码学话题但属选型对比"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "找回密码的邮件链接，用户点过一次之后还能再点一次生效，这个要怎么改？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-credential-rotation-on-state-change (问题在一次性凭据消费后未作废的生命周期纪律，不是 token 的加密构造)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-credential-rotation-on-state-change, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "数据库连接串的密码现在放在环境变量里，没有硬编码进代码，这算把密钥管好了吗？",
+      "expected_behavior": "边界场景: 密钥管理是加密安全的乘法因子之一，应激活本 skill——环境变量只是最低线，需继续审计轮换、访问控制与泄露面 (期望激活: whitehat-crypto-misuse-audit)",
+      "notes": "边界: 从'没硬编码'引出的密钥管理完整性审计"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

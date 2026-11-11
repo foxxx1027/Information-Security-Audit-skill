@@ -1,0 +1,52 @@
+{
+  "skill": "isms-two-step-conformity-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "内审按条款排计划，每条要求是先确认对方有没有这个过程，还是直接逐条对照要求打勾？",
+      "expected_behavior": "应激活 isms-two-step-conformity-audit, 两步法：第一步查过程是否到位（存在性），第二步逐条 shall 查符合性，顺序不可倒",
+      "notes": "正面场景：条款审核顺序"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "帮供应商做等保差距分析，怎么做才不会漏掉'根本没有这个过程'的项？",
+      "expected_behavior": "应激活 isms-two-step-conformity-audit, 先存在后符合，防止文件符合性掩盖过程缺失",
+      "notes": "正面场景：差距分析防漏"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "这家公司文件写得头头是道，但对应流程压根没跑过，按条款审怎么判？",
+      "expected_behavior": "应激活 isms-two-step-conformity-audit, 第一步过程存在性不过即体系要素缺失方向，走不到逐条勾选",
+      "notes": "正面场景：文件符合掩盖过程缺失"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "27001 附录 A 一共有多少条控制主题？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 纯知识查询",
+      "notes": "诱饵：知识查询"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "过程确实缺失这条已经查实了，这条发现该开什么级别、理由怎么写？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-nonconformity-grading-loop",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-nonconformity-grading-loop）：两步法供判据，定级开单归分级闭环"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "标准换版新增了一批条款，自查时应该先补文件制度还是先把过程跑起来？",
+      "expected_behavior": "期望激活 isms-two-step-conformity-audit：存在性优先于细节打磨——先把新增条款对应的过程建起来（第一步），文件逐条符合性是第二步",
+      "notes": "边界：换版自查的优先级，正是两步法靶点"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

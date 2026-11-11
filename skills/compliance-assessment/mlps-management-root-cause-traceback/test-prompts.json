@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-management-root-cause-traceback",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "公司年年采购安全设备，攻防演练还是年年被打穿，问题到底出在哪？该从哪里查起？",
+      "expected_behavior": "应激活 mlps-management-root-cause-traceback, “技术整改无效”信号触发，沿制度归口/职责闭合/人员链三路径回溯",
+      "notes": "正面: 投入无效信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "上次事件的所有技术整改项都关闭了，同类事故这个月又复发，怎么定位真正的根因？",
+      "expected_behavior": "应激活 mlps-management-root-cause-traceback, 技术答“能不能”、管理答“允不允许谁批准留没留痕”，先定位管理根因再投技术预算",
+      "notes": "正面: 整改无效复盘"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "又要立项买一套数据防泄漏产品，买之前怎么论证我们缺的到底是产品还是别的？",
+      "expected_behavior": "应激活 mlps-management-root-cause-traceback, 先查管理三路径再决定技术采购，诊断顺序与采购顺序相反",
+      "notes": "正面: 采购前置诊断"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "这台服务器的中间件爆出远程代码执行漏洞，帮我看看怎么修、要不要升级。",
+      "expected_behavior": "不应激活本 skill, 单点技术缺陷处置属本 skill 排除域",
+      "notes": "诱饵: 安全失效话题但为单点技术缺陷"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "制度文件一套一套的，就是没人说得清执行没执行，怎么查落地？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-triple-consistency-check（文档↔实地↔记录三角互证）",
+      "notes": "跨 skill 混淆诱饵: 诊断定方向 vs 取证落证据"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "复盘时发现变更审批到底该谁批，三个团队互相甩锅，这算技术缺陷还是别的问题？",
+      "expected_behavior": "应激活 mlps-management-root-cause-traceback, 职责闭合路径：互相推诿=边界不闭合，属管理根因",
+      "notes": "边界: 表象像流程问题，判归属"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

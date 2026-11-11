@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-security-as-compliance-checks",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "安全编码规范写了三年，没人看也没人查，怎么让它真正被执行？",
+      "expected_behavior": "应激活 whitehat-security-as-compliance-checks, 把规范转成可判定合规条目并映射到可扫描信号（函数名/AST/配置），接入检查流程与度量",
+      "notes": "正面: 规范落地的条目化与信号化"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "想在 CI 里加安全卡点，哪些检查项适合做成自动门禁？",
+      "expected_behavior": "应激活 whitehat-security-as-compliance-checks, 按'条目可判定+信号可扫描'筛选可自动化项，设计门禁与豁免流程",
+      "notes": "正面: CI 安全门禁设计"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "用大模型审代码的安全问题，每次给的结论都不一样，怎么让它稳定输出？",
+      "expected_behavior": "应激活 whitehat-security-as-compliance-checks, 把开放问题转为合规条目判断（是否遵守规范），让模型按条目清单稳定裁决",
+      "notes": "正面: LLM 审码结论稳定化"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "规范文档的版本管理、评审和发布流程应该怎么管？",
+      "expected_behavior": "不应激活本 skill, 因为这是文档管理流程，不涉及条目化与信号化; 属文档工程, 无需调用书中任何技能",
+      "notes": "诱饵: 规范落地话题的文书版"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "水平越权这种漏洞能不能做成自动化扫描？还是只能靠人工看？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-tool-vs-manual-boundary (问的是某类漏洞可否模式化交给工具即工具与人的边界，不是把要求转成条目的技术)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-tool-vs-manual-boundary, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "能不能把'订单不允许被越权查看'也做成 CI 里的自动检查项？",
+      "expected_behavior": "边界场景: 越权查看属业务逻辑类问题，规范条目化覆盖不到，正确引导是用业务逻辑四问做人工审查而非硬做自动化——应激活 whitehat-business-logic-four-questions (期望激活: whitehat-business-logic-four-questions)",
+      "notes": "边界: 想把一切自动化的冲动与可模式化边界的冲突"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

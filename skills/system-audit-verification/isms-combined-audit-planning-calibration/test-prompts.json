@@ -1,0 +1,52 @@
+{
+  "skill": "isms-combined-audit-planning-calibration",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "客户在策划问卷里勾了'两个体系已完全整合、一套文件覆盖'，这种自述能直接采信进审核计划吗？怎么验？",
+      "expected_behavior": "应激活 isms-combined-audit-planning-calibration, 用业务流程、部门职责、文件结构三类客观材料交叉校准自述信息",
+      "notes": "正面场景：整合度自述的交叉校准"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "整合审核一阶段做完了，发现安全和质量其实是两套各自独立的文件，原来排的计划要怎么调？",
+      "expected_behavior": "应激活 isms-combined-audit-planning-calibration, 以文件整合程度为第一判据切换路径（分别审核并增设文件间一致性检查），并利用一阶段后校准点调整人日与分工",
+      "notes": "正面场景：一阶段后校准点"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "下季度要做安全加质量的合并内审，策划时先弄清楚什么才能定审核路径和人日？",
+      "expected_behavior": "应激活 isms-combined-audit-planning-calibration, 把策划当迭代假设检验：先验证文件整合度假设再定路径，保留校准点",
+      "notes": "正面场景：合并内审策划方法论"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "单一体系的年度内审计划表里，各条款的审核优先级怎么排？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 单体系计划编排不属于结合审核策划校准",
+      "notes": "诱饵：单体系策划"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "我们并行跑着两套体系文件，想系统性核对一下两套文件之间的要求和口径有没有互相打架的地方，要查哪些对应关系？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-document-consistency-matrix",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-document-consistency-matrix）：文件间一致性核对是具体执行动作，不是结合审核策划"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "领导还没确认信息安全和质量这两个体系能不能合并着审，就让我直接排一份合并审核计划，我该从哪一步做起？",
+      "expected_behavior": "期望激活 isms-combined-audit-admission：顺序倒置——先过结合审核可行性准入（三条件+机制同构），准入通过后才进入策划校准",
+      "notes": "边界：跳过准入直接策划的场景，应路由到上游判定"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

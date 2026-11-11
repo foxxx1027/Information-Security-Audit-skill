@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-escape-as-last-step",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们明明在入口统一 addslashes 了，入库前又有一步自动 urldecode，怎么还是被注入了？",
+      "expected_behavior": "应激活 caudit-escape-as-last-step, 列出链上全部变换调用, 判定 urldecode 在转义之后=转义归零",
+      "notes": "正面场景: 转义后再解码打穿"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "计划上线一条数据清洗管道：入库前统一编码，之后还有繁简转换和规范化处理，这个顺序安全吗？",
+      "expected_behavior": "应激活 caudit-escape-as-last-step, 用'转义必须是进入解释器前最后一步'判据审查管线顺序",
+      "notes": "正面场景: 管线时序设计评审"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "审计一条模板渲染链路，过滤之后中间还夹了一个 str_replace，怎么判断转义还生不生效？",
+      "expected_behavior": "应激活 caudit-escape-as-last-step, 按变换调用相对转义的位置逐个判定",
+      "notes": "正面场景: 既有链路的时序审计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "Python 里 unicode 和 utf-8 老是搞混，能通俗讲讲它们的区别吗？",
+      "expected_behavior": "不应激活任何本册技能, 编码概念科普, 不是过滤管线时序问题",
+      "notes": "诱饵: 编码话题但为知识学习"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "uid 是纯数字的参数，我用 intval 强转一下是不是就够安全了？",
+      "expected_behavior": "不应激活 caudit-escape-as-last-step, 应激活 caudit-type-context-defense (考点是数值语境选类型锁定这个武器, 不是转义的位置)",
+      "notes": "跨skill混淆诱饵: 武器选择与持枪姿势之辨"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "搜索结果高亮会把关键词再拼一次 HTML，转义是在入库前做的，高亮这里会出问题吗？",
+      "expected_behavior": "应激活 caudit-escape-as-last-step: 高亮重拼=输出前的再次改写与重新进入解释器, 入库前转义位置太早, 应按管线时序判据处理",
+      "notes": "边界: 涉及取出回显, 但问题焦点是转义时机, 归本技能"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

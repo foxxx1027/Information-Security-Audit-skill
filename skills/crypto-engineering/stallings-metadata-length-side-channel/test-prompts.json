@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-metadata-length-side-channel",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "端到端加密聊天，消息长度指纹还能暴露内容类别，padding 怎么设计？",
+      "expected_behavior": "应激活 stallings-metadata-length-side-channel, 并用可变填充切断长度-内容映射",
+      "notes": "正面场景: 长度指纹, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "TLS 压缩的 CRIME 攻击到底泄了什么？压缩比怎么就成了信道？",
+      "expected_behavior": "应激活 stallings-metadata-length-side-channel, 并按'加密前任何明文相关可观测变换都是侧信道'判定压缩",
+      "notes": "正面场景: 压缩侧信道, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "内容全加密了，'谁在和谁说话'这种通信模式还藏得住吗？",
+      "expected_behavior": "应激活 stallings-metadata-length-side-channel, 并评估通信存在性信道与元数据抹平",
+      "notes": "正面场景: 谁在和谁通信, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "nginx 开 gzip 能省多少带宽？压缩等级配几比较划算？",
+      "expected_behavior": "不应激活本 skill, 因为是性能配置问题, 无泄漏评估对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 压缩话语, 实为带宽优化"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "服务端 RSA 解密的耗时跟密钥相关，用盲化还是恒定时间实现？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-side-channel-mitigation-ladder (实现层微观测, 本 skill 管协议可观测面)",
+      "notes": "跨 skill 混淆诱饵: A2 明列观测介质不同两套都要跑"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "用隐写术把消息藏进图片最低位，通信内容是不是就安全了？",
+      "expected_behavior": "应激活 stallings-metadata-length-side-channel, 因为隐写与加密正交且通信存在性仍暴露正是其判定律 (expected: stallings-metadata-length-side-channel)",
+      "notes": "边界: 隐写话语, 考点是存在性信道"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

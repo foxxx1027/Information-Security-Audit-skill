@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-hash-property-usage-matching",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "hash-property-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "系统里同一个 SHA-256 同时用作文件去重键、口令存储和接口签名三处，逐个说说各处够不够？",
+      "expected_behavior": "应激活 stinson-hash-property-usage-matching, 按用途逐项匹配：去重需抗碰撞、口令需原像+慢哈希、签名前处理需抗碰撞，『用了 SHA-256』处处都不是充分条件",
+      "notes": "正面场景: 跨用途复用同一哈希的评审（A2 #1）"
+    },
+    {
+      "id": "hash-property-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "内容寻址存储的去重键想截断到 128 位，这个用途下该担心哪条性质？",
+      "expected_behavior": "应激活 stinson-hash-property-usage-matching, 先定性去重键需要抗碰撞（而非原像），截断后碰撞档位随 n/2 缩水",
+      "notes": "正面场景: 去重键的性质匹配（A2 #3）"
+    },
+    {
+      "id": "hash-property-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "MD5 现在还能用在哪些非安全场景？交接文档里哪些用法必须标记迁移？",
+      "expected_behavior": "应激活 stinson-hash-property-usage-matching, 按用途分栏回答：非对抗场景可用处 vs 必须迁移处（碰撞敏感处全换）",
+      "notes": "正面场景: MD5/SHA-1 迁移边界（A2 #2）"
+    },
+    {
+      "id": "hash-property-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "前端要用 JS 对 2GB 大文件算哈希做秒传，怎么分片读取不卡 UI？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 前端工程实现，不涉及哈希性质选型",
+      "notes": "诱饵: 哈希话题的 UI 工程层"
+    },
+    {
+      "id": "hash-property-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "自定义 MAC 写的 Hash(key‖msg)，消息还能往后拼内容，具体会被怎么打？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-encrypt-authenticate-composition — HMAC 构造与长度扩展的审计归组合检查表；本 skill 管裸哈希用途匹配",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-encrypt-authenticate-composition): 哈希进 MAC 构造后跨入组合检查表边界"
+    },
+    {
+      "id": "hash-property-edge-01",
+      "type": "edge_case",
+      "prompt": "下载页放一个 SHA-256 校验值给用户核对，能防攻击者替换安装包吗？",
+      "expected_behavior": "应激活 stinson-hash-property-usage-matching (expected: 本 skill) — 裸哈希只防传输误码/意外篡改，无密钥无来源认证：主动替换者可连校验值一起换；对抗性完整性需签名",
+      "notes": "边界: 哈希『完整性』用途的对抗性边界——被动损坏 vs 主动替换"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-deliverable-stage-gates",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "怎么判断这个测评项目方案编制阶段是真的完成了？只看日历排期说不过去吧。",
+      "expected_behavior": "应激活 mlps-deliverable-stage-gates, 不问进度问产物：调查表/方案书/作业指导书等清单齐备才算完成",
+      "notes": "正面: 阶段完成的可审计定义"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "外包测评服务要做验收，对方只交了本报告，我验收时该索要哪些阶段产物？",
+      "expected_behavior": "应激活 mlps-deliverable-stage-gates, 按四阶段固定产物清单验收（计划书/调查表/方案书/指导书/证据记录/报告）",
+      "notes": "正面: 外包验收产物清单"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "测评方案已经委托方书面确认过了，现场情况一变项目经理就想改方案，能随便动吗？",
+      "expected_behavior": "应激活 mlps-deliverable-stage-gates, 评审—确认—冻结质量门：批准后不得随意调整，变更须走程序",
+      "notes": "正面: 方案冻结"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "项目组两个组员为现场分工吵起来了，排班怎么调比较好？",
+      "expected_behavior": "不应激活本 skill, 团队人事协调，非项目产物与阶段门管理",
+      "notes": "诱饵: 项目话题但属团队管理"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "去年的测评报告还剩几个月就满一年，中间系统做过一次大改造，这份报告还能继续对外用吗？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-report-validity-retest（报告效力边界与重测触发）",
+      "notes": "跨 skill 混淆诱饵: 项目过程质量 vs 报告效力"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "项目经理口头汇报说四个阶段都走完了，但我手上没有委托方对方案的书面确认件，这算阶段完成吗？",
+      "expected_behavior": "应激活 mlps-deliverable-stage-gates, 阶段完成=产物齐备+节点冻结，缺书面确认即质量门未过",
+      "notes": "边界: 口头进度 vs 书面冻结证据"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

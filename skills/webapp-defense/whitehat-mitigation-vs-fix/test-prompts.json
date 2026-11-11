@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-mitigation-vs-fix",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "开发说'我已经加了 HttpOnly 了'，这个 XSS 工单现在能关吗？",
+      "expected_behavior": "应激活 whitehat-mitigation-vs-fix, 定级裁决：HttpOnly 是减损控件（降低 cookie 窃取损失）不消除漏洞，不能按修复结案，要求根因修复",
+      "notes": "正面: 以缓解措施申请结案的验收"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "登录接口加了验证码，撞库是不是就算防住了？",
+      "expected_behavior": "应激活 whitehat-mitigation-vs-fix, 定级：验证码抬高自动化成本属减损，可被打码平台绕过，残余风险要明示",
+      "notes": "正面: 验证码防撞库的定级"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "反正前面有 WAF 挡着，后端代码就不用改了吧？",
+      "expected_behavior": "应激活 whitehat-mitigation-vs-fix, 定级 WAF 为缓解层并说明绕过面（解析差异/规则覆盖），漏洞本身仍在，需排根因修复",
+      "notes": "正面: WAF 当挡箭牌的定级"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我看看渗透测试报告的目录结构怎么组织比较专业。",
+      "expected_behavior": "不应激活本 skill, 因为这是纯文档结构问题，与措施定级无关; 属文书结构咨询, 无需调用书中任何技能",
+      "notes": "诱饵: 渗透报告话题看似相关"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "光靠 WAF 一层我心里不踏实，整体的多层防线应该怎么规划？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-defense-in-depth (要的是多层防御体系的结构与配合，不是对单个措施定级验收)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-defense-in-depth, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "根因要等下个季度大重构才能修，先上的缓解措施做到什么程度算达标、可以暂挂？",
+      "expected_behavior": "边界场景: 为减损控件定义验收口径——明确触达哪层损失、覆盖率要求（HttpOnly 全站漏一处即失效），并给根因排期，应激活本 skill (期望激活: whitehat-mitigation-vs-fix)",
+      "notes": "边界: 缓解作为过渡方案的验收标准"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

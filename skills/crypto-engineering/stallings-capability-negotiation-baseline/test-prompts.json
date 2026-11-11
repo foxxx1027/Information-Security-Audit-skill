@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-capability-negotiation-baseline",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "客户端还有 60% 停在老版本，算法协商规则怎么定才不会静默降到弱档？",
+      "expected_behavior": "应激活 stallings-capability-negotiation-baseline, 并定未知能力的确定性选择规则+失败显式化",
+      "notes": "正面场景: 新旧版本并存协商, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "群聊消息多端同步，有一端只支持老算法，是不是全群都得迁就它的弱档？",
+      "expected_behavior": "应激活 stallings-capability-negotiation-baseline, 并按弱副本木桶律设计多端最低集",
+      "notes": "正面场景: multi-recipient 弱副本, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "互操作测试里两版本客户端协商行为不一致，协商失败该静默回退还是显式报错断开？",
+      "expected_behavior": "应激活 stallings-capability-negotiation-baseline, 并明确失败终止语义而非静默回退",
+      "notes": "正面场景: 失败终止设计, A2 情境 4"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "API 网关要做 A/B 分流，按 header 灰度还是按百分比切流量？",
+      "expected_behavior": "不应激活本 skill, 因为是产品发布分流策略, 无密码算法协商对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 协商/分流话语, 非能力协商"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "邮件网关推 STARTTLS 升级，中间人一干扰两端就回退明文，这段过渡期怎么治理？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-protocol-migration-governance (过渡期治理与降级封堵, 本 skill 管协商规则机制层)",
+      "notes": "跨 skill 混淆诱饵: A2 明列治理层 vs 机制层"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "新版客户端默认推 XChaCha20，老服务器不认识，遇到未知算法该选保守档还是选最强档？",
+      "expected_behavior": "应激活 stallings-capability-negotiation-baseline, 因为'能力未知时的确定性选择规则'正是其核心判据 (expected: stallings-capability-negotiation-baseline)",
+      "notes": "边界: 单点选型问题, 落在未知能力选择规则上"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-delayed-enforcement",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "风控命中疑似机器人的请求，是当场拦截还是先放行观察？纠结好久了。",
+      "expected_behavior": "应激活 whitehat-delayed-enforcement, 按识别与处置解耦给出策略：延迟处置拉开行为与反馈的时间差，防规则被二分探测",
+      "notes": "正面: 即时拦截 vs 延迟处置的抉择"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们的反爬规则上线两周就被绕了，感觉对面把触发条件摸得一清二楚，问题出在哪？",
+      "expected_behavior": "应激活 whitehat-delayed-enforcement, 复盘处置反馈是否成为探测 oracle：即时生效+全量封禁会让规则见光死，改延迟分批",
+      "notes": "正面: 规则被摸清的复盘"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "老板想让风控 SDK 下发到 App 端本地跑，说省服务器，这有什么隐患？",
+      "expected_behavior": "应激活 whitehat-delayed-enforcement, 论证检测逻辑下发客户端等于公开规则，应改服务端执行并只回传必要信号",
+      "notes": "正面: 检测逻辑部署位置决策"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "内审发现财务报销流程违规，按制度应该怎么处理当事人？",
+      "expected_behavior": "不应激活本 skill, 因为这是无对抗回路的内部合规处置，不存在被探测问题; 属内控合规事务, 无需调用书中任何技能",
+      "notes": "诱饵: 处置话题看似相关"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "我们的反垃圾只看发帖内容里的关键词，被同义改写绕得一塌糊涂，特征体系要怎么重构？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-abuse-feature-model (问题在识别体系即内容单维被绕过，不是识别之后的处置时序)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-abuse-feature-model, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "电商风控把疑似黄牛的订单直接自动取消，商家抱怨正常大单也被砍了，这个度怎么把握？",
+      "expected_behavior": "边界场景: 处置策略问题——自动即时拒绝既暴露判定边界又误伤大单，应激活本 skill 改为延迟处理+分批+观察池 (期望激活: whitehat-delayed-enforcement)",
+      "notes": "边界: 表面是误杀问题实为处置时序设计"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

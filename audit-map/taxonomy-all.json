@@ -1,0 +1,2900 @@
+{
+ "skills": [
+  {
+   "slug": "whitehat-abuse-feature-model",
+   "title_cn": "反滥用特征三维架构",
+   "one_line": "按内容/行为/主体三维正交设计风控特征，交叉验证降误杀并定期重估衰减",
+   "primary": "02-应用层安全",
+   "sub": "2.5-业务逻辑安全",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "风控反滥用体系设计，属业务风控域",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-attack-chain-pruning",
+   "title_cn": "攻击链裁剪配权",
+   "one_line": "先画攻击者升级路径再逐跳砍权限，数据库/进程/容器配权由攻击链推导",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "面向数据库/容器/进程的基础设施配权",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-attack-surface-reduction",
+   "title_cn": "攻击面收敛减面",
+   "one_line": "按删除>禁用>加固次序收敛暴露面，管理台/调试接口/多余组件皆为待删项",
+   "primary": "01-资产边界",
+   "sub": "",
+   "secondary": [
+    "04-服务器与基础设施"
+   ],
+   "reason": "攻击面识别与收敛，属资产边界管理",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-business-logic-four-questions",
+   "title_cn": "业务逻辑审查四问",
+   "one_line": "状态变更触发权/覆盖面/校验挂边/重认证四问审查订单支付等流程漏洞",
+   "primary": "02-应用层安全",
+   "sub": "2.5-业务逻辑安全",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "流程绕过与风控反制类逻辑漏洞审查",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-context-encoding",
+   "title_cn": "输出语境编码矩阵",
+   "one_line": "无万能转义：按输出场景对应编码，DOM XSS每跳按目标语境重编码",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "XSS防御编码选型，注入防治核心",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-continuous-security-verification",
+   "title_cn": "持续安全验证",
+   "one_line": "把制度/设备/零事故当待验假设，用Find-Fix循环加监控持续验证安全态",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "05-日志审计与监控",
+    "06-管理与流程合规"
+   ],
+   "reason": "周期检查与复测式验证方法论",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-coverage-first",
+   "title_cn": "覆盖率优先原则",
+   "one_line": "白帽漏一即败：先全覆盖拿未覆盖清单再深挖，未发现须与未覆盖并列呈报",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "01-资产边界",
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "攻防不对称导出的求全排序思维",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-credential-rotation-on-state-change",
+   "title_cn": "凭证轮换与作废纪律",
+   "one_line": "状态质变必轮换会话标识，一次性凭据消费即原子作废，防固定与重放",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "会话与令牌生命周期管理纪律",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-cross-context-channel-enumeration",
+   "title_cn": "跨上下文通道枚举",
+   "one_line": "SOP外还有拖拽/postMessage/CORS等侧门，逐通道核验接收端校验",
+   "primary": "01-资产边界",
+   "sub": "",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "枚举跨信任域通道，浏览器攻击面识别",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-crypto-misuse-audit",
+   "title_cn": "密码学误用审计",
+   "one_line": "加密安全=算法×模式×IV×认证×随机源×密钥管理乘法链，逐失败点查误用",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "密码学方案构造误用的审计清单",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-csrf-intent-token",
+   "title_cn": "CSRF意图凭证防御",
+   "one_line": "CSRF本质是参数可猜加凭据自动携带，统一引入不可预测Token并先修XSS",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "CSRF归因请求伪造，Token防御落地",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-data-classification-modules",
+   "title_cn": "数据定级模块化保护",
+   "one_line": "访谈定级数据，按级定义保护方式并模块化复用，统一多项目安全标准",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "数据分级治理与标准复用流程",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-data-code-separation",
+   "title_cn": "数据与代码分离原则",
+   "one_line": "一切注入=用户数据被解释器当代码，防御靠参数化/编码等结构分离而非黑名单",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "注入类漏洞统一成因模型与分离防御",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-data-minimization",
+   "title_cn": "数据最小化原则",
+   "one_line": "先问要不要持有再谈怎么保护：采集/存储/留存全链减量，不存即零泄露",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "数据持有面治理与隐私合规落地",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-decompose-by-attack-class",
+   "title_cn": "按攻击类别分解防御",
+   "one_line": "把告警风险归因到攻击类别逐类设计方案，以类别为工作单元化被动为主动",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "安全工作组织层面的分解思维模型",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-defense-at-interpretation",
+   "title_cn": "解释发生处设防",
+   "one_line": "语境在哪环可确定防线就在哪环：存原始按消费点编码，入口过滤两头失败",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "注入防御防线位置裁决方法",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-defense-in-depth",
+   "title_cn": "纵深防御体系",
+   "one_line": "多层设防各层在正确位置解决本层根因，勿把多目标压在单一机制上",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [],
+   "reason": "跨层防御总体思维模型",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-delayed-enforcement",
+   "title_cn": "延迟处置纪律",
+   "one_line": "识别与处置解耦：延迟封禁/分批打压防规则被二分探测，检测逻辑留服务端",
+   "primary": "02-应用层安全",
+   "sub": "2.5-业务逻辑安全",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "风控处置时序对抗探测的策略",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-evidence-preservation-logging",
+   "title_cn": "证据保全日志架构",
+   "one_line": "日志实时外送并与被攻系统隔离生命周期，响应先保全现场再止损",
+   "primary": "05-日志审计与监控",
+   "sub": "",
+   "secondary": [],
+   "reason": "日志完整性与取证溯源保障",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-fix-at-highest-leverage",
+   "title_cn": "最高杠杆层修复",
+   "one_line": "哪层修一次全体受益就推那层：上游依赖优先修复，等待期做标注临时的缓解",
+   "primary": "02-应用层安全",
+   "sub": "2.7-依赖与供应链",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "依赖框架上游漏洞的修复决策",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-framework-authority-audit",
+   "title_cn": "框架权威性审计",
+   "one_line": "权威与流行不构成安全证据：对抗验证默认安全特性，查CVE史与维护节奏",
+   "primary": "02-应用层安全",
+   "sub": "2.7-依赖与供应链",
+   "secondary": [],
+   "reason": "组件框架信任度与CVE版本审计",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-mitigation-vs-fix",
+   "title_cn": "缓解与修复分级",
+   "one_line": "治根因还是治后果：HttpOnly/WAF/验证码皆减损控件，不算修复结案",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "整改措施定级与验收方法论",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-parser-consistency-audit",
+   "title_cn": "解析器一致性审计",
+   "one_line": "同一数据过两个解释器口径必不一致，画全解析环节逐对核对防校验绕过",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "双端解析差异致注入绕过的审计",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-requirement-decomposition",
+   "title_cn": "安全需求分解",
+   "one_line": "把更安全口号拆成可判定威胁条目再对齐验收标准，可验收才可交付",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "SDL需求阶段流程与验收对齐",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-resource-quota-audit",
+   "title_cn": "资源配额滥用审计",
+   "one_line": "DoS=对有限资源的无限制滥用：列全部有限资源逐项问匿名能否无限触发",
+   "primary": "02-应用层安全",
+   "sub": "2.8-安全配置",
+   "secondary": [
+    "04-服务器与基础设施"
+   ],
+   "reason": "DoS资源滥用防护归安全配置类",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-root-cause-patch-discipline",
+   "title_cn": "根因修复纪律",
+   "one_line": "补丁针对成因而非POC特征，按payload修必被变体绕过，补丁本身须过审",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "修复验收与复测的整改方法论",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-security-as-compliance-checks",
+   "title_cn": "安全合规化检查",
+   "one_line": "把安全吗开放命题转为可判定合规条目并映射可扫描信号，CI门禁落地",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "规范制度落地为可检查条目流程",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-security-as-product-feature",
+   "title_cn": "安全作为产品特性",
+   "one_line": "没有不安全的业务只有不安全的实现：保护业务目标，改造实现方式两全",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "安全业务冲突裁决的思维模型",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-security-assessment",
+   "title_cn": "四阶段安全评估",
+   "one_line": "资产分级→威胁分析→风险分析→方案设计顺序推进，先定保护对象再排序",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "完整评估流程与风险排序框架",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-security-interaction-design",
+   "title_cn": "安全交互设计",
+   "one_line": "提示是稀缺资源：仅用户可行动且风险具体时出现，能服务端裁决的不问用户",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "面向用户的提示设计跨域纪律",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-security-process-fit-delivery-cadence",
+   "title_cn": "流程适配交付节奏",
+   "one_line": "安全机制存亡取决于与交付节奏兼容性，错配流程被无声绕过防护归零",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "SDL流程落地节奏设计",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-signal-reliability",
+   "title_cn": "信号可靠性分级",
+   "one_line": "能取到值不等于能当安全边界：按可伪造成本/可缺失性分级，裁决权在服务端",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "02-应用层安全"
+   ],
+   "reason": "信号可信度的信任本质判断",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-solution-acceptance-checklist",
+   "title_cn": "方案验收五条清单",
+   "one_line": "按有效/体验/性能/耦合/扩展五维评审安全方案，体验与性能一票否决",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "安全方案合格性的验收流程",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-source-sink-audit",
+   "title_cn": "Source-Sink白盒审计",
+   "one_line": "注入漏洞=可控输入×危险解释器，枚举source跟踪数据流抵达sink即漏洞面",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "02-应用层安全"
+   ],
+   "reason": "污点传播源码级审计方法论",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-tool-vs-manual-boundary",
+   "title_cn": "工具人工分工边界",
+   "one_line": "可模式化漏洞交扫描器，业务逻辑类必须人工，零告警可能是盲区非安全",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "扫描与人工渗透的分工方法论",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-trust-assumption-audit",
+   "title_cn": "信任假设审计",
+   "one_line": "列出机制隐含信任的前提逐条攻击验证，前提被打破则机制整体失效",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "信任本质检验的评审思维模型",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-trust-boundary",
+   "title_cn": "信任域与边界划分",
+   "one_line": "低信任流向高信任必过边界检查，高流向低免检，检查位置跟数据流向走",
+   "primary": "01-资产边界",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "信任边界建模归资产边界类",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-unpredictability",
+   "title_cn": "不可预测性原则",
+   "one_line": "关键值可预测=可批量枚举预构造，随机化抬高攻击成本，含ASLR式缓解",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "02-应用层安全"
+   ],
+   "reason": "不可猜设计与攻击成本思维模型",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "whitehat-whitelist-first",
+   "title_cn": "白名单优先原则",
+   "one_line": "白名单失败关闭黑名单失败开放，优先只允许已知安全项，通配符即退化",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "02-应用层安全"
+   ],
+   "reason": "校验授权规则形态的通用思想",
+   "coll": "webapp-defense"
+  },
+  {
+   "slug": "caudit-admin-webshell-parity",
+   "title_cn": "后台高危功能Webshell等价管控",
+   "one_line": "把后台文件管理、在线SQL、命令执行、备份翻译成webshell能力清单并按等价强度管控",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [
+    "2.2-访问授权"
+   ],
+   "reason": "后台高危功能等价webshell执行面",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-api-blindspot-priority",
+   "title_cn": "API盲区优先级与三准则",
+   "one_line": "按密度与覆盖率成反比定律枚举盲区接口，鉴权、字段最小化、常规漏洞三准则排序",
+   "primary": "02-应用层安全",
+   "sub": "2.2-访问授权",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "接口未授权居首，盲区即攻击面",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-api-relay-architecture",
+   "title_cn": "站库分离API中转与阈值监控",
+   "one_line": "站库分离须API层收口加受限凭证，调用画像阈值兼作拖库入侵检测",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "05-日志审计与监控"
+   ],
+   "reason": "数据访问收口架构与防拖库监控",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-attacker-first-function-design",
+   "title_cn": "攻击者视角功能安全设计总纲",
+   "one_line": "新功能先枚举攻击面推演利用方式，再按利用反推安全设计，顺序强制不可颠倒",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "攻击面到利用到对策的跨域门禁",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-audit-path-selection",
+   "title_cn": "审计路径选型框架",
+   "one_line": "按时间预算、目标归属、漏洞类型在回溯、定向、通读四路径中选型并声明覆盖边界",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [],
+   "reason": "四条审计路径的选型与放弃声明",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-blacklist-failure-modes",
+   "title_cn": "黑名单失效模式与等价能力推演",
+   "one_line": "黑名单从枚举不全、等价变体、改写重建、语义错位四向漏，等价能力推演定设计否定",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.3-输入验证与注入"
+   ],
+   "reason": "黑名单四类失效的源码级推演",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-captcha-failure-premises",
+   "title_cn": "验证码失效四前提与硬规则",
+   "one_line": "验证码有效拆为一次性、限次、机器识别、代答经济四前提，任一不满足即验收不过",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "2.5-业务逻辑安全"
+   ],
+   "reason": "验证码四前提检验，防凭证爆破",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-choke-point-first",
+   "title_cn": "收口点优先审计策略",
+   "one_line": "统一过滤或数据访问层读一处覆盖多数路径，无收口本身即最高风险信号",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [],
+   "reason": "收口点决定审计切入与架构定性",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-data-pollution-two-paths",
+   "title_cn": "数据污染两条路径模型",
+   "one_line": "污染分被动接收与主动获取两路，入口与功能点两层过滤，改写点即新污染源",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.3-输入验证与注入"
+   ],
+   "reason": "污染源两路径建模的源码级方法",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-escape-as-last-step",
+   "title_cn": "转义必须是最后一步",
+   "one_line": "转义后任何解码、转码、改写都使转义归零，审计动作是列变换清单判位置",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.3-输入验证与注入"
+   ],
+   "reason": "转义时序判据：后有变换即失效",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-filter-coverage-map",
+   "title_cn": "过滤覆盖面盲区测绘",
+   "one_line": "按数据类别、入口、时机测绘统一过滤覆盖边界，空格即盲区并逐项验证",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "统一过滤覆盖边界的源码测绘",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-horizontal-depth-pillars",
+   "title_cn": "两支柱体系：横向细化与纵深防御",
+   "one_line": "横向细化靠规则量抬攻击成本有停止条件，纵深按上层失效推演，木桶原理定投入",
+   "primary": "02-应用层安全",
+   "sub": "2.8-安全配置",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "防御规则层次配比与投入基线",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-logic-vuln-audit",
+   "title_cn": "逻辑漏洞应然实然对照法",
+   "one_line": "先建业务状态机与不变量应然模型，通读源码提取实然逐项diff，偏差即候选漏洞",
+   "primary": "02-应用层安全",
+   "sub": "2.5-业务逻辑安全",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "应然实然对照挖掘业务逻辑漏洞",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-mechanism-to-search-terms",
+   "title_cn": "机理驱动定向挖掘三步法",
+   "one_line": "先吃透漏洞机理再现场推导搜索词，搜到sink后回溯可控性与过滤充分性双问",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.3-输入验证与注入"
+   ],
+   "reason": "机理推搜索词的定向挖掘三步法",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-password-reset-three-stages",
+   "title_cn": "找回密码三阶段防线",
+   "one_line": "发码、校验、执行三阶段分别核地址来源、凭证四性、执行复验，防账号接管",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "凭证重发流程三阶段缺陷谱",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-patch-diff-remediation",
+   "title_cn": "补丁diff入口与成因类修复",
+   "one_line": "diff定位根因提炼漏洞模式全库同成因检索，修复须过等价表示字面性检查",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.7-依赖与供应链"
+   ],
+   "reason": "补丁diff入口与同类漏洞收敛",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-payment-invariants",
+   "title_cn": "支付三不变量",
+   "one_line": "金额服务端真值、数值下限、原子幂等三不变量核对资金流程，另查回调再改写",
+   "primary": "02-应用层安全",
+   "sub": "2.5-业务逻辑安全",
+   "secondary": [],
+   "reason": "资金流程三条不变量逐条核对",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-privilege-delta-dataflow",
+   "title_cn": "权限差数据流通道审计",
+   "one_line": "枚举低权可写高权必读的必达通道字段，逐字段按高权端语境编码并盲打验证",
+   "primary": "02-应用层安全",
+   "sub": "2.2-访问授权",
+   "secondary": [
+    "2.3-输入验证与注入",
+    "03-代码审计"
+   ],
+   "reason": "低权写高权必读的越权通道枚举",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-rate-limit-dual-edge",
+   "title_cn": "限频多维组合与滥用面",
+   "one_line": "每维限频推演绕过端与滥用端（锁号DoS、误杀），输出多维组合加分级响应",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "2.5-业务逻辑安全"
+   ],
+   "reason": "限频策略绕过与滥用两端推演",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-second-order-vuln",
+   "title_cn": "二次漏洞锚点追踪法",
+   "one_line": "写入与消费是独立控制点，按表名字段锚点追全部消费点逐个核对话境过滤",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.3-输入验证与注入"
+   ],
+   "reason": "写入触发分离，取出即新输入",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-security-metadata-pollution",
+   "title_cn": "安全元数据污染判别",
+   "one_line": "白名单、开关、验证答案、金额真值、排序键等构造结构的参数不得出现在请求链上",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "2.5-业务逻辑安全",
+    "03-代码审计"
+   ],
+   "reason": "安全元数据不得由请求携带裁决",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-server-side-state-truth",
+   "title_cn": "业务状态真值三问",
+   "one_line": "对资格次数额度身份问真值存哪、迁移是否原子、裁决可否伪造，删Cookie即验收",
+   "primary": "02-应用层安全",
+   "sub": "2.5-业务逻辑安全",
+   "secondary": [
+    "2.1-身份认证与会话管理"
+   ],
+   "reason": "资格次数身份等状态真值三问",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-structured-full-read",
+   "title_cn": "通读法结构化读法",
+   "one_line": "按目录、入口、过滤文件、函数配置的角色排序通读，产出数据流图与过滤覆盖表",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [],
+   "reason": "通读法的文件角色注意力排序",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-trust-tier-isolation",
+   "title_cn": "信任级数据隔离结构优先",
+   "one_line": "一次编码疏忽即可越界的校验型边界应升级分表、写死域、行级安全等结构型隔离",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.2-访问授权"
+   ],
+   "reason": "信任级结构型隔离的数据架构",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-type-context-defense",
+   "title_cn": "类型即边界语境防御选型",
+   "one_line": "引号语境转义、裸数值类型锁定、标识符枚举映射，校验语义须与解析器一致",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.3-输入验证与注入"
+   ],
+   "reason": "按注入语境选武器的源码级判据",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-var-overwrite-chain",
+   "title_cn": "变量覆盖三点连线判定",
+   "one_line": "覆盖点、前文关键变量、后文消费三点连线才算漏洞，修复即斩断任一边",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.2-访问授权"
+   ],
+   "reason": "覆盖点前文后文三点连线判定",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "caudit-whitelist-spectrum",
+   "title_cn": "白名单三形态谱系",
+   "one_line": "固定枚举、类型锁定、正则形态约束三形态选型，处置须命中即拦截不得替换为空",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [
+    "2.3-输入验证与注入"
+   ],
+   "reason": "白名单三形态谱系与处置规则",
+   "coll": "code-audit"
+  },
+  {
+   "slug": "wahh-13-area-pentest-framework",
+   "title_cn": "13区域渗透测试总框架",
+   "one_line": "按逻辑依赖排序的13区域清单，防疏忽、依赖回溯防漏测",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "渗透测试组织与覆盖总纲",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-attack-plan-prioritization",
+   "title_cn": "攻击计划优先级排序",
+   "one_line": "按功能有用度×漏洞严重度双变量排序，决定各区域时间预算",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "受攻击面翻译成攻击计划",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-authentication-audit-panorama",
+   "title_cn": "验证机制全景审查",
+   "one_line": "登录/注册/改密/找回逐个过13类缺陷清单，凭据全路径三查",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "认证全流程缺陷审查",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-authz-differential-testing",
+   "title_cn": "访问控制差分测试",
+   "one_line": "建主体×对象×动作授权矩阵，双账户重放测垂直/水平/上下文越权",
+   "primary": "02-应用层安全",
+   "sub": "2.2-访问授权",
+   "secondary": [],
+   "reason": "授权矩阵差分实验设计",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-blind-exploitation-ladder",
+   "title_cn": "盲利用阶梯",
+   "one_line": "无回显时按条件响应→时间延迟→带外通道逐级构造取数信道",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "注入确认后的盲取数技术",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-boundary-validation-model",
+   "title_cn": "边界确认模型",
+   "one_line": "每组件按下一跳解释器重新确认输入，入口单点确认必失效",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "输入校验部署位置原则",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-brute-force-engineering",
+   "title_cn": "认证蛮力工程学",
+   "one_line": "锁定模型四分类配绕过，广度优先猜密，字典按实测规则收缩",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "凭据猜测攻击的运筹方法",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-client-state-untrusted",
+   "title_cn": "客户端状态不可信",
+   "one_line": "五类载体三步测试，加密不改不可信本质，须证服务端缺校验",
+   "primary": "02-应用层安全",
+   "sub": "2.2-访问授权",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "误信客户端控件是授权缺陷前提",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-consistency-anomaly-targeting",
+   "title_cn": "全站一致性异常定位",
+   "one_line": "以点推面解码全站机制，风格不一致的拼接区是优先靶区",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "优先攻击目标的选择信号",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-core-defense-weakest-link",
+   "title_cn": "核心防御与最弱环节",
+   "one_line": "防御归四格三层串联，总体安全按最弱环节定级与修复排序",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "整体安全基线定级框架",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-csrf-assessment",
+   "title_cn": "CSRF判定与令牌评估",
+   "one_line": "三特征判可攻击性，令牌五问审实现，Referer是坏防御",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "CSRF可攻击性判定",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-custom-attack-automation",
+   "title_cn": "定制攻击自动化",
+   "one_line": "请求/响应对加触点六指标，会话处理解耦攻击语义防静默失效",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "批量攻击执行的自动化纪律",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-detection-design",
+   "title_cn": "检测面设计",
+   "one_line": "信噪比权衡，基于本应用正常行为的上下文检测与日志设计",
+   "primary": "05-日志审计与监控",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "日志告警监控的检测设计",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-experimental-testing-discipline",
+   "title_cn": "渗透测试实验纪律",
+   "one_line": "良性对照、新会话复现、重复请求、以代理字节为准四件套判真伪",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "单条发现的证实证伪纪律",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-filesystem-attack-surface",
+   "title_cn": "文件系统攻击面测试",
+   "one_line": "遍历探测加标记串定位，读写两路目标清单，LFI借受控文件升级",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "路径遍历与文件包含攻击面",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-filter-bypass-model",
+   "title_cn": "过滤器绕过模型",
+   "one_line": "分别建模过滤器与后端解析规则集，差异点即绕过面四类向量",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "输入过滤的对抗性绕过方法",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-function-path-enumeration",
+   "title_cn": "功能路径枚举",
+   "one_line": "参数即功能：枚举方法名映射隐藏API，低权直调测暴露面",
+   "primary": "01-资产边界",
+   "sub": "",
+   "secondary": [],
+   "reason": "隐藏功能面枚举测绘",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-hidden-content-enumeration",
+   "title_cn": "隐藏内容枚举",
+   "one_line": "建不存在基线按差异判读，命名归纳构造词典迭代回灌",
+   "primary": "01-资产边界",
+   "sub": "",
+   "secondary": [],
+   "reason": "隐藏内容与端点发现",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-info-leak-inference",
+   "title_cn": "信息泄露与推论挖掘",
+   "one_line": "错误消息当探测器反推逻辑，凡可区分反馈皆情报信道",
+   "primary": "02-应用层安全",
+   "sub": "2.6-错误处理与信息泄露",
+   "secondary": [],
+   "reason": "错误信息与侧信道泄露挖掘",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-injection-unified-model",
+   "title_cn": "注入统一模型",
+   "one_line": "SQL/NoSQL/XPath/命令统一为输入被解析为指令，确认阶梯取证",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "跨解释器注入确认总模型",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-input-handling-spectrum",
+   "title_cn": "输入处理五法谱系",
+   "one_line": "黑名单→白名单→净化→安全处理→语法检查的选择判据",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "输入校验防御方法选型",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-insecure-authz-antipatterns",
+   "title_cn": "不安全授权反模式",
+   "one_line": "参数型/头部型/位置型三型形态学，配识别信号快速定性",
+   "primary": "02-应用层安全",
+   "sub": "2.2-访问授权",
+   "secondary": [],
+   "reason": "不安全授权实现形态学",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-layered-trust-attack-paths",
+   "title_cn": "分层信任攻击路径",
+   "one_line": "枚举谁完全信任谁，单点漏洞经信任放大扩张影响半径",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "应用内部层间基础设施信任",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-logic-flaw-assumption-breaking",
+   "title_cn": "逻辑缺陷假设攻破法",
+   "one_line": "枚举开发者隐含假设逐条构造违背，无签名漏洞的系统挖法",
+   "primary": "02-应用层安全",
+   "sub": "2.5-业务逻辑安全",
+   "secondary": [],
+   "reason": "业务逻辑假设违背挖掘",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-logic-target-zones-transactions",
+   "title_cn": "逻辑靶区与交易模式",
+   "one_line": "四类优先靶区收敛逻辑测试，交易不变量违背模式起手",
+   "primary": "02-应用层安全",
+   "sub": "2.5-业务逻辑安全",
+   "secondary": [],
+   "reason": "逻辑测试选靶与交易靶区",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-multistage-state-machine-attack",
+   "title_cn": "多阶段状态机攻击",
+   "one_line": "孤立重放各阶段请求，定位无需前序即可触发的处理逻辑",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "多阶段流程状态机攻击",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-native-code-blackbox-probe",
+   "title_cn": "本地代码黑盒探测",
+   "one_line": "约整长度阶梯加边界值表，一次一参数，反常信号甄别崩溃",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "原生组件内存破坏黑盒探查",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-obfuscated-data-attack-ladder",
+   "title_cn": "模糊数据攻击四阶梯",
+   "one_line": "逆向→换取→移植→畸形串递进，解不开的密文仍可利用",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "加密误用参数的攻击利用",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-parameterization-discipline",
+   "title_cn": "参数化纪律",
+   "one_line": "统一判据=值以数据形式绑定，全量全字段覆盖防残留拼接",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "注入防御判定与覆盖审计",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-scanner-limits-discipline",
+   "title_cn": "扫描器能力边界纪律",
+   "one_line": "可靠探测边界=有签名漏洞，四大内在限制定人机分工比例",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "扫描器工具边界与使用纪律",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-session-token-generation-analysis",
+   "title_cn": "会话令牌生成侧分析",
+   "one_line": "采样差分与统计检验估有效熵，假想最弱熵源失效试验",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "令牌生成熵与可预测性审计",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-session-token-lifecycle-audit",
+   "title_cn": "会话令牌生命周期审查",
+   "one_line": "传输/日志/终止/固定/Cookie范围全链路，服务端废弃才失效",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "令牌处理侧生命周期审计",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-shared-cloud-threat-model",
+   "title_cn": "共享云环境威胁模型",
+   "one_line": "恶意租户与受害租户双威胁，隔离三措施与云特有攻击面",
+   "primary": "07-第三方集成",
+   "sub": "",
+   "secondary": [],
+   "reason": "多租户共享环境隔离审查",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-source-code-audit",
+   "title_cn": "源码审计三重查找法",
+   "one_line": "数据流追踪+签名搜索+逐行深审排程，锚点与注释补救漏报",
+   "primary": "03-代码审计",
+   "sub": "",
+   "secondary": [],
+   "reason": "白盒源码审计排程方法",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-stored-dom-xss-mapping",
+   "title_cn": "存储型与DOM型XSS定位",
+   "one_line": "提交特殊串遍历全部显示点，DOM用source→sink污点追踪",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "存储/DOM型XSS定位方法",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-tech-stack-fingerprinting",
+   "title_cn": "技术栈指纹方法论",
+   "one_line": "声明旗标→规范行为→语法差异三层信号，越靠行为越可信",
+   "primary": "01-资产边界",
+   "sub": "",
+   "secondary": [],
+   "reason": "纯信息收集的技术归因",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-thick-client-dual-route",
+   "title_cn": "厚客户端双路线测试",
+   "one_line": "拦流量（hosts+自签CA）或反编译，四类目标提取隐藏功能",
+   "primary": "01-资产边界",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "客户端侧攻击面获取与测绘",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-untrusted-input-dimensions",
+   "title_cn": "不可信输入公理",
+   "one_line": "用户可提交任意输入，改值/乱序/增加/删除四维操纵面",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [],
+   "reason": "跨领域不可信输入公理",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-xss-detection-bypass",
+   "title_cn": "XSS系统化探测与绕过",
+   "one_line": "良性串定位全部反射，判语法上下文构造逃逸，过滤三分诊",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "反射型XSS探测与上下文逃逸",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "wahh-xss-impact-defense-baseline",
+   "title_cn": "XSS影响评估与防御基线",
+   "one_line": "借域信誉执行代码，载荷五类分类学，输出编码防御三重",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [],
+   "reason": "XSS定级与输出编码基线",
+   "coll": "pentest-methodology"
+  },
+  {
+   "slug": "isms-auditor-independence-checks",
+   "title_cn": "审核员独立性核查",
+   "one_line": "审核组分工回避、咨询顾问两年回避、技术专家仅建议不算审核员",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "审核人员独立性与回避程序",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-combined-audit-admission",
+   "title_cn": "结合审核准入判定",
+   "one_line": "三条件硬门槛加机制同构判定，决定多标准能否一次进场合审",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "结合审核可行性与底线准入",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-combined-audit-planning-calibration",
+   "title_cn": "结合审核策划校准",
+   "one_line": "用业务、职责、文件三类客观材料校准整合自述，定路径与人日",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "整合审核策划与阶段校准",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-common-difference-evidence-split",
+   "title_cn": "共同差异点取证分配",
+   "one_line": "共同关注点合并取证、差异点逐标准单查，防独有要求被稀释",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "多标准合并检查表与取证分工",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-control-equivalence-judgment",
+   "title_cn": "控制等效性判定",
+   "one_line": "控制做不到时改审等效达成：提炼目标、识别补偿措施、查运行证据",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "补偿性控制等效判定方法",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-control-test-admission",
+   "title_cn": "控制测试准入与选档",
+   "one_line": "主动测试前五条准入约束，按信息对称度选串联、灰盒或盲测档位",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "渗透演练准入授权与选档纪律",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-counterfactual-document-review",
+   "title_cn": "反证式文件审读",
+   "one_line": "SMART与5W1H各挂失效后果链，用缺了会坏什么审承诺类文本",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "承诺文本可审计性评审方法",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-degraded-evidence-fallback",
+   "title_cn": "降级证据处理",
+   "one_line": "数据未到期时以约定加配置层证据替代，声明降级并约期复核",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "证据降级与限定结论程序",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-document-consistency-matrix",
+   "title_cn": "文件一致性核对矩阵",
+   "one_line": "四组一致性关系核对程序与产出物，识破表演性文件",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "文件评审四查，体系文件互证",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-evidence-admissibility-threshold",
+   "title_cn": "证据资格三门槛",
+   "one_line": "相关、可证实、已记录三道门槛，听说与口头承诺只算线索",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "通用取证思维，划线索与证据",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-four-column-checklist-design",
+   "title_cn": "四栏检查表设计",
+   "one_line": "shall转检查题、答案二值附理由，外来通用表必裁剪后用",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "检查表题型结构设计规范",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-interview-questioning-discipline",
+   "title_cn": "访谈提问纪律",
+   "one_line": "面谈八注意防引导性提问，请对方描述工作、结尾总结评审",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "取证访谈现场提问纪律",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-interview-tiering",
+   "title_cn": "访谈分层选档",
+   "one_line": "按结论层级选访谈对象与深度，存在层取样不得下有效性结论",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "访谈对象与深度规划设计",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-log-audit-trio",
+   "title_cn": "日志审计三件套",
+   "one_line": "字段完备、架构适配、跨系统联合三查，判定事后可调查能力",
+   "primary": "05-日志审计与监控",
+   "sub": "",
+   "secondary": [],
+   "reason": "日志体系完备性与可调查性",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-multi-site-sampling-formula",
+   "title_cn": "多场所抽样公式",
+   "one_line": "先过相似性闸门再按平方根乘风险系数定样本量，总部必查",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "多场所审核抽样方案设计",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-network-service-three-line-audit",
+   "title_cn": "网络服务三线审核",
+   "one_line": "合同、配置、日志三线互证外包服务，防声明加密实为HTTP回源",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "外包网络服务基础设施核验",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-nonconformity-grading-loop",
+   "title_cn": "不符合项分级闭环",
+   "one_line": "重大、一般、观察项三级判据，验证纠正有效性后方可关单",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "不符合项定级与整改闭环",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-privilege-audit-chain",
+   "title_cn": "特权权限审核链",
+   "one_line": "定义、平台核查、使用日志三步取证，专查提权盲区与分权判据",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "05-日志审计与监控"
+   ],
+   "reason": "特权账号核验，依托审计链",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-recovery-time-verification",
+   "title_cn": "恢复时效实测",
+   "one_line": "把有无备份升级为实测恢复耗时对照RPO与RTO，缺演练即未验证",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "04-服务器与基础设施"
+   ],
+   "reason": "备份灾备恢复时效技术验证",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-risk-acceptance-criteria-first",
+   "title_cn": "风险接受准则先行",
+   "one_line": "先查接受标准是否先于处置存在，残余风险须管理者正式批准",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "风险处置与接受标准治理",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-sampling-uncertainty-disclosure",
+   "title_cn": "抽样不确定性披露",
+   "one_line": "首末次会议告知加报告载明局限，结论限定为样本未见不符合",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "抽样结论边界与报告披露",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-soa-justification-traceback",
+   "title_cn": "SoA说理回溯",
+   "one_line": "双向抽查控制选删理由，清单齐全非合规证据，断链即发现",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "适用性声明选控说理审查",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-test-event-method",
+   "title_cn": "测试事件法",
+   "one_line": "受控触发一次事件沿路径核对记录与响应，验会不会记而非曾记录",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "受控事件动态验证记录响应",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-three-layer-evidence-chain",
+   "title_cn": "三层取证链",
+   "one_line": "文档、配置、运行记录三层逐层取证互证，抓配置有日志无断链",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "控制落地核验的通用骨架",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-two-stage-audit-gate",
+   "title_cn": "两阶段审核门禁",
+   "one_line": "一阶段换信息与判断，五类门槛问题整改完毕方可进二阶段",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "分阶段审核放行门禁设计",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "isms-two-step-conformity-audit",
+   "title_cn": "两步符合性审核",
+   "one_line": "先查过程存在性再逐条查shall符合，防文件符合掩盖过程缺失",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "条款符合性判定总顺序",
+   "coll": "system-audit-verification"
+  },
+  {
+   "slug": "mlps-active-verification-perturbation",
+   "title_cn": "主动验证法（可控扰动与否定式验证）",
+   "one_line": "设计可控扰动以否定式结果证明防护生效的主动验证法",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "测评验证作业方法",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-artifact-verification-record-quality",
+   "title_cn": "产物核验与记录实质性质检",
+   "one_line": "两步核验过程产物实物并按四要素质检记录证明力",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "过程产物证据判定",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-assessment-redlines",
+   "title_cn": "测评作业红线与现场纪律",
+   "one_line": "授权限域限速陪同清零等渗透前红线与现场纪律清单",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "测评作业红线纪律",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-assessment-scope-selection",
+   "title_cn": "测评对象确定法",
+   "one_line": "架构调研先行，按资产赋值从九类对象裁剪测评范围",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "测评对象确定属测评作业",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-audit-log-offsite-retention",
+   "title_cn": "审计记录留存的异地化判据",
+   "one_line": "本地日志可灭失而无异地日志基础设施即判不符合",
+   "primary": "05-日志审计与监控",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "审计日志留存异地化",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-audit-six-dimension-assessment",
+   "title_cn": "安全审计六维测评框架",
+   "one_line": "按范围内容分析防篡改进程保护防覆盖六维评审计能力",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "05-日志审计与监控"
+   ],
+   "reason": "审计能力测评框架",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-auth-transport-plaintext-veto",
+   "title_cn": "鉴别信息传输保护判据",
+   "one_line": "明文传口令一票否决；能力存在须显式配置与实测证明",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "04-服务器与基础设施",
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "鉴别信息传输加密判定",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-backup-recoverability-verification",
+   "title_cn": "备份恢复的可恢复性验证",
+   "one_line": "有备份不等于可恢复，按四层核查并强制恢复演练证据",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "备份恢复对象为系统数据",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-compliance-vs-risk-boundary",
+   "title_cn": "等级测评与风险评估的分工边界",
+   "one_line": "等级测评评措施、风险评估评威胁，结论措辞与合同边界",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "合规与风险结论边界",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-control-effectiveness-four-checks",
+   "title_cn": "控制有效性四查",
+   "one_line": "粒度覆盖生效技术强制四查，区分配置存在与控制生效",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "控制有效性核查方法",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-data-transit-storage-grid",
+   "title_cn": "数据安全传输/存储两分检查格",
+   "one_line": "传输存储乘完整性保密性四格防漏，检测恢复成对验收",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "04-服务器与基础设施"
+   ],
+   "reason": "数据传输存储保护防漏",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-deliverable-stage-gates",
+   "title_cn": "产物驱动的阶段管理与节点评审冻结",
+   "one_line": "阶段完成以产物清单为准，方案经确认后评审冻结",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "项目阶段流程管理",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-delivery-completeness-check",
+   "title_cn": "交付完整性核查",
+   "one_line": "按物纸人责四要素核查交付移交，追讨过程性文档债务",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "系统交付完整性管理",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-document-lifecycle-closed-loop",
+   "title_cn": "文档闭环管理",
+   "one_line": "以评审修订掌握度三证据判断制度文档是否仍被运营",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "文档闭环管理",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-go-live-quality-gate",
+   "title_cn": "建设期质量门",
+   "one_line": "第三方独立测试加四件套覆盖与外包后门审查的放行门",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "03-代码审计",
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "上线验收质量门",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-grading-decision",
+   "title_cn": "等保定级决策程序",
+   "one_line": "受侵害客体乘侵害程度双要素定级，S/A取高加三方校验",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "定级是合规动作",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-indicator-selection-rules",
+   "title_cn": "测评指标确定规则集",
+   "one_line": "按S/A等级选指标，共用资源就高，先适用性后符合性",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "指标确定属测评作业",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-intrusive-test-downgrade",
+   "title_cn": "验证测试的降级权衡与豁免程序",
+   "one_line": "高侵入测试先降级替代再豁免签章，报告写明未验范围",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "测试降级豁免程序",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-level-diff-model",
+   "title_cn": "逐级增强三层次diff模型",
+   "one_line": "级差拆为控制点、要求项增加与强度增强三层可计数差异",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "标准级差分析方法",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-management-root-cause-traceback",
+   "title_cn": "管理根因回溯法",
+   "one_line": "技术整改无效时沿制度归口、职责闭合、人员链回溯根因",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "管理根因追溯",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-method-role-allocation",
+   "title_cn": "访谈/检查/测试三法角色组合策略",
+   "one_line": "检查为基本证据、测试为验证、访谈辅助，管理域禁用工具",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "三法角色组合方法论",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-native-capability-gap-chain",
+   "title_cn": "原生能力缺口判定链",
+   "one_line": "指标超产品默认能力时按缺口、补偿、否则不符合三步判定",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "04-服务器与基础设施"
+   ],
+   "reason": "能力缺口判定链",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-personnel-lifecycle-controls",
+   "title_cn": "人员安全全生命周期管控",
+   "one_line": "录用在职离岗外部人员四阶段管控，离岗三步收权",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "人员全周期安全管理",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-policy-four-layer-pyramid",
+   "title_cn": "制度体系四层金字塔自查",
+   "one_line": "方针制度规程记录四层金字塔定位制度体系缺口",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [],
+   "reason": "制度体系分层自查",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-preponderant-evidence",
+   "title_cn": "证据优势法（强证据压倒弱证据）",
+   "one_line": "按测试、检查、访谈可靠性分级，强证据压倒弱证据",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "证据优势裁决法",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-readiness-self-inspection",
+   "title_cn": "等保就绪度与迎检自查法",
+   "one_line": "按备案常缺项与公安检查口径倒序排查迎检就绪度",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "迎检备案合规准备",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-reconciliation-style-checking",
+   "title_cn": "对账式核查法",
+   "one_line": "以系统外基准与不可变主键对账查共享、幽灵、默认账户",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "02-应用层安全",
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "系统账号端口最小化核查",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-reference-value-fallback",
+   "title_cn": "标准留白参考值兜底法",
+   "one_line": "标准留白时自建参考值表兜底并声明其经验值性质",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "测评判定依据兜底",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-report-validity-retest",
+   "title_cn": "测评结论时效边界与变更重测",
+   "one_line": "结论仅对测评时点有效，组件变更或周期到即触发重测",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "报告时效与重测触发",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-risk-assessment-six-steps",
+   "title_cn": "风险评估六步法与测评耦合",
+   "one_line": "资产赋值、重要性阈值、威胁脆弱性到风险排序六步流程",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "六步风险分析方法",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-score-aggregation-chain",
+   "title_cn": "可复算得分聚合链",
+   "one_line": "0-5赋值、加权、修正到结论档位，全链可复算追分",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "得分聚合复算方法",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-separation-of-duties-dual-axis",
+   "title_cn": "职责分离双轴核查",
+   "one_line": "跨层特权互斥与管理审计角色互斥双轴核查职责闭合",
+   "primary": "06-管理与流程合规",
+   "sub": "",
+   "secondary": [
+    "04-服务器与基础设施",
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "职责分离管理核查",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-standard-six-relation-mapping",
+   "title_cn": "跨标准六关系差异映射法",
+   "one_line": "跨标准条款差异收敛为六种关系并配映射矩阵可查询",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "标准差异映射方法",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-test-vantage-point-placement",
+   "title_cn": "工具接入点布点法",
+   "one_line": "沿信任梯度五原则布接入点，隔离设备两侧分段探测",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "工具接入点布点",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-tool-test-typology",
+   "title_cn": "工具测试类型学与证据形态匹配",
+   "one_line": "扫描发现、监测观测、渗透验证三类证据形态不可互换",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "工具类型与证据匹配",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-triple-consistency-check",
+   "title_cn": "三重一致性核查与形式合规穿透",
+   "one_line": "文档、实地、记录三重互证，任一断裂即降档穿透纸面合规",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "三重一致性核查",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-verdict-chain-revision",
+   "title_cn": "判定链与整体测评回改机制",
+   "one_line": "单项到结论判定链固定，整体测评回改是唯一修正通道",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "判定链与回改机制",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "mlps-verdict-tiers",
+   "title_cn": "判定档位体系",
+   "one_line": "符合、部分符合、不适用、进一步跟踪等档位各有触发纪律",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [],
+   "reason": "判定档位体系",
+   "coll": "compliance-assessment"
+  },
+  {
+   "slug": "stinson-adversary-capability-goal-matrix",
+   "title_cn": "敌手能力×目标双轴建模",
+   "one_line": "把安全声明拆成敌手能力×攻击目标格子再评估",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "敌手建模跨领域通用思维",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-attack-feasibility-three-dimensions",
+   "title_cn": "攻击可行性三维评估",
+   "one_line": "算法复杂度×数据可得性×存储成本定级攻击现实威胁",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "攻击定级通用评估框架",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-authenticated-key-establishment",
+   "title_cn": "密钥建立认证绑定审计",
+   "one_line": "裸DH必遭中间人，签名须盖身份与瞬时值并验持有",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "认证密钥建立协议审计",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-birthday-bound-parameter-sizing",
+   "title_cn": "生日界参数反推",
+   "one_line": "n位空间仅给n/2位碰撞安全，按敌手查询量反推位长",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "摘要与ID位长参数选型",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-certificate-validation-checklist",
+   "title_cn": "证书验证审计清单",
+   "one_line": "验签名/有效期/撤销/用途四步，信任锚治理与fail-open",
+   "primary": "07-第三方集成",
+   "sub": "",
+   "secondary": [
+    "2.8-安全配置"
+   ],
+   "reason": "证书与信任基础设施审计",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-collusion-threshold-verification",
+   "title_cn": "合谋阈值双验证",
+   "one_line": "门限须同验t份可恢复与t-1份零信息及份额独立性",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "2.2-访问授权"
+   ],
+   "reason": "门限密码方案验收框架",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-composition-not-amplification",
+   "title_cn": "组合不自动增强",
+   "one_line": "双重加密默认零增益，须证非幂等与组件密钥独立",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "组合≠增强跨领域思维",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-cross-session-reflection-defense",
+   "title_cn": "跨会话反射攻击防御",
+   "one_line": "并行会话搬运认证值，唯一解法是消息流域分离",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "协议认证域分离纪律",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-deterministic-pke-fails",
+   "title_cn": "确定性公钥加密必败",
+   "one_line": "持公钥即可加密候选比对，先查明文空间可枚举性",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "公钥加密随机化审查",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-encrypt-authenticate-composition",
+   "title_cn": "加密认证组合检查表",
+   "one_line": "ECB禁用、先签名后加密，自定义拼接MAC默认可伪造",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "加密认证组合构造审计",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-evidence-tier-labeling",
+   "title_cn": "安全证据四级标注",
+   "one_line": "证明/ROM/启发式/未证假设分级，决策由最弱环节主导",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "证据层级选型决策方法论",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-feasibility-ceiling-first",
+   "title_cn": "可行性上界优先",
+   "one_line": "先证信息论上界再构造顶界方案，不可能性先于选型",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [],
+   "reason": "不可能性判定思维",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-freshness-replay-decision-tree",
+   "title_cn": "新鲜性与重放决策树",
+   "one_line": "时间戳/随机挑战/幂等键三路线，新鲜值须进签名覆盖",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "2.5-业务逻辑安全"
+   ],
+   "reason": "重放防护三路线抉择",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-hash-property-usage-matching",
+   "title_cn": "Hash性质用途匹配",
+   "one_line": "原像/第二原像/碰撞与用途一一对应，SHA-256非充分",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "哈希用途选型检查表",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-key-lifetime-rolling",
+   "title_cn": "密钥寿命与参数滚动",
+   "one_line": "参数按最优攻击外推做生命周期预算与迁移策略",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "密钥参数生命周期管理",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-keysize-not-security",
+   "title_cn": "密钥尺寸不等于安全",
+   "one_line": "大密钥空间遇结构弱点即作废，另查四条结构线",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "密钥尺寸≠安全强度",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-linearity-kills-ciphers",
+   "title_cn": "线性构造必被解方程",
+   "one_line": "线性/仿射组合的密码构造强度为零，须非线性层",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "线性性致结构性崩溃",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-low-entropy-password-offline-audit",
+   "title_cn": "低熵口令离线验证审计",
+   "one_line": "关键在验证面位置：可离线试解的构造必败须移在线",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "口令认证离线暴破面审计",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-nonce-reuse-failure-checklist",
+   "title_cn": "一次性值复用失败清单",
+   "one_line": "IV/nonce/签名k/种子任何复用触发代数级崩溃",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "nonce复用即代数崩溃",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-oracle-surface-control",
+   "title_cn": "谕示面收敛控制",
+   "one_line": "每个能力接口都是攻击原语，须限型限格式默认关闭",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据",
+    "2.6-错误处理与信息泄露"
+   ],
+   "reason": "接口谕示面通用收敛思维",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-partial-leakage-amplification",
+   "title_cn": "部分泄露同态放大审计",
+   "one_line": "一位泄漏可经同态运算加二分查找放大为全明文恢复",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "公钥方案泄漏面清点",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-perfect-secrecy-formalization",
+   "title_cn": "完美保密形式化判据",
+   "one_line": "后验=先验分布三查，核验OTP/QKD类绝对安全宣称",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "完美保密形式化思维",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-proof-coverage-audit",
+   "title_cn": "可证明安全覆盖域审计",
+   "one_line": "证明只保护声明过的格子，拆敌手/量化/模型/构造四界",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [],
+   "reason": "可证明安全观边界审计",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-provable-security-usability-cost",
+   "title_cn": "可证明方案可用性代价",
+   "one_line": "扩张率/解密歧义/吞吐决定混合加密是必然形态",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "安全可用性代价核算",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-pseudorandomness-criterion",
+   "title_cn": "伪随机性判据",
+   "one_line": "统计全绿仅必要条件，验收看不可预测与种子链路",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "伪随机判据理论思维",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-public-key-parameter-hygiene",
+   "title_cn": "公钥参数卫生检查表",
+   "one_line": "RSA/DL/ECC参数结构弱点与私钥泄露处置逐项核对",
+   "primary": "07-第三方集成",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "公钥参数与密管卫生",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-reduction-comparison",
+   "title_cn": "归约比较性质强弱",
+   "one_line": "性质蕴含须写出黑盒转译构造，不靠直觉排序",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [],
+   "reason": "归约思想核心方法",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-security-notion-calibration",
+   "title_cn": "安全度量口径校准",
+   "one_line": "计算/可证明/无条件三把尺子不可混用，先声明再论证",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "安全定义口径方法论",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-signature-homomorphism-breaking",
+   "title_cn": "签名同态伪造审查",
+   "one_line": "裸RSA签名可由旧签名相乘拼出，必须Hash绑定编码域",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "签名同态致组合伪造",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-simulatability-zero-knowledge",
+   "title_cn": "可模拟性零知识判据",
+   "one_line": "零泄漏证明靠模拟器生成同分布假本，失败处即泄漏",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "2.1-身份认证与会话管理"
+   ],
+   "reason": "可模拟性理论判据",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stinson-structural-security-bound",
+   "title_cn": "结构性安全界设计",
+   "one_line": "宽轨道/活动S盒数推轮数，用可计算不变量压攻击上界",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "密码结构可证界评估",
+   "coll": "crypto-foundations"
+  },
+  {
+   "slug": "stallings-algorithm-retirement-crypto-agility",
+   "title_cn": "算法退役与密码敏捷治理链",
+   "one_line": "结构预警→难度外推→套件档位→格式中立→双算法冗余的退役路线图",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "算法退役与套件治理属参数治理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-analysis-cost-vs-brute-force",
+   "title_cn": "理想原语判据：分析代价≥穷举",
+   "one_line": "原语强度被最便宜攻击路径封顶，选型先查有无结构捷径",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "理想原语判据是跨域评估思维",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-anti-replay-window-engineering",
+   "title_cn": "防重放机制选型与窗口工程",
+   "one_line": "重放分四型，按信道形态选质询/时间戳/序号窗口机制",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "防重放属会话新鲜性管理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-attack-capability-success-levels",
+   "title_cn": "攻击能力×成功等级双轴声明",
+   "one_line": "不可伪造声明须拆解攻击者能力档×危害档，厂商宣称常是最低档",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "攻击能力分级用于验证声明",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-attack-service-mechanism-alignment",
+   "title_cn": "攻击—服务—机制三层对齐矩阵",
+   "one_line": "资产定级后逐行核对攻击→服务→机制，交叉矩阵暴露覆盖缺口",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "01-资产边界"
+   ],
+   "reason": "攻击服务机制对齐属跨域方法论",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-attack-surface-shrink-then-layer",
+   "title_cn": "攻击面双杠杆：先收缩再分层",
+   "one_line": "测绘网络/软件/人三栏暴露面先收缩，残余面再分层，两账分记",
+   "primary": "01-资产边界",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "攻击面测绘即资产边界梳理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-attack-tree-and-or-modeling",
+   "title_cn": "攻击树与/或建模",
+   "one_line": "根为目的叶为手法，或节点找最便宜切断点排防御优先级",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [],
+   "reason": "攻击树是威胁建模通用方法",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-auth-assurance-tiering",
+   "title_cn": "认证对象分解与保障分档",
+   "one_line": "验物还是验人、因子按失效定价、风险定 step-up 档位",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "2.5-业务逻辑安全"
+   ],
+   "reason": "认证机制分档属身份认证",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-auth-mechanism-axes",
+   "title_cn": "认证机制选型四轴",
+   "one_line": "覆盖率/范围/摩擦/追责四轴比选域级与个人级机制",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "认证机制比选属身份认证",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-birthday-bound-variant-substitution",
+   "title_cn": "生日界换算与变式调包攻击",
+   "one_line": "m 位 Hash 抗碰撞仅 m/2 位，变式构造使碰撞成调包攻击",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "哈希长度与碰撞量化属加密",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-block-cipher-mode-five-axis",
+   "title_cn": "分组密码工作模式五轴评估",
+   "one_line": "按开销/错误传播/并行等五轴选模式，CTR 需计数器全局唯一",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "工作模式选型属加密治理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-brute-force-three-conditions",
+   "title_cn": "穷举可行三条件",
+   "one_line": "算法已知+空间可穷尽+明文可识别，抬高识别门槛即低成本加固",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "密钥空间与识别门槛属加密",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-canonicalization-first",
+   "title_cn": "规范化先行与松紧权衡",
+   "one_line": "对被改写对象签名/比较前先定规范化，等价类过宽即调包面",
+   "primary": "02-应用层安全",
+   "sub": "2.3-输入验证与注入",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "规范化归一属输入验证范畴",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-capability-negotiation-baseline",
+   "title_cn": "能力协商确定性与弱副本木桶",
+   "one_line": "未知能力有确定规则、最低集只升不降、弱副本拉低整体",
+   "primary": "02-应用层安全",
+   "sub": "2.8-安全配置",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "能力协商基线属安全配置",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-challenge-response-design-criteria",
+   "title_cn": "挑战-应答设计判据",
+   "one_line": "应答须为持钥者变换，权威三件套防反射重放与错配",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "挑战应答判据属认证机制",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-cheap-check-first",
+   "title_cn": "廉价验证前置排序",
+   "one_line": "带密钥的廉价校验排在昂贵运算前，cookie 先证可达再放行",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "抗握手洪泛属服务器可用性防护",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-computational-security-three-questions",
+   "title_cn": "计算安全三问与一次一密判据",
+   "one_line": "防谁/防多久/值多少共同定强度档位，OTP 只作验收判据",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "密钥强度定档属参数治理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-confusion-diffusion-suite",
+   "title_cn": "混淆-扩散检验套件",
+   "one_line": "影响矩阵/雪崩/SAC/非线性/密钥包裹五类自动化检测自研函数",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "自研密码自动化检测属验证",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-constraint-driven-encryption-design",
+   "title_cn": "约束反推的存储加密设计",
+   "one_line": "先列攻击面与功能代数再反推构造，P1619 七条为范例",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "存储加密与FPE设计属加密",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-control-anchor-forgeability",
+   "title_cn": "管控落点与锚点可伪造性",
+   "one_line": "检查点问依赖标识可否伪造，锚点选早可得难伪造字段",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "02-应用层安全"
+   ],
+   "reason": "准入与网络层落点属基础设施",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-credential-splitting",
+   "title_cn": "凭据拆分与协商摊销",
+   "one_line": "载体凭据管分发摊销+一次性证明管身份绑定，各配寿命",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "凭据拆分属会话凭据管理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-crypto-operation-ordering",
+   "title_cn": "密码操作次序纪律",
+   "one_line": "签名加密压缩MAC次序定可见性与可仲裁性，覆盖域防降级重放",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "密码操作排序属验证审查",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-design-principles-review-protocol",
+   "title_cn": "安全设计准则清单化评审",
+   "one_line": "13 条准则逐条过，违反项登记补偿控制，检验同因失效伪纵深",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "设计准则评审是通用方法论",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-deterministic-leak-tweak-binding",
+   "title_cn": "确定性泄漏与tweak绑定",
+   "one_line": "确定性加密泄相等关系，公开唯一 tweak 随对象变化封堵",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "确定性加密泄漏治理属加密",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-domain-parameter-validation-gate",
+   "title_cn": "域参数与公钥校验闸门",
+   "one_line": "曲线判别式/安全素数/群成员检查，校验失败即安全事件",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "域参数治理属加密硬闸门",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-environment-threat-rewrite",
+   "title_cn": "环境迁移的威胁模型重推",
+   "one_line": "盘点旧环境免费保障，丢失项即新攻击面，三列闭环补回",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "09-通用安全方法论"
+   ],
+   "reason": "环境威胁改写归基础设施",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-evidence-alignment-binding",
+   "title_cn": "证据绑定与对齐聚合",
+   "one_line": "多层验证须对齐核心身份，签名三方绑定防剥离搬运重签",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "认证证据对齐属身份认证",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-evidence-asymmetry-non-repudiation",
+   "title_cn": "证据不对称与不可否认",
+   "one_line": "MAC 双方对等不能举证，签名可仲裁，按仲裁场景选机制",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "2.5-业务逻辑安全"
+   ],
+   "reason": "不可否认判定属认证选型",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-extension-point-criticality",
+   "title_cn": "演进接口：扩展点与解耦",
+   "one_line": "可选扩展+critical 显式拒绝语义实现前向兼容演进",
+   "primary": "02-应用层安全",
+   "sub": "2.8-安全配置",
+   "secondary": [],
+   "reason": "扩展点治理属安全配置",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-fail-direction-audit",
+   "title_cn": "fail方向声明与静默失效",
+   "one_line": "每条校验显式声明 fail-open/close，SPF 静默失效最危险",
+   "primary": "02-应用层安全",
+   "sub": "2.6-错误处理与信息泄露",
+   "secondary": [],
+   "reason": "fail方向审计属失效处理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-hardness-dependency-audit",
+   "title_cn": "难题依赖审计与等效换算",
+   "one_line": "陷门/归约/同族三问，跨算法换算对称等效位数再比较",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "难题依赖是跨域评估思维",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-hash-property-application-mapping",
+   "title_cn": "Hash抗性蕴含与应用映射",
+   "one_line": "原像/第二原像/碰撞互不蕴含，按用法选抗性且护校验值",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "Hash选型映射属加密治理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-key-counting-hierarchy",
+   "title_cn": "组合计数与密钥分层",
+   "one_line": "N(N-1)/2 计数变可算问题，层次坍缩按成本×频率分层",
+   "primary": "07-第三方集成",
+   "sub": "",
+   "secondary": [
+    "02-应用层安全"
+   ],
+   "reason": "密钥分发架构属第三方集成",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-key-leak-blast-radius-forward-secrecy",
+   "title_cn": "密钥爆炸半径与前向安全",
+   "one_line": "按能解多少历史定损，长期钥只认证、会话钥临时派生",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "密钥架构与前向安全属加密",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-key-separation-binding",
+   "title_cn": "密钥用途单一与上下文绑定",
+   "one_line": "一钥一用且约束焊进密钥，KDF 纳入用途租约与转录",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "密钥用途纪律属加密治理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-keyless-mutation-test",
+   "title_cn": "无钥变形测试清单",
+   "one_line": "重排/截断/拼接/定向翻转/解方程五类变形，校验过即证伪",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "2.4-加密与敏感数据"
+   ],
+   "reason": "无钥变形测试属验证方法",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-linearity-solvability-test",
+   "title_cn": "线性可解性快判",
+   "one_line": "线性变换即解方程组，已知明文下密钥直接可解，一票否决",
+   "primary": "08-安全基线与渗透验证",
+   "sub": "",
+   "secondary": [
+    "03-代码审计"
+   ],
+   "reason": "自研加密线性快判属测试",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-meet-in-the-middle-cascade-audit",
+   "title_cn": "中间相遇：级联不叠加",
+   "one_line": "双重加密名112实56位，复合构造须按两头夹击重算成本",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "级联强度防御核算属加密",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-metadata-length-side-channel",
+   "title_cn": "元数据与长度侧信道",
+   "one_line": "内容加密后仍泄压缩比/长度/通信存在性，可变填充切断",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "2.6-错误处理与信息泄露"
+   ],
+   "reason": "长度元数据泄漏属侧信道",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-nonce-iv-one-time-constraints",
+   "title_cn": "一次性参数硬约束清单",
+   "one_line": "nonce/IV/盐/k 复用各有失效数学，五类参数统一审查",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "一次性参数防御清单属加密",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-passive-active-response-asymmetry",
+   "title_cn": "被动主动对策不对称",
+   "one_line": "被动难检测投预防，主动难防投检测恢复，据此分预算",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "05-日志审计与监控"
+   ],
+   "reason": "对策重心不对称是通用思维",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-policy-gradual-rollout",
+   "title_cn": "策略灰度与遥测回路",
+   "one_line": "档位序列+百分比灰度，升级挂度量阈值而非日历日期",
+   "primary": "02-应用层安全",
+   "sub": "2.8-安全配置",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "策略灰度上线属安全配置",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-precompute-offline-split",
+   "title_cn": "预计算与在线离线分离",
+   "one_line": "与输入无关的量离线预计算，在线路径轻量化，池按钥护",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "密码运算性能工程属加密",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-protocol-belief-analysis",
+   "title_cn": "协议信念分析三步法",
+   "one_line": "写信念断言逐条找反例再审新假设，审协议时序逻辑",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "认证协议审计属会话管理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-protocol-migration-governance",
+   "title_cn": "兼容过渡与协议演进治理",
+   "one_line": "双清单分账、兼容层带退役表、签名策略封死降级回退",
+   "primary": "02-应用层安全",
+   "sub": "2.8-安全配置",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "协议升级治理属配置演进",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-randomness-engineering-governance",
+   "title_cn": "随机数工程与验收治理",
+   "one_line": "双轴验收+多种子测试矩阵，熵不足拒发钥而非静默继续",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "06-管理与流程合规"
+   ],
+   "reason": "随机数治理属加密随机源",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-revocation-as-propagation",
+   "title_cn": "撤销即通知传播",
+   "one_line": "撤销本质是通知传播，有效期换不设防窗口须声明生效时限",
+   "primary": "07-第三方集成",
+   "sub": "",
+   "secondary": [
+    "02-应用层安全"
+   ],
+   "reason": "吊销传播与PKI信任属集成",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-security-layer-placement",
+   "title_cn": "协议栈层次与覆盖段选型",
+   "one_line": "按覆盖杠杆/透明性/语义粒度选层，分段保护≠端到端",
+   "primary": "04-服务器与基础设施",
+   "sub": "",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "IPsec/TLS层级落点属基础设施",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-security-solution-four-elements",
+   "title_cn": "安全方案四要素核对",
+   "one_line": "算法/产生/分发/协议四栏完备性，任一薄弱整体即薄弱",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "07-第三方集成"
+   ],
+   "reason": "四要素核对是通用方法论",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-side-channel-mitigation-ladder",
+   "title_cn": "侧信道缓解阶梯",
+   "one_line": "盲化>恒定时间>随机延时，数学层与实现层分开评估",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "侧信道缓解属加密实现",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-statistical-residual-order-analysis",
+   "title_cn": "统计残留的阶数分析",
+   "one_line": "密钥空间非指标，按保留几阶统计与所需样本量定档",
+   "primary": "09-通用安全方法论",
+   "sub": "",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "自研构造强度定档判据",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-structural-reduction-parameterized-construction",
+   "title_cn": "结构归约与参数化构造",
+   "one_line": "化归定长组件再论证，海绵三参数派生一族原语",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [],
+   "reason": "密码构造设计方法论属加密",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-transparency-audit-clauses",
+   "title_cn": "透明性与可审计性治理",
+   "one_line": "常数生成规则/公开设计/第三方分析/黑盒定价四条验收条款",
+   "primary": "02-应用层安全",
+   "sub": "2.6-错误处理与信息泄露",
+   "secondary": [
+    "06-管理与流程合规",
+    "2.7-依赖与供应链"
+   ],
+   "reason": "透明性审计条款归信息泄露",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-trust-topology-blast-radius",
+   "title_cn": "信任拓扑与爆炸半径",
+   "one_line": "集中度×密钥量双坐标，量化背书者失陷能冒充多少身份",
+   "primary": "07-第三方集成",
+   "sub": "",
+   "secondary": [],
+   "reason": "信任拓扑治理属第三方集成",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-two-phase-gated-access",
+   "title_cn": "两阶段开门与控制面先行",
+   "one_line": "身份认证与密钥就绪拆两道门，消除已认证明文窗口",
+   "primary": "02-应用层安全",
+   "sub": "2.1-身份认证与会话管理",
+   "secondary": [],
+   "reason": "两阶段门控属认证会话管理",
+   "coll": "crypto-engineering"
+  },
+  {
+   "slug": "stallings-unauthenticated-key-exchange",
+   "title_cn": "无认证密钥交换中间人",
+   "one_line": "密钥协商≠身份认证，无背书公钥可被双钥替换整体接管",
+   "primary": "02-应用层安全",
+   "sub": "2.4-加密与敏感数据",
+   "secondary": [
+    "08-安全基线与渗透验证"
+   ],
+   "reason": "中间人反例防御检查归加密",
+   "coll": "crypto-engineering"
+  }
+ ]
+}

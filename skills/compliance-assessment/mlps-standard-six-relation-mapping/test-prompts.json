@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-standard-six-relation-mapping",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "金融行业的系统做测评，行业标准和国家标准怎么对照？行业到底严在哪？",
+      "expected_behavior": "应激活 mlps-standard-six-relation-mapping, 六关系封闭分类+条款号×关系映射矩阵",
+      "notes": "正面: 行业 vs 国标"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "集团下发的安全规范和国标并存，怎么把两套的差异整理成可查询的结构？",
+      "expected_behavior": "应激活 mlps-standard-six-relation-mapping, 收敛为相同/细化/增强/新增/调整/合并六关系矩阵",
+      "notes": "正面: 集团规范对照"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "等保换版了，新旧条款的差异怎么结构化梳理，不能只罗列条目吧？",
+      "expected_behavior": "应激活 mlps-standard-six-relation-mapping, 换版差距分析收敛为六关系并配映射矩阵",
+      "notes": "正面: 换版差异梳理"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们就对照国标这一套标准查自己的差距，缺哪些控制直接列个整改清单就行。",
+      "expected_behavior": "不应激活本 skill, 无第二套标准作对照（本 skill 排除域），单标准差距检查不适用映射法",
+      "notes": "诱饵: 差距话题但只有一套标准"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "三级比二级的要求多在哪几层？控制点和要求项各增加了多少？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-level-diff-model（同标准相邻等级的三层计数 diff）",
+      "notes": "跨 skill 混淆诱饵: 两套标准平行对照 vs 同标准级差"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "对照下来有条行业标准的要求写法反而比国标松了，是不是直接照国标执行就行？",
+      "expected_behavior": "应激活 mlps-standard-six-relation-mapping, 调整类关系警惕反向弱化，逐条裁决执行口径",
+      "notes": "边界: 反向弱化的处置"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

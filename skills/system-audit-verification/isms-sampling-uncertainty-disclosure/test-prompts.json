@@ -1,0 +1,52 @@
+{
+  "skill": "isms-sampling-uncertainty-disclosure",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "这次抽了 15 家门店检查都没发现问题，报告能不能写'全集团门店符合要求'？",
+      "expected_behavior": "应激活 isms-sampling-uncertainty-disclosure, 结论限定为'所抽样本未见不符合'，报告载明可能降低结论可信性的不确定因素",
+      "notes": "正面场景：结论措辞越权纠正"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "首次会议的议程里，关于抽查这件事要向受审方讲什么？",
+      "expected_behavior": "应激活 isms-sampling-uncertainty-disclosure, 首会告知证据基于样本、存在不确定因素",
+      "notes": "正面场景：首会告知环节"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "没被抽到的那家门店后来出了数据泄露，当时审核报告的结论还站得住吗？",
+      "expected_behavior": "应激活 isms-sampling-uncertainty-disclosure, 核对当时是否完成三处披露闭环（首会/末会/报告）以界定结论边界",
+      "notes": "正面场景：事后倒查结论边界"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "审核报告的封面、目录和页眉页脚有什么排版规范？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 文档格式规范事务",
+      "notes": "诱饵：格式排版"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "下一轮要覆盖 220 家门店，该抽多少家，给我个有依据的数和算法。",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-multi-site-sampling-formula",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-multi-site-sampling-formula）：决定抽多少/抽谁，公式在前、披露在后"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "这次审核对象只有一个机房，所有场所全查了、覆盖率 100%，报告还需要写抽样带来的不确定性吗？",
+      "expected_behavior": "期望 none：全量审核不存在抽样不确定性，样本性披露前提消失，无须启用本技能；若有其他障碍（如某记录缺失）属别的披露义务",
+      "notes": "边界：全查场景下样本性披露的前提消失"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

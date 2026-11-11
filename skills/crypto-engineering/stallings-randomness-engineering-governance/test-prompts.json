@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-randomness-engineering-governance",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "50 万台设备首次开机生成设备密钥，怎么防'同批同钥'事故？",
+      "expected_behavior": "应激活 stallings-randomness-engineering-governance, 并按 TRNG→调节→DRBG 分层+验收矩阵设计量产密钥生成",
+      "notes": "正面场景: 量产防同批同钥, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "随机数跑过一轮 NIST 测试就敢说好吗？验收方案该怎么设计？",
+      "expected_behavior": "应激活 stallings-randomness-engineering-governance, 并用多种子×多测试×多子序列矩阵验收",
+      "notes": "正面场景: 验收方案设计, A2 情境 4"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "DRBG 的 reseed 策略和健康测试怎么配？进程 fork 之后状态怎么办？",
+      "expected_behavior": "应激活 stallings-randomness-engineering-governance, 并评审 DRBG 实现(灾难性故障健康测试/状态输出分离)",
+      "notes": "正面场景: DRBG 实现评审, A2 情境 3"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "自动化测试的随机种子要固定下来方便复现，怎么管理？",
+      "expected_behavior": "不应激活本 skill, 因为是测试工程问题, 无随机安全验收对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 种子话语, 实为测试确定性"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "IV 计数器断电回退导致的 nonce 复用红线怎么审？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-nonce-iv-one-time-constraints (消费侧一次性纪律, 本 skill 管生产与验收)",
+      "notes": "跨 skill 混淆诱饵: A2 明列供给侧一个使用侧"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "直接拿 CPU 的 RDRAND 当唯一熵源行不行？要不要再混别的？",
+      "expected_behavior": "应激活 stallings-randomness-engineering-governance, 因为随机源审计覆盖第三方库/硬件上游正是其语言信号 (expected: stallings-randomness-engineering-governance)",
+      "notes": "边界: 硬件问题表象, 落在熵源治理"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

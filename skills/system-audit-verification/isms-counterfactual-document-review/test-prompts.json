@@ -1,0 +1,52 @@
+{
+  "skill": "isms-counterfactual-document-review",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "供应商合同里只写了一句'发生安全事件时及时响应'，这种模糊条款怎么审它到底可不可执行？",
+      "expected_behavior": "应激活 isms-counterfactual-document-review, 用 5W1H 六问与 SMART 五项各配缺失后果链反证式审读，判'不可证实'并给出可审计改写",
+      "notes": "正面场景：模糊承诺条款审读"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们今年的安全目标写的是'持续提升全员安全意识'，内审时这条目标怎么判写得合不合格？",
+      "expected_behavior": "应激活 isms-counterfactual-document-review, 核对目标是否可测量、有无责任人与时限，用'缺了会坏什么'替代'写了没有'",
+      "notes": "正面场景：目标可测量性审读"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "这份应急预案程序读起来全是正确的空话，怎么系统地把缺的要素挑出来？",
+      "expected_behavior": "应激活 isms-counterfactual-document-review, 逐要素（谁/何事/何时/何地/为何/如何+可测可证）反推缺失后果链",
+      "notes": "正面场景：程序文件空话诊断"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我们从零起草一份新的信息安全方针文件。",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 起草创作不是审读既有承诺文本",
+      "notes": "诱饵：文本写作咨询"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "文件评审时发现他们家的风险评估程序和实际出的评估报告对不上，这种程序和产出物的对应关系怎么核对？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-document-consistency-matrix",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-document-consistency-matrix）：跨文件关系核对，不是单份文本要素质量"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "对方方针写得口号漂亮、内容空洞，现场是不是可以直接开一条不符合？",
+      "expected_behavior": "期望激活 isms-counterfactual-document-review：先反证式定位该文本缺什么要素、审不出什么后果链，判'不可证实'并给补全改写；径直开单跳过了文本诊断步骤（诊断确证仍不达标后，再走定级流程）",
+      "notes": "边界：文本缺陷与开单冲动的分界，先诊断后定级"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

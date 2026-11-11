@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-nonce-iv-one-time-constraints",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "签名服务器的 ECDSA 随机数 k 万一复用会怎样？随机源审计怎么做？",
+      "expected_behavior": "应激活 stallings-nonce-iv-one-time-constraints, 并按 k 复用→私钥泄露的失效数学审随机消费纪律",
+      "notes": "正面场景: ECDSA k 审计, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "多个节点共享密钥跑 CTR 模式，计数器分配的碰撞窗口怎么防？",
+      "expected_behavior": "应激活 stallings-nonce-iv-one-time-constraints, 并统一审查一次性参数分配方案",
+      "notes": "正面场景: nonce 分配评审, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "设备断电重启后 IV 计数器从零开始，这有什么风险？",
+      "expected_behavior": "应激活 stallings-nonce-iv-one-time-constraints, 并做 counter rollback/崩溃回退审计",
+      "notes": "正面场景: counter 回退, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "前端表单防重复提交的 nonce 字段怎么生成和校验？",
+      "expected_behavior": "不应激活本 skill, 因为是 Web 表单交互逻辑, 无一次性密码参数对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: nonce 字面撞车, 实为表单去重"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "50 万台设备量产开机生成密钥，熵源怎么验收才不会同批同钥？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-randomness-engineering-governance (随机数生产与验收, 本 skill 管消费侧纪律)",
+      "notes": "跨 skill 混淆诱饵: A2 明列供给侧和使用侧各审各的"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "RFC6979 确定性 ECDSA 把随机数去掉了，k 的一次性红线还用管吗？",
+      "expected_behavior": "应激活 stallings-nonce-iv-one-time-constraints, 因为确定性+代数结构的封堵仍在一次性参数审查清单内 (expected: stallings-nonce-iv-one-time-constraints)",
+      "notes": "边界: 消费侧话语滑向随机源, 考点是 k 约束本身"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

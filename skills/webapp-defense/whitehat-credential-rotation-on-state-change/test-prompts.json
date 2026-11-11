@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-credential-rotation-on-state-change",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "登录成功之后，session id 需要重新生成一个吗？现在的实现是登录前后保持不变。",
+      "expected_behavior": "应激活 whitehat-credential-rotation-on-state-change, 判定为状态质变必须轮换会话标识（防 Session Fixation），并检查改密/提权路径是否同样轮换",
+      "notes": "正面: 登录后 session 轮换的经典问题"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "测试同学发现我们的短信验证码提交成功之后还能再用一次，这算漏洞吗，要紧吗？",
+      "expected_behavior": "应激活 whitehat-credential-rotation-on-state-change, 按一次性凭据纪律修复：消费即作废，作废与状态更新原子化",
+      "notes": "正面: 一次性凭据可重放"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "在做 OAuth 对接，发现授权码 code 换完 token 之后还能再换一次，是哪个环节没做对？",
+      "expected_behavior": "应激活 whitehat-credential-rotation-on-state-change, 审查 code 的单次消费与绑定校验，落地消费即作废的原子操作",
+      "notes": "正面: OAuth code 重放"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "会话闲置多久自动登出比较合适，30 分钟还是 2 小时？",
+      "expected_behavior": "不应激活本 skill, 因为这是会话超时策略的产品取舍，不属于凭证轮换与一次性纪律; 属产品策略问题, 无需调用书中任何技能",
+      "notes": "诱饵: 同谈会话但主题是超时时长"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "用户密码表现在存的是 md5，打算换成 bcrypt，存储方案怎么改造？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-crypto-misuse-audit (密码存储的算法与盐值设计是密码学误用审计，不是凭证生命周期轮换纪律)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-crypto-misuse-audit, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "登录页加了图形验证码防爆破，但验证码输错几次也不过期、不用刷新，这样留着可以吗？",
+      "expected_behavior": "边界场景: 验证码是一次性凭据，消费（含校验失败）后应刷新作废以防无限试探，应激活本 skill 裁定一次性纪律 (期望激活: whitehat-credential-rotation-on-state-change)",
+      "notes": "边界: 看似防爆破强度问题实为一次性凭据生命周期问题"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-privilege-delta-dataflow",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们工单系统存了用户提交的附件名和 User-Agent 回显，这些会不会形成打到管理员的存储型 XSS？",
+      "expected_behavior": "应激活 caudit-privilege-delta-dataflow, 按'低权可写→高权必读'枚举必达通道字段并逐字段安排输出编码",
+      "notes": "正面场景: 工单系统的提权链排查"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "评估一下盲打后台的可行性：哪些'普通用户可写、管理员一定会看'的字段最值得优先排查？",
+      "expected_behavior": "应激活 caudit-privilege-delta-dataflow, 枚举两端都是人的必达通道并排序利用优先级",
+      "notes": "正面场景: 盲打优先级评估"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "客服在后台会看到用户提交的各种内容，输出编码应该怎么按字段和上下文安排？",
+      "expected_behavior": "应激活 caudit-privilege-delta-dataflow, 逐字段在高权端按上下文输出编码",
+      "notes": "正面场景: 高权端编码清单设计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "反射型 XSS 的 payload 怎么构造才能绕过浏览器自带的过滤器？",
+      "expected_behavior": "不应激活任何本册技能, payload 构造细节(技能明确排除), 且反射型单会话场景不涉权限差",
+      "notes": "诱饵: XSS 话题但为利用构造"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "用户资料里的昵称入库前转义了，被站内信和搜索结果引用展示时还要再处理吗？",
+      "expected_behavior": "不应激活 caudit-privilege-delta-dataflow, 应激活 caudit-second-order-vuln (考点是写入→取出→触发的链路判定, 不是按权限差选目标)",
+      "notes": "跨skill混淆诱饵: 机制(怎么追)与排序(先追哪个)之辨"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "内部工单系统，提交人和处理人都是公司员工、同一个权限级别，备注字段会被对方看到，这算高权限读取通道吗？",
+      "expected_behavior": "边界判定: none。读写两端同为内部同权级, 不存在'低权写→高权读'的权限差, 不构成提权链高发带, 常规输出处理即可",
+      "notes": "边界: 形似工单通道但无信任级差"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

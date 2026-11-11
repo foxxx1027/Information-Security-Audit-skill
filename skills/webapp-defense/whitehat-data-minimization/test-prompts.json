@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-data-minimization",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "老板说'这些用户行为数据先都存着，以后训练模型说不定用得上'，我总觉得不妥，怎么把话说清楚？",
+      "expected_behavior": "应激活 whitehat-data-minimization, 用'不持有即零泄露面'论证：逐环复核采集必要性，给出不采/降采/限期留存方案",
+      "notes": "正面: '先存着以后用'的持有必要性裁决"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "为了排查问题方便，我们把每个请求的完整报文都打进日志，连密码字段都在，这样有风险吗？",
+      "expected_behavior": "应激活 whitehat-data-minimization, 按全链减量审查日志：剔除凭据字段、脱敏、定留存期限",
+      "notes": "正面: 日志全量记录的减量审查"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "合作方要做数据对接，开口要我们数据库的账号密码，能给他们吗，有什么替代方案？",
+      "expected_behavior": "应激活 whitehat-data-minimization, 用最小授权令牌替代凭据交出：只读范围、限期、可撤销",
+      "notes": "正面: 第三方集成的最小授权"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "用户表 8000 万行了，查询越来越慢，分库分表方案怎么做？",
+      "expected_behavior": "不应激活本 skill, 因为这是纯数据架构扩容问题，与'要不要持有数据'无关; 属数据库架构, 无需调用书中任何技能",
+      "notes": "诱饵: 用户数据话题但无持有面裁决"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "已经决定要存用户身份证号了，加密算法和密钥管理怎么选？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-crypto-misuse-audit (持有决策已定，进入'怎么保护'的密码学实现审计，最小化裁决在其上游)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-crypto-misuse-audit, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "App 做头像裁剪，裁完的小图存下来了，用户上传的原图还有必要一直留着吗？",
+      "expected_behavior": "边界场景: 留存环节的减量复核——业务不再需要原图即应限期删除或降质保存，应激活本 skill 裁定 (期望激活: whitehat-data-minimization)",
+      "notes": "边界: 单个字段的留存取舍"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

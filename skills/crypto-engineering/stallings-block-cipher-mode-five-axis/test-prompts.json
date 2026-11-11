@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-block-cipher-mode-five-axis",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "卫星遥测信道误码率高，加密模式选什么？GCM 是不是在这种信道上太脆了？",
+      "expected_behavior": "应激活 stallings-block-cipher-mode-five-axis, 并按错误恢复/错误传播等五轴给高误码信道选模式",
+      "notes": "正面场景: 特殊信道选模式, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "数据库磁盘加密要支持单块随机访问改写，CTR 和 XTS 怎么比？",
+      "expected_behavior": "应激活 stallings-block-cipher-mode-five-axis, 并按并行/随机访问轴+计数器管理成本评估存储模式",
+      "notes": "正面场景: 随机访问加密, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "设计文档里写用 ECB，评审意见怎么写才能把这条堵死？",
+      "expected_behavior": "应激活 stallings-block-cipher-mode-five-axis, 并用五轴评分说明 ECB 泄漏与替代选择",
+      "notes": "正面场景: 为什么不用 ECB, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "AES-NI 是哪年进 x86 指令集的？老至强不支持的话程序怎么降级？",
+      "expected_behavior": "不应激活本 skill, 因为是 CPU 指令集史实与兼容性问题, 无模式选型对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: AES 话语, 实为硬件史实查询"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "数据库字段加密后相同的身份证号密文相同，等值查询和泄漏怎么权衡？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-deterministic-leak-tweak-binding (确定性泄漏与 tweak, 五轴只是把 ECB 泄漏当一票否决项)",
+      "notes": "跨 skill 混淆诱饵: A2 明列 ECB 泄漏在两 skill 的分工"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "嵌入式板子只有加密硬件没有解密引擎，还想在握手前预热降低在线时延，选什么模式？",
+      "expected_behavior": "应激活 stallings-block-cipher-mode-five-axis, 因为 CTR 的'只需加密实现+预处理'六优点正是五轴比较的落点 (expected: stallings-block-cipher-mode-five-axis)",
+      "notes": "边界: 像硬件约束工程问题, 实为模式选型的实现轴"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

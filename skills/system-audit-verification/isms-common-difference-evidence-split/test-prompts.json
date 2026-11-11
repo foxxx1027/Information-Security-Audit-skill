@@ -1,0 +1,52 @@
+{
+  "skill": "isms-common-difference-evidence-split",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们在做 27001 和等保 2.0 的整合自查，想排一张检查表把两边要求都覆盖住不漏项，怎么排？",
+      "expected_behavior": "应激活 isms-common-difference-evidence-split, 用共同关注点底表界定可合并集一次取证，差异点逐标准单独深查，同主题条款按'A条款→B条款→审核方法'成对展开",
+      "notes": "正面场景：双标准合并排表"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "合并内审时像文件控制、培训、内审、管理评审这些两边都有的要求，能不能共用一次取证？",
+      "expected_behavior": "应激活 isms-common-difference-evidence-split, 按共同关注点底表判定哪些可共用证据、哪些同主题条款须分列（如管评过程可合审、输入输出分列）",
+      "notes": "正面场景：共同点共用取证判定"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "多标准合并检查表的初稿出来了，怎么自查它有没有把某个标准的独有要求稀释掉？",
+      "expected_behavior": "应激活 isms-common-difference-evidence-split, 逐标准核对独有要求是否有单侧深查题，防止共同点稀释独有要求",
+      "notes": "正面场景：防稀释自查"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "等保 2.0 三级和二级在定级要求上有什么区别？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 纯标准知识查询，无审核执行设计需求",
+      "notes": "诱饵：知识查询"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "管理层想下个月把几个管理体系放在一起一次审掉，先帮我评估一下这么做行不行。",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-combined-audit-admission",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-combined-audit-admission）：'能不能合并'的准入判定先于'怎么合并取证'"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "两个标准里都有培训要求，是不是抽一次培训记录、谈一次培训负责人，就算两边都审到了？",
+      "expected_behavior": "期望激活 isms-common-difference-evidence-split：须先按底表确认两标准对该共同关注点的要求确实同构才能共用取证；同主题不同侧重点的要求要成对展开防漏",
+      "notes": "边界：想当然共用取证，须走共同点界定流程"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-data-code-separation",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "GraphQL 的查询语句本身能当注入载体吗？这种没怎么见过的注入类型，防御思路应该从哪下手？",
+      "expected_behavior": "应激活 whitehat-data-code-separation, 归因到'用户数据被解释器当代码执行'，选结构与数据分离的防御方向（参数化/白名单 schema）",
+      "notes": "正面: 陌生注入类型的归因与防御方向"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们对用户输入做了转义，为什么日志系统里还是被注入了换行伪造的记录？",
+      "expected_behavior": "应激活 whitehat-data-code-separation, 分析转义为何在该解释器上无效，改为按目标解释器做结构分离（参数化日志字段）",
+      "notes": "正面: 转义了仍被注入的成因分析"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "同事想用正则过滤掉 insert、delete 这种关键字来防 SQL 注入，我觉得不靠谱，怎么说服他？",
+      "expected_behavior": "应激活 whitehat-data-code-separation, 用'数据被当代码'的成因模型论证黑名单必被绕过（编码/注释/拆分），指明参数化才是结构解",
+      "notes": "正面: 关键字过滤方案的可靠性评估"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "数据库连接池配置有问题导致接口频繁超时，帮我看看连接数该怎么配。",
+      "expected_behavior": "不应激活本 skill, 因为这是配置错误类性能问题，无解释器把数据当代码的环节; 属运维调参, 无需调用书中任何技能",
+      "notes": "诱饵: 数据库问题看似相关"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "接手一个 Java 老项目，帮我系统过一遍哪里有反序列化和命令执行的风险点。",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-source-sink-audit (用户要的是在代码库里枚举 source 与 sink 找漏洞面，不是理解注入成因与防御方向)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-source-sink-audit, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们 ORM 的查询全部用了参数绑定，是不是就等于告别 SQL 注入了？",
+      "expected_behavior": "边界场景: 参数化是正确方向，但应激活本 skill 核查例外点——动态表名、orderBy 字段、iBatis $value$ 类插值仍是数据进了代码位 (期望激活: whitehat-data-code-separation)",
+      "notes": "边界: 已做对大部分防御后的残余面确认"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-filter-coverage-map",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "全站上了 WAF 和统一入口过滤，接下来怎么系统梳理哪些数据根本不经过这道防线？",
+      "expected_behavior": "应激活 caudit-filter-coverage-map, 测绘统一过滤的覆盖面边界并产出盲区图与逐项验证结论",
+      "notes": "正面场景: 统一防御的盲区测绘"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "X-Forwarded-For、Referer 这些请求头，还有上传的原始文件名，统一过滤都管得到吗？",
+      "expected_behavior": "应激活 caudit-filter-coverage-map, 按头字段/$_FILES/超全局逐项核对是否在保护内",
+      "notes": "正面场景: 头字段与文件名盲区"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "内部服务互调、日志管道、webhook 回调这些流量，WAF 覆盖得到吗？怎么逐项验证？",
+      "expected_behavior": "应激活 caudit-filter-coverage-map, 把非标准入口纳入覆盖面地图逐项验证",
+      "notes": "正面场景: 非标准入口覆盖核对"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "WAF 昨晚把我们自己的支付回调误拦了，加白名单应该怎么配？",
+      "expected_behavior": "不应激活任何本册技能, WAF 规则运维配置, 不是覆盖面测绘",
+      "notes": "诱饵: WAF 话题但为设备运维"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "入口已经统一过滤了，具体功能点还要不要各自再校验一遍？",
+      "expected_behavior": "不应激活 caudit-filter-coverage-map, 应激活 caudit-data-pollution-two-paths (考点是入口统一+功能点专项的两层部署决策)",
+      "notes": "跨skill混淆诱饵: 测绘已有过滤 vs 决策过滤部署"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们系统压根没有统一过滤层，各业务自己写校验，这时候盲区图还画得出来吗？该先干嘛？",
+      "expected_behavior": "边界判定: 应激活 caudit-choke-point-first。统一过滤(收口)不存在则盲区图无从谈起, 应先定性收口缺失并建议建收口",
+      "notes": "边界: 测绘前提不成立, 退回收口点判断"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

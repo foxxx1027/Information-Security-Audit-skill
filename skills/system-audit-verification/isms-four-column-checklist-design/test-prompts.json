@@ -1,0 +1,52 @@
+{
+  "skill": "isms-four-column-checklist-design",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "零信任改造项目快收尾了，帮我设计一张不流于形式的验收核查表。",
+      "expected_behavior": "应激活 isms-four-column-checklist-design, 按'标准要求/审核检查题/答案记录(是-否二值)/注释与指南'四栏结构出题并保证逐要求至少一题",
+      "notes": "正面场景：项目验收核查表设计"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "网上下载的通用 27001 内审检查表能直接拿来用吗？",
+      "expected_behavior": "应激活 isms-four-column-checklist-design, 适用'外来通用表必须裁剪后用'元规则并给出裁剪要点",
+      "notes": "正面场景：通用表裁剪"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "我们检查表的答案栏想加一档'部分符合'，可以吗？",
+      "expected_behavior": "应激活 isms-four-column-checklist-design, 按二值答案纪律处理：答'否'必附理由，部分符合归'否'并说明",
+      "notes": "正面场景：答案栏设计纪律"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "这次外审的酒店和接送车帮我订一下。",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 纯行政后勤事务",
+      "notes": "诱饵：行政后勤"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "检查表排完发下去了，审核员拿到表以后是先确认对方有没有这个过程，还是直接逐条对照要求打勾？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-two-step-conformity-audit",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-two-step-conformity-audit）：条款审的宏观顺序（先存在后符合），不是单行题目微观结构"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "上期内审三天审下来表格全是勾、一条问题没发现，帮我看看这是审核员不行还是表不行。",
+      "expected_behavior": "期望激活 isms-four-column-checklist-design：'全是勾零发现'是检查表设计失效的典型信号（题目深度不足、否答案无理由栏、表变成围墙），应先改造检查表再评估人员因素",
+      "notes": "边界：表现似人员问题，实质是检查表设计问题"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

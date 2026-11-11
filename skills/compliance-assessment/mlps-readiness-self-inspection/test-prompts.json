@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-readiness-self-inspection",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "公安下周要来做等级保护监督检查，我们从哪里查起性价比最高？",
+      "expected_behavior": "应激活 mlps-readiness-self-inspection, 备案三常缺项+检查内容转自查表倒序排查",
+      "notes": "正面: 迎检倒计时排查"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "首次迎检，备案材料里最容易缺什么？拓扑图要不要和备案表保持一致？",
+      "expected_behavior": "应激活 mlps-readiness-self-inspection, 30 日时限/拓扑一致/三级附加材料三条线索",
+      "notes": "正面: 备案材料缺项"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "上次被责令整改，复查前怎么验证整改真的覆盖了检查口径？",
+      "expected_behavior": "应激活 mlps-readiness-self-inspection, 按公安九项检查内容逐项对照复核",
+      "notes": "正面: 整改复核"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "测评机构后天进场，机房门禁、工位和会议室这些现场环境要准备什么？",
+      "expected_behavior": "不应激活本 skill, 现场接待后勤准备，非合规就绪排查",
+      "notes": "诱饵: 迎检相邻场景但为后勤事务"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "去年的测评报告快满一年了，中间系统还换过一次网关，这份报告还能对外用吗？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-report-validity-retest（单份报告的效力边界与重测触发）",
+      "notes": "跨 skill 混淆诱饵: 组织就绪度 vs 报告效力"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "迎检前一晚才发现网络拓扑图和备案表对不上，是连夜改图还是先做差异自查？",
+      "expected_behavior": "应激活 mlps-readiness-self-inspection, 迎检失败主因是文档与实际脱节，优先一致性核对而非突击补材料",
+      "notes": "边界: 时间压力下的正确动作"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

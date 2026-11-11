@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-admin-webshell-parity",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "老板想让运维后台加一个在线执行 SQL 的控制台，方便平时排查问题，这个功能风险怎么评估？上线要配哪些管控措施？",
+      "expected_behavior": "应激活 caudit-admin-webshell-parity, 先做等价能力判定(在线SQL≈webshell执行面), 再给出默认不上线/白名单/降权/二次验证等管控清单",
+      "notes": "正面场景: 后台新增在线SQL控制台"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "管理后台要上文件管理器，支持上传下载和在线解压，这个功能开之前要落实哪些安全要求？",
+      "expected_behavior": "应激活 caudit-admin-webshell-parity, 把文件管理器翻译成读写外传能力清单, 按等价 webshell 强度逐项给管控(目录固定/文件名随机/独立凭证等)",
+      "notes": "正面场景: 后台文件管理器评审"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "我们 SaaS 平台打算给租户开放 CSV 导入，还支持导入带公式的单元格，这块怎么定风险等级、管控清单怎么列？",
+      "expected_behavior": "应激活 caudit-admin-webshell-parity, 公式求值≈执行面, 按等价能力判定定级并输出管控清单",
+      "notes": "正面场景: 公式导入≈执行面"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "管理后台的界面要升级，左侧菜单想换成可折叠的，有什么好用的前端组件推荐？",
+      "expected_behavior": "不应激活任何本册技能, 纯前端 UI 组件选型, 与后台高危功能的风险评估无关",
+      "notes": "诱饵: 提到'管理后台'但实为界面开发问题"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "后台管理员和普通用户账号存在同一张表里，靠 type 字段区分，这样有没有结构性问题？",
+      "expected_behavior": "不应激活 caudit-admin-webshell-parity, 应激活 caudit-trust-tier-isolation (问的是账号信任级的数据模型隔离, 不是后台功能本身的滥用)",
+      "notes": "跨skill混淆诱饵: 同提'后台', 但考点是前后台同表的结构风险"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "后台的定时任务模块允许管理员填一个服务器上的脚本路径去执行，这算不算高危功能？要按什么强度管控？",
+      "expected_behavior": "应激活 caudit-admin-webshell-parity: 指定脚本路径执行≈命令执行面, 能力等价 webshell, 应按该强度管控",
+      "notes": "边界: 功能形态隐蔽(填路径而非敲命令), 但能力等价, 应激活"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

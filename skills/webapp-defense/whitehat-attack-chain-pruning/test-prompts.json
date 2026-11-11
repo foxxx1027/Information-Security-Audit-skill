@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-attack-chain-pruning",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "新项目要配数据库账号了，应用连库的那种，以前都是图省事直接 root 连，这次想配得规范点，到底该给哪些权限？",
+      "expected_behavior": "应激活 whitehat-attack-chain-pruning, 从'注入拿到初始立足点后攻击链怎么走'出发，逐跳推导应用账号应保留的最小能力集",
+      "notes": "正面: 数据库账号权限按攻击链推导"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们的 Web 进程现在用 root 跑，同事说内网环境无所谓，我心里发毛，该怎么定运行身份？",
+      "expected_behavior": "应激活 whitehat-attack-chain-pruning, 画出失陷后的提权路径（读密钥、跳板内网、改系统文件），按链决定进程降权与文件权限",
+      "notes": "正面: 进程运行身份裁决"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "红队演练假设攻击者通过上传拿到一个 webshell，我想提前把从 webshell 到数据库和内网的路堵死。",
+      "expected_behavior": "应激活 whitehat-attack-chain-pruning, 以 webshell 为初始立足点画攻击链，逐跳砍能力：禁执行目录、账号隔离、出网限制",
+      "notes": "正面: 失陷降损措施设计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我写一份服务器账号申请与审批的流程文档，下周给运维团队评审用。",
+      "expected_behavior": "不应激活本 skill, 因为纯权限管理流程文书，无攻击场景与攻击链推导诉求; 属流程文档工作, 无需调用书中任何技能",
+      "notes": "诱饵: 权限话题的文书版"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "刚接手的云主机默认跑着七八个服务，sshd、邮件、打印全开着，好多根本用不到，要怎么清理？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-attack-surface-reduction (用户要做的是删减用不到的入口即减面，不是假设失陷后裁剪链上权限)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-attack-surface-reduction, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "等保测评要求我们提供数据库'最小权限'的配置说明，帮我整理一份能过检查的说明文档。",
+      "expected_behavior": "边界场景: 目标是产出合规说明文档而非按攻击链推导权限配置，无攻击场景，不应激活任何技能 (本 skill 明确排除'无攻击场景的权限文档编写') (期望不激活任何技能)",
+      "notes": "边界: 提到最小权限但实为合规文档差事"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

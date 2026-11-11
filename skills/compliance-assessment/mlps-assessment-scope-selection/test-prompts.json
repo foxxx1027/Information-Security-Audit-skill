@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-assessment-scope-selection",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "接了个多层微服务加数据湖的等保测评项目，测评对象怎么选？哪些纳入哪些不测，得有个能写进报告的规则。",
+      "expected_behavior": "应激活 mlps-assessment-scope-selection, 架构调研先行，按资产赋值从九类对象选取并写明选择规则、经委托方书面确认",
+      "notes": "正面: 首次划范围"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "门户网站完全公开、没有登录入口，鉴别类的指标还测它吗？是不是该把它从对象里剔出去？",
+      "expected_behavior": "应激活 mlps-assessment-scope-selection, 无鉴权面剔出鉴别类指标，防浪费配额",
+      "notes": "正面: 公开面的对象裁剪"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "委托方质问为什么没把灾备机房纳入测评，我需要一套能书面回复的解释框架。",
+      "expected_behavior": "应激活 mlps-assessment-scope-selection, 按资产赋值与对象选择规则给出可复核的书面依据",
+      "notes": "正面: 范围质疑应答"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "这单测评的报价按人天怎么估？有没有现成的报价单模板？",
+      "expected_behavior": "不应激活本 skill, 商务报价事务，非测评对象选择",
+      "notes": "诱饵: 项目相关但非范围决策"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "二级业务系统和三级系统共用一套机房和堡垒机，这些共用对象上的指标按几级的要求测？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-indicator-selection-rules（对象定了之后按等级与就高原则选指标）",
+      "notes": "跨 skill 混淆诱饵: 对象选择 vs 指标选取"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "业务方想省钱，要把数据湖那一层从这次测评范围里拿掉，但按资产赋值它价值很高，这个口子能开吗？",
+      "expected_behavior": "应激活 mlps-assessment-scope-selection, 按资产赋值规则判定漏测高价值层=范围错误，不得随意裁剪",
+      "notes": "边界: 成本压力下的范围压缩"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

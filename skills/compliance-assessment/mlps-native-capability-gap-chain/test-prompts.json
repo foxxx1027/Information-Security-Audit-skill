@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-native-capability-gap-chain",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "三级系统的强制访问控制，容器平台默认的 seccomp/AppArmor 够不够？不够的话怎么判？",
+      "expected_behavior": "应激活 mlps-native-capability-gap-chain, 判原生能力边界→查第三方补偿证据→缺补偿即判不符合",
+      "notes": "正面: 容器 MAC 能力边界"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "操作系统本身做不到指标要求的那项能力，判不符合合理吗？全行业都没人做啊。",
+      "expected_behavior": "应激活 mlps-native-capability-gap-chain, “全行业默认都没有”不构成放低标准的理由",
+      "notes": "正面: 行业惯例抗辩"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "厂商宣传平台支持双因素鉴别，默认配置里压根没开也没配，这条怎么判？",
+      "expected_behavior": "应激活 mlps-native-capability-gap-chain, 区分宣传能力/默认状态/实际生效，缺补偿即不符合",
+      "notes": "正面: 宣传 vs 默认"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "采购的堡垒机下周到货，上架和割接方案该谁出、窗口怎么约？",
+      "expected_behavior": "不应激活本 skill, 设备上架实施事务，非能力缺口判定",
+      "notes": "诱饵: 产品话题但为实施排期"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "服务网格说支持 mTLS，但默认是 permissive 模式，也没强制加密，这条传输保护怎么判？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-auth-transport-plaintext-veto（能力存在≠默认启用，显式开关+抓包）",
+      "notes": "跨 skill 混淆诱饵: 原生就没有（补偿链） vs 有能力但没启用（否决规则）"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "平台默认没有审计报表功能，他们后来接了一套开源日志平台做报表，这项算补上了吗？",
+      "expected_behavior": "应激活 mlps-native-capability-gap-chain, 第二环：第三方补偿是否真实部署并生效，逐项核证据",
+      "notes": "边界: 有补偿动作时查生效"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

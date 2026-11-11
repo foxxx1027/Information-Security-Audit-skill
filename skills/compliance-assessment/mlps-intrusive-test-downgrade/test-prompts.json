@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-intrusive-test-downgrade",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "客户坚决不让对生产数据库跑漏洞扫描，这批指标怎么合规交差？",
+      "expected_behavior": "应激活 mlps-intrusive-test-downgrade, 双轨处置：降级为低侵入检查替代+报告写明替代理由与未验证范围",
+      "notes": "正面: 拒绝扫描的降级"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "数据库扫描工具必须要 DBA 权限，客户说什么都不给，有什么等价取证办法？",
+      "expected_behavior": "应激活 mlps-intrusive-test-downgrade, 替代证据须证明技术状态：只读配置核查、离线扫描、抽查+tracert",
+      "notes": "正面: 前置条件给不了"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "客户愿意签“自愿放弃验证测试声明”，签完是不是这些项就彻底不用管了？",
+      "expected_behavior": "应激活 mlps-intrusive-test-downgrade, 声明入附件但不免除可检查项义务，豁免有边界",
+      "notes": "正面: 豁免声明的效力"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "扫描报告里一堆高危漏洞，整改建议这段怎么写得专业一点？",
+      "expected_behavior": "不应激活本 skill, 报告文案撰写，非降级豁免程序",
+      "notes": "诱饵: 扫描话题但为报告表达"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "进场前要客户签测试授权书，里面至少该有哪些条款？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-assessment-redlines（授权—限域—限速—陪同—清零的测试纪律）",
+      "notes": "跨 skill 混淆诱饵: 测不了怎么办 vs 能测要满足什么"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "客户只开放只读模式让我们扫，有几项检查只读覆盖不了，我们打算这几项直接在报告里写“符合”，行吗？",
+      "expected_behavior": "应激活 mlps-intrusive-test-downgrade, 未验证范围必须显式化，替代证据门槛是证明技术状态，不得默认符合",
+      "notes": "边界: 部分受限时的结论纪律"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-data-classification-modules",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "集团下面十几个系统，每个项目都自己定敏感数据怎么保护，乱七八糟，怎么统一成一套可复用的标准？",
+      "expected_behavior": "应激活 whitehat-data-classification-modules, 按'数据定级→按级定义保护方式→模块化复用'三步设计分级保护体系",
+      "notes": "正面: 多项目统一安全标准"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "业务接入了新的向量库存用户画像，要不要重新做一次数据资产盘点和定级？",
+      "expected_behavior": "应激活 whitehat-data-classification-modules, 新技术引入后触发重盘数据资产，按级套用或扩展保护模块",
+      "notes": "正面: 新技术引入后的数据资产重盘"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "用户手机号五年前定的是普通字段，现在撞库这么凶，是不是得重新定级保护？",
+      "expected_behavior": "应激活 whitehat-data-classification-modules, 按泄露后果重估字段敏感等级，升级对应保护模块",
+      "notes": "正面: 字段敏感度随时间重估"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们要建数据中台，先做数仓还是先做数据治理，路线图怎么排？",
+      "expected_behavior": "不应激活本 skill, 因为这是数据工程建设路线，与数据分级保护无关; 属数据工程规划, 无需调用书中任何技能",
+      "notes": "诱饵: 数据治理话题看似相关"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "产品想把用户通讯录整个存下来'以后做好友推荐'，这份数据到底该不该收？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-data-minimization (先裁决'要不要持有'即不持有为零泄露面，持有之后才谈分级保护)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-data-minimization, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "等保要求对数据定级备案，能不能给个快速过关的做法，别拖项目进度？",
+      "expected_behavior": "边界场景: 合规分级要落地成工程上可执行的保护措施才算完成，应激活本 skill 用定级与保护模块化方法做，而非应付备案了事 (期望激活: whitehat-data-classification-modules)",
+      "notes": "边界: 看似合规差事实为分级工程化"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

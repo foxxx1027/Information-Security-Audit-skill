@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-trust-assumption-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "这份认证方案的设计文档发我了，帮我评审一下有没有安全问题。",
+      "expected_behavior": "应激活 whitehat-trust-assumption-audit, 显式列出方案隐含信任的全部前提（谁能改什么、哪个值不可伪造、上游是否可靠），逐条检验在真实环境是否成立",
+      "notes": "正面: 方案评审的前提列举与检验"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "JWT 的签名算法字段由客户端传，密钥放在环境变量里，这套实现有问题吗？",
+      "expected_behavior": "应激活 whitehat-trust-assumption-audit, 列出并攻击各前提：alg 头可篡改（none/算法混淆）、环境变量可泄露，给出修正",
+      "notes": "正面: JWT 实现的前提攻击"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "系统都托管在云上了，厂商说底层安全他们负责，我们这边是不是就没事了？",
+      "expected_behavior": "应激活 whitehat-trust-assumption-audit, 检验'云厂商负责=我方安全'的前提：责任共担边界、我方配置与应用层假设逐条审",
+      "notes": "正面: 云托管责任的前提检验"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我看一下这三家渗透测试供应商的报价哪个更划算。",
+      "expected_behavior": "不应激活本 skill, 因为这是商务比价，与机制前提检验无关; 属采购商务, 无需调用书中任何技能",
+      "notes": "诱饵: 安全服务话题的商业版"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "画系统架构图的时候，服务之间的信任关系怎么建模，检查点放哪里？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-trust-boundary (要的是信任域划分与检查位置即结构建模，不是检验某机制的前提假设)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-trust-boundary, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "明明上了 Token 又配了防火墙，最后还是被打进来了，问题可能出在哪？",
+      "expected_behavior": "边界场景: 机制都在却失效，通常是隐含前提被打破（凭证可预测、内网路径、上游漏洞），应激活本 skill 做前提审计而非再加机制 (期望激活: whitehat-trust-assumption-audit)",
+      "notes": "边界: 看似产品失效实为假设失效"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

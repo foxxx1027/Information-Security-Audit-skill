@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-grading-decision",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "新上的业务系统该定几级？业务数据泄露会伤到公众权益，服务中断只影响内部办公，这两条线怎么定？",
+      "expected_behavior": "应激活 mlps-grading-decision, 双要素矩阵分别评定 S 线与 A 线，取高合成 G",
+      "notes": "正面: 新系统定级"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "定级报告下周送专家评审，S 线 A 线的评定理由怎么写才经得起问？",
+      "expected_behavior": "应激活 mlps-grading-decision, 按受侵害客体×侵害程度逐线论证并准备三方校验与备案材料",
+      "notes": "正面: 定级报告撰写"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "云上多租户 SaaS 平台，能不能按以前 Web 系统定二级的老经验直接定？",
+      "expected_behavior": "应激活 mlps-grading-decision, 新形态系统须走双要素矩阵，不能套老经验",
+      "notes": "正面: 云上新形态定级争议"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们想给要采购的安全产品做个检测认证，找什么机构、走什么流程？",
+      "expected_behavior": "不应激活本 skill, 产品检测认证属本 skill 排除域",
+      "notes": "诱饵: 等级话题但为产品检测"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "系统定完三级了，测评指标按三级要求来选，哪些不适用的怎么剔除？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-indicator-selection-rules（按等级选指标+适用性裁决）",
+      "notes": "跨 skill 混淆诱饵: 定级是上游、指标选取是下游"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "这套系统信息泄露只是严重损害公民权益，服务中断会特别严重地损害社会秩序，客户想折中定个二级省点成本，怎么答复？",
+      "expected_behavior": "应激活 mlps-grading-decision, 取高合成不许折中：G=max(S,A)，按服务线定级",
+      "notes": "边界: 折中定级的裁决"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

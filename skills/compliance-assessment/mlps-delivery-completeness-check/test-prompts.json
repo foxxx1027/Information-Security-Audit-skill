@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-delivery-completeness-check",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "外包项目要验收了，乙方只交付了安装包和用户手册，设计文档、工程报告都没提，这样的交付完整吗？",
+      "expected_behavior": "应激活 mlps-delivery-completeness-check, 按物/纸/人/责四要素核查，双清单中过程性文档缺失",
+      "notes": "正面: 外包交付缺过程文档"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "云原生项目收尾，IaC 脚本、CI 流水线定义、镜像仓库权限，这些要不要写进交付清单？",
+      "expected_behavior": "应激活 mlps-delivery-completeness-check, 镜像/IaC 属“物”的清点范围，纳入双清单核对",
+      "notes": "正面: 云原生交付物"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "系统要二次开发了才发现当年没拿到变更历史和设计方案，当初交付到底缺了什么？",
+      "expected_behavior": "应激活 mlps-delivery-completeness-check, 过程性文档缺失是外包交付最常见隐性债务，演进时致命",
+      "notes": "正面: 演进期暴露的交付债"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "运维团队内部交接，值班表、知识库、待办工单怎么移交给下一批人？",
+      "expected_behavior": "不应激活本 skill, 运行期运维交接属本 skill 排除域",
+      "notes": "诱饵: 交接话题但为运行期运维"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "新系统上线验收，开发方自己出了一份安全测试报告，能不能作为验收依据？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-go-live-quality-gate（独立性—公正第三方测试要求）",
+      "notes": "跨 skill 混淆诱饵: 移交完整性 vs 放行测试证据门"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "终态文档都齐了，运维手册用户手册都在，就是过程性文档当时没要，现在系统跑得好好的，还有必要追讨吗？",
+      "expected_behavior": "应激活 mlps-delivery-completeness-check, 过程性文档缺在当时不疼、在演进时致命，应追讨",
+      "notes": "边界: 运行正常时的隐性交付债"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

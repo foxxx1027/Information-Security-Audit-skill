@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-continuous-security-verification",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "WAF 买了、等保也过了，老板问是不是可以不用担心安全了，我该怎么回答？",
+      "expected_behavior": "应激活 whitehat-continuous-security-verification, 把'部署了'当待验证假设，转化为周期健康检查+在线监控+紧急响应的持续验证清单",
+      "notes": "正面: '上了 X 就放心'的假设拆解"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "系统半年零事故，能不能说明现在的安全状态是好的？",
+      "expected_behavior": "应激活 whitehat-continuous-security-verification, 驳斥'零事故=安全'，列出需持续验证的假设（扫描盲区、流程执行率、监控覆盖）",
+      "notes": "正面: 零事故不等于安全的论证"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "安全检查到底多久做一次合适？一年一次渗透是不是就够了？",
+      "expected_behavior": "应激活 whitehat-continuous-security-verification, 按资产等级与变化频率定巡检节奏，用在线监控补周期扫描的盲区",
+      "notes": "正面: 巡检频率与验证节奏设计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我订一下季度安全意识培训的会议室和日程安排。",
+      "expected_behavior": "不应激活本 skill, 因为这是纯会务行政工作，与安全机制验证无关; 属行政事务, 无需调用书中任何技能",
+      "notes": "诱饵: 安全培训话题看似相关"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "安全评审流程定了半年，开发一直嫌慢偷偷跳过，是不是流程本身的设计要改？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-security-process-fit-delivery-cadence (机制被绕过源于与交付节奏错配，要在设计端改造流程节奏与粒度，而非对已存在机制做周期验证)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-security-process-fit-delivery-cadence, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "上次事故复盘发现备份策略写了三年但从没人验证过能不能恢复，我想把这些'写在纸上的机制'逐个确认还活着没。",
+      "expected_behavior": "边界场景: 把制度存在当假设、逐项验证是否仍有效被执行，应激活本 skill 走 Find 循环 (期望激活: whitehat-continuous-security-verification)",
+      "notes": "边界: 从单点备份问题引出的机制存活验证"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

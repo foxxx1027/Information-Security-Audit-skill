@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-security-metadata-pollution",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "列表页支持用户自己勾选导出哪些字段，字段名直接拼进 SQL 查询，这个设计有什么问题？",
+      "expected_behavior": "应激活 caudit-security-metadata-pollution, 排序/导出字段是参与构造结构的元数据, 不得由请求携带, 出现在请求链上本身就是缺陷",
+      "notes": "正面场景: 导出字段名污染"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "下单表单里有个隐藏 input 带着原价，说是方便服务端直接用，这个值会不会被用户改掉？",
+      "expected_behavior": "应激活 caudit-security-metadata-pollution, 金额真值是元数据, 隐藏域携带=请求可篡改, 必须服务端裁决",
+      "notes": "正面场景: 隐藏域携带价格"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "后台的限流阈值做成了接口参数，运营说这样方便动态调整，这个设计有什么风险？",
+      "expected_behavior": "应激活 caudit-security-metadata-pollution, 策略参数(开关/阈值/白名单)可经普通请求链修改即缺陷, 修复为请求传索引+服务端映射",
+      "notes": "正面场景: 策略参数可被请求修改"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "数据库的表结构和字段命名规范，团队里吵得很凶，帮忙定一版规范吧。",
+      "expected_behavior": "不应激活任何本册技能, 数据建模与命名规范, 不是参数来源安全审查",
+      "notes": "诱饵: 字段话题但为建模规范"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "每日签到的'今天已签'标记放在 Cookie 里，用户清了 Cookie 又能签一次，这个怎么改？",
+      "expected_behavior": "不应激活 caudit-security-metadata-pollution, 应激活 caudit-server-side-state-truth (考点是业务状态的真值存放, 非策略参数来源)",
+      "notes": "跨skill混淆诱饵: 同为'客户端携带', 但归状态真值三问"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "搜索结果的页码参数 page 由用户传上来，这个也算'不该由用户传'的参数吗？",
+      "expected_behavior": "边界判定: 应激活 caudit-type-context-defense。页码是普通数据参数(非构造结构的元数据), 该做的是数值类型锁定校验, 归类型语境判据",
+      "notes": "边界: 元数据与普通数据之分, 页码属后者"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

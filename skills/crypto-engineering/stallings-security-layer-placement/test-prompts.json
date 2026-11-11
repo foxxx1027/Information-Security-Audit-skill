@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-security-layer-placement",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "远程访问选 IPsec 还是 TLS？各自到底保护了哪一段？",
+      "expected_behavior": "应激活 stallings-security-layer-placement, 并按覆盖杠杆/透明性/语义粒度三轴比选",
+      "notes": "正面场景: IPsec vs TLS, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "网关统一终止 TLS 之后内网那段明文要不要登记？要不要上 mesh mTLS？",
+      "expected_behavior": "应激活 stallings-security-layer-placement, 并画'保护覆盖哪一段'找明文段+评估叠加",
+      "notes": "正面场景: TLS termination at gateway, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "内网东西向流量还要不要加密？上了一层传输加密够不够？",
+      "expected_behavior": "应激活 stallings-security-layer-placement, 并按每跳安全≠全程安全评估内网加密与两层叠加",
+      "notes": "正面场景: 内网还要加密吗, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "已经决定在网关做 TLS 终止了，现在要把 cipher 配置清单加固一遍。",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'落点已定后的配置加固审计'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 层次话语, 但落点已定只剩配置"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "802.1X 准入检查点锚定的 MAC 标识可不可伪造？放链路层还是 DHCP 层？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-control-anchor-forgeability (标识可伪造性核对, 本 skill 决定机制长在哪层)",
+      "notes": "跨 skill 混淆诱饵: A2 明列先选层再验锚"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "传输层 mTLS 之上再加应用层业务签名，是冗余还是必要？",
+      "expected_behavior": "应激活 stallings-security-layer-placement, 因为'结论常是两层叠加而非二选一'正是其三轴比选输出 (expected: stallings-security-layer-placement)",
+      "notes": "边界: 叠加疑虑, 考点是分层选型判断"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

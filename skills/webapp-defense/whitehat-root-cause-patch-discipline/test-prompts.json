@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-root-cause-patch-discipline",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "渗透报告 40 个漏洞，开发说一天全部修完了，这速度我不敢信，怎么验收？",
+      "expected_behavior": "应激活 whitehat-root-cause-patch-discipline, 逐个核查补丁是消除漏洞成立条件还是仅封堵 POC 特征，按成因口径复测",
+      "notes": "正面: 批量快速修复的验收"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "运维在 WAF 上加了条规则把攻击拦住了，漏洞工单想直接关，行不行？",
+      "expected_behavior": "应激活 whitehat-root-cause-patch-discipline, 判定虚拟补丁属缓解不能结案：要求标注临时、排期根因修复",
+      "notes": "正面: 虚拟补丁能否结案"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "上次的补丁把 script 标签过滤了，这周又冒出来 img onerror 的绕过，为什么补丁会失效？",
+      "expected_behavior": "应激活 whitehat-root-cause-patch-discipline, 论证按 POC 修必被同族变体绕过，改为按成因修（输出编码/参数化的结构改造）",
+      "notes": "正面: 补丁被变体绕过的归因"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "补丁版本的灰度发布和回滚流程应该怎么设计？",
+      "expected_behavior": "不应激活本 skill, 因为这是发布工程流程，与补丁质量裁决无关; 属发布工程, 无需调用书中任何技能",
+      "notes": "诱饵: 补丁话题看似相关"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这个漏洞的根源在第三方 SDK 里，我们是自己打补丁还是去催厂商？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-fix-at-highest-leverage (裁决的是在哪一层修即杠杆，不是修的方式与质量)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-fix-at-highest-leverage, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "复测的时候漏洞没有复现，这个工单就可以直接关闭了吗？",
+      "expected_behavior": "边界场景: 未复现不等于已修复——可能是环境差异或 payload 变化，应激活本 skill 按成因口径验收后才能关单 (期望激活: whitehat-root-cause-patch-discipline)",
+      "notes": "边界: 流程操作问题背后的验收判据"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

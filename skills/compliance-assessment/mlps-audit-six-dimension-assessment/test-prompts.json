@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-audit-six-dimension-assessment",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "等保测评查到安全审计这块，对方就给了个日志文件夹，光有日志算审计能力完备吗？到底要查哪些维度？",
+      "expected_behavior": "应激活 mlps-audit-six-dimension-assessment, 按范围/内容/分析报表/防篡改留存/进程保护/防覆盖六维逐项预检",
+      "notes": "正面: 审计能力全景评估"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "云上的操作审计服务已经开通了，想快速排查审计能力还缺哪块，从哪里入手？",
+      "expected_behavior": "应激活 mlps-audit-six-dimension-assessment, 用六维框架对照云审计服务定位最弱维",
+      "notes": "正面: 云审计服务体检"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "上次出了事件一直查不清是谁执行的操作，想复盘当初审计建设到底缺了哪一环。",
+      "expected_behavior": "应激活 mlps-audit-six-dimension-assessment, 用六维反推缺失维（范围/内容/报表等）",
+      "notes": "正面: 溯源失败复盘"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "把审计记录的输出格式调一下，业务部门想在里面多带一个部门字段。",
+      "expected_behavior": "不应激活本 skill, 具体字段调优属本 skill 排除域",
+      "notes": "诱饵: 审计话题但为字段工程细节"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "操作系统和数据库的审计日志都在本地盘上，管理员随手能删、写满还会覆盖，留存这一维怎么判？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-audit-log-offsite-retention（留存防灭失维的深度判定规则）",
+      "notes": "跨 skill 混淆诱饵: 六维全景 vs 留存单维深查"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "审计六块里他们只做了原始日志留存，分析报表从来没有过，这一维是不是直接就能预判不符合？",
+      "expected_behavior": "应激活 mlps-audit-six-dimension-assessment, 分析报表维缺失即定位为审计弱点并预判",
+      "notes": "边界: 单维缺失的定位与预判"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

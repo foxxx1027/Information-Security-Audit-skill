@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-passive-active-response-asymmetry",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "明年预算要么投全链路加密改造要么投 SIEM 检测平台，钱该往哪边倾斜？",
+      "expected_behavior": "应激活 stallings-passive-active-response-asymmetry, 并按被动不可检测投预防/主动投检测+恢复分派预算",
+      "notes": "正面场景: 预算分配, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "LoRa 传感节点电池只够承担一种防护，选加密还是选入侵检测？",
+      "expected_behavior": "应激活 stallings-passive-active-response-asymmetry, 并做资源受限设备的防护取舍",
+      "notes": "正面场景: IoT 取舍, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "流量都上 TLS 了还要不要 IDS？这笔账怎么算？",
+      "expected_behavior": "应激活 stallings-passive-active-response-asymmetry, 并按被动/主动攻击的对策不对称解释叠加必要性",
+      "notes": "正面场景: 上了加密还要不要 IDS, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "上周报的 XSS 漏洞补丁到底打上没有？帮我回归验证一下。",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'已知具体漏洞的修复决策'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 安全投入话语, 实为漏洞回归验证"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "威胁清单每一条有没有对应机制挡住？覆盖矩阵怎么画？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-attack-service-mechanism-alignment (全谱覆盖核对, 本 skill 做覆盖填完后的预算分派)",
+      "notes": "跨 skill 混淆诱饵: A2 明列覆盖矩阵填完之后的资源分配"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "厂商说他们的流量分析产品能发现窃听行为，这话的边界在哪？",
+      "expected_behavior": "应激活 stallings-passive-active-response-asymmetry, 因为'被动攻击几乎不可检测'的宣称边界审查正是 A2 情境 3 (expected: stallings-passive-active-response-asymmetry)",
+      "notes": "边界: 产品评估话语, 考点是被动攻击可检测性"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

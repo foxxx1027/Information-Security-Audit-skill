@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-indicator-selection-rules",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "二级和三级的业务系统共用一套堡垒机和密钥管理平台，这些共用对象的指标按几级选才对？",
+      "expected_behavior": "应激活 mlps-indicator-selection-rules, 共用物理/管理资源按就高原则，不被多数低等级对象稀释",
+      "notes": "正面: 共用资源就高"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "环境里根本没有拨号网络，相关的指标是不是直接跳过？报告里怎么写？",
+      "expected_behavior": "应激活 mlps-indicator-selection-rules, 先判适用性：环境不触发即不适用且须写明原因，不适用≠不符合",
+      "notes": "正面: 不适用裁决"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "客户自愿加了几项高于基本要求的加固，这些怎么进报告？算不算分？",
+      "expected_behavior": "应激活 mlps-indicator-selection-rules, 特殊指标单列=自愿项可赋权重，与基本指标分开体现",
+      "notes": "正面: 特殊指标处理"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "测评合同里的保密条款和违约责任怎么起草对我们有利？",
+      "expected_behavior": "不应激活本 skill, 合同商务条款起草，非指标确定",
+      "notes": "诱饵: 项目文案但属商务法务"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这个系统还没定级，你先按经验给我挑一版指标凑合用吧。",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-grading-decision（定级是指标选取的上游，顺序不可倒置）",
+      "notes": "跨 skill 混淆诱饵: 跳过定级直接选指标"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "某项指标对应的组件客户环境确实没部署，方案里写“不适用”还是现场判“不符合”？",
+      "expected_behavior": "应激活 mlps-indicator-selection-rules, 指标级适用性裁决发生在方案阶段：环境不触发写不适用并写明原因",
+      "notes": "边界: 不适用在指标层与测评项层的归属"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

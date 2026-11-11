@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-backup-recoverability-verification",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "被测单位说每天都做备份，这条还是被判不符合，他们不服，我怎么把判定依据讲清楚？",
+      "expected_behavior": "应激活 mlps-backup-recoverability-verification, 重心从“有没有备份”转到“能否恢复”，说明缺定期恢复演练即不符合",
+      "notes": "正面: 有备份≠可恢复"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "云厂商答辩说数据三副本自动同步，不需要再做恢复演练，这套说辞怎么反驳？",
+      "expected_behavior": "应激活 mlps-backup-recoverability-verification, 云多副本不回答恢复目标，恢复演练与介质有效性是决定性证据",
+      "notes": "正面: 云多副本话术"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "备份介质全部锁在机房保险柜里，异地保存和离站运输这条怎么查？",
+      "expected_behavior": "应激活 mlps-backup-recoverability-verification, 按策略八要素核查保存场所与离站运输要求",
+      "notes": "正面: 介质场所核查"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我们评审一下双活数据中心架构，切换的时候 RTO 理论上能做到多少？",
+      "expected_behavior": "不应激活本 skill, 高可用架构评审属本 skill 排除域",
+      "notes": "诱饵: 恢复话题但属 HA 架构域"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "他们交了一沓备份恢复测试报告，怎么看是真实演练过的还是检查前补出来的？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-artifact-verification-record-quality（过程记录的四要素实质质检）",
+      "notes": "跨 skill 混淆诱饵: 备份判定 vs 记录效力质检"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "备份制度有、每周备份的记录也有，就是从来没做过恢复演练，这条判不符合还是部分符合？",
+      "expected_behavior": "应激活 mlps-backup-recoverability-verification, 按判分基线：无定期恢复演练直接不符合",
+      "notes": "边界: 制度记录齐但缺演练的档位"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

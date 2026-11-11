@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-deterministic-leak-tweak-binding",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "身份证号字段加密后还要支持等值查询，确定性加密的泄漏面怎么权衡？",
+      "expected_behavior": "应激活 stallings-deterministic-leak-tweak-binding, 并评估相等关系泄漏+等值/机密性冲突分层",
+      "notes": "正面场景: 等值查询加密, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "FPE 保持 16 位卡号格式，等价类撞库风险怎么算？要不要加盐？",
+      "expected_behavior": "应激活 stallings-deterministic-leak-tweak-binding, 并按明文有效熵=总长−已知部分定等价类裕度",
+      "notes": "正面场景: FPE 等价类, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "磁盘加密想让同一个值在不同扇区密文不同，位置绑定怎么设计？",
+      "expected_behavior": "应激活 stallings-deterministic-leak-tweak-binding, 并设计公开、唯一、随对象变化的 tweak",
+      "notes": "正面场景: 位置绑定, A2 情境 3"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "日志里手机号中间四位打星号，这样展示符合个保法的脱敏要求吗？",
+      "expected_behavior": "不应激活本 skill, 因为是合规展示问题, 无确定性加密对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 脱敏话语, 展示层合规非加密方案"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "卫星遥测信道高误码率，CBC、CTR、GCM 这些模式按什么维度比？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-block-cipher-mode-five-axis (传输侧模式五轴选型, 本 skill 深入确定性泄漏机理)",
+      "notes": "跨 skill 混淆诱饵: ECB/FPE 在两 skill 交界"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "缓存键直接用加密后的邮箱，正好同邮箱同键命中，这个用法有没有安全问题？",
+      "expected_behavior": "应激活 stallings-deterministic-leak-tweak-binding, 因为审计'相同输入相同密文'方案的泄漏面正是其适用域 (expected: stallings-deterministic-leak-tweak-binding)",
+      "notes": "边界: 工程上'正好用'的巧用, 实为泄漏面审计"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

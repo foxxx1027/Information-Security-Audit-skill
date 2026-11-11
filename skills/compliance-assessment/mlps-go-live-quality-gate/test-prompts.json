@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-go-live-quality-gate",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "新系统要上线了，UAT 已经签字通过，安全验收这一关还需要补哪些测试证据？",
+      "expected_behavior": "应激活 mlps-go-live-quality-gate, UAT/试运行不能顶替验收，安全测试四件套：配置检查+漏洞扫描+渗透+源代码扫描",
+      "notes": "正面: UAT≠验收"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "开发方自己找了个团队做了渗透测试说没问题，这能当验收依据吗？",
+      "expected_behavior": "应激活 mlps-go-live-quality-gate, 独立性要素：内部/开发方自测被明文禁止",
+      "notes": "正面: 开发自测无效"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "低代码平台交付的项目拿不到源代码，上线验收的安全测试怎么提要求？",
+      "expected_behavior": "应激活 mlps-go-live-quality-gate, 缺代码级审查=部分符合；外包防线要求源代码交付并审查后门",
+      "notes": "正面: 无源码的验收要求"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "系统上线后每周跑一次漏洞扫描，频率够不够？要不要加密一点？",
+      "expected_behavior": "不应激活本 skill, 运行期漏洞管理属本 skill 排除域",
+      "notes": "诱饵: 测试话题但为运行期运营"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "系统已经验收放行了，接下来要做运维移交，交接清单里该列哪些东西？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-delivery-completeness-check（移交完整性四要素）",
+      "notes": "跨 skill 混淆诱饵: 放行前测试门 vs 放行后移交门"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "系统上线后每隔两周就“莫名异常”，重启一下就好了，供应商说是内存泄漏，我总觉得不对，该往哪查？",
+      "expected_behavior": "应激活 mlps-go-live-quality-gate, “间歇性异常+重启即好”是疑似木马信号，往建设期源代码后门方向查",
+      "notes": "边界: 运行期症状回溯建设期质量门"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

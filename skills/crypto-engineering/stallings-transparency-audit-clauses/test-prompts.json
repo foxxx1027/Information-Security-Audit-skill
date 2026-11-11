@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-transparency-audit-clauses",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "采购一个黑盒的 AI 风控加密模块，验收条款里怎么写常数来源可复现？",
+      "expected_behavior": "应激活 stallings-transparency-audit-clauses, 并落成四条验收条款(常数规则/公开文档/分开判定/可认知)",
+      "notes": "正面场景: 黑盒采购条款, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "内部自研混淆方案的准入门槛：设计文档和第三方分析该怎么要求？",
+      "expected_behavior": "应激活 stallings-transparency-audit-clauses, 并把'开放设计'落成准入条款",
+      "notes": "正面场景: 自研方案准入, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "'从来没被攻破过'和'经得起攻击'怎么在合同里分开判定？",
+      "expected_behavior": "应激活 stallings-transparency-audit-clauses, 并把两者分开判定写成条款",
+      "notes": "正面场景: 分开判定条款, desc 明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "下单优惠计算模块的业务代码 review，重点该看什么？",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'业务逻辑组件的密码级审查'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 评审话语, 实为业务代码审查"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "自研算法的陷门和难题归约怎么审？8192 位那种话术。",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-hardness-dependency-audit (数学假设与归约, 本 skill 是组织层透明与准入)",
+      "notes": "跨 skill 混淆诱饵: A2 明列两者先后分工"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "对方曲线常数是设计师手敲的，说有版权不能公开，能过验收吗？",
+      "expected_behavior": "应激活 stallings-transparency-audit-clauses, 因为'固定常数有可复现无自由度的生成规则'正是第一条验收条款 (expected: stallings-transparency-audit-clauses)",
+      "notes": "边界: 法务/版权话语, 考点是常数可复现条款"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-structured-full-read",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "接了个完全没有文档的 Django 老项目做安全评审，不知道从哪开始看，第一周怎么安排？",
+      "expected_behavior": "应激活 caudit-structured-full-read, 按目录结构→入口文件→安全过滤文件(最优先)→函数集与配置的顺序读, 交付数据流图+过滤覆盖表",
+      "notes": "正面场景: 无文档项目上手"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "要在一个陌生的两百多万行仓库里做安全审计，怎么通读才能建立全局数据流图？",
+      "expected_behavior": "应激活 caudit-structured-full-read, 入口文件一遍建立全局数据流地图",
+      "notes": "正面场景: 建立全局数据流"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "审计任务要求覆盖业务逻辑漏洞，我决定通读全文，读的时候应该先看哪些类型的文件？",
+      "expected_behavior": "应激活 caudit-structured-full-read, 按文件角色分派注意力(过滤文件最优先, 它决定可疑点能否利用)",
+      "notes": "正面场景: 通读时的文件优先级"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "这份开源项目的 README 和目录结构能帮我讲讲这个项目是干嘛的吗？",
+      "expected_behavior": "不应激活任何本册技能, 项目功能介绍, 没有安全评审任务",
+      "notes": "诱饵: 看目录结构但为功能了解"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "系统里有个所有 SQL 都会经过的统一入口函数，我该不该把大部分审计时间压在它上面？",
+      "expected_behavior": "不应激活 caudit-structured-full-read, 应激活 caudit-choke-point-first (考点是收口点值不值得压倒性投入的战略取舍, 不是通读顺序)",
+      "notes": "跨skill混淆诱饵: 怎么读 vs 哪里值得压倒性投入"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "时间只有两天，这个三十万行的项目通读一遍现实吗？还是干脆换个打法？",
+      "expected_behavior": "边界判定: 应激活 caudit-audit-path-selection。问题本质是'要不要通读'的路径选型决策, 选定通读后才轮到通读法",
+      "notes": "边界: 提到通读但问的是选型"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

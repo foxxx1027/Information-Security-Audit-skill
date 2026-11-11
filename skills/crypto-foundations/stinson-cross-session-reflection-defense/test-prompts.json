@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-cross-session-reflection-defense",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "cross-session-reflection-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们的认证协议是 A 发 nonce、B 回 MAC(key‖nonce)，渗透测试开两条并行会话把 A 的挑战原样转给 B 就绕过去了，怎么堵？",
+      "expected_behavior": "应激活 stinson-cross-session-reflection-defense, 识别反射/搬运攻击语法，修复走域分离：每条消息流的认证值以不同方式计算（方向/角色/会话 ID 进 MAC 输入）",
+      "notes": "正面场景: 并行会话攻击定位与修复（A2 #2）"
+    },
+    {
+      "id": "cross-session-reflection-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "扫码登录场景，两个用户同时扫了同一个码，后台用同一把密钥算 MAC，会发生什么？改哪里？",
+      "expected_behavior": "应激活 stinson-cross-session-reflection-defense, 分析并发扫码下的跨会话搬运：合法方替攻击者算出认证值，域分离缺失点定位",
+      "notes": "正面场景: 扫码登录回调审计（A2 #1）"
+    },
+    {
+      "id": "cross-session-reflection-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "渗透测试报告写了 parallel session attack，说我们双向认证的消息能被搬运，我要定位是哪条消息流没做域分离。",
+      "expected_behavior": "应激活 stinson-cross-session-reflection-defense, 逐消息流核对认证值计算方式是否区分方向/角色/会话，找出可搬运字段",
+      "notes": "正面场景: 渗透报告中的并行会话字样（A2 #2）"
+    },
+    {
+      "id": "cross-session-reflection-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "WebSocket 两个客户端的消息偶发串台，后端 session 路由逻辑怎么改？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 功能性路由 bug，不是对抗性搬运",
+      "notes": "诱饵: 『跨会话串台』字面相近的普通 bug"
+    },
+    {
+      "id": "cross-session-reflection-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "抓包的人把一条支付请求原样延迟 10 分钟重发，服务端又扣了一次款，加时间戳还是幂等键？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-freshness-replay-decision-tree — 时间维的旧消息重放，走时间戳/挑战/一次性上下文三路线取舍；域分离管不住旧消息重放",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-freshness-replay-decision-tree): 本 skill 管空间维（消息是否属于本会话），兄弟 skill 管时间维"
+    },
+    {
+      "id": "cross-session-reflection-edge-01",
+      "type": "edge_case",
+      "prompt": "我们在 MAC 输入里加了方向字节，C→S 用 0x01、S→C 用 0x02，反射攻击是不是就防住了？",
+      "expected_behavior": "应激活 stinson-cross-session-reflection-defense (expected: 本 skill) — 修复确认型：方向位只盖一个维度，会话 ID/角色/流标识未进 MAC 输入则跨会话搬运仍可能，按域分离维度清单核验",
+      "notes": "边界: 半程修复的验证问题，仍在域分离审计范围内"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

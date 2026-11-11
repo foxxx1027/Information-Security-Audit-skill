@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-defense-in-depth",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们都买了 WAF 了，应用代码里的漏洞还要自己修吗？",
+      "expected_behavior": "应激活 whitehat-defense-in-depth, 按多层设防论证：WAF 只是一层，应用与数据层要在各自正确位置解决本层根因，单层不可替代",
+      "notes": "正面: 单点方案（只上 WAF）够不够"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "老板觉得给全员做一次安全培训就不怕勒索了，我觉得没这么简单，怎么论证？",
+      "expected_behavior": "应激活 whitehat-defense-in-depth, 用木桶无短板模型展示单点方案的失效路径，给出人员+技术多层的配合结构",
+      "notes": "正面: 只做培训的单层依赖"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "新的业务平台要从零设计安全架构，网关、应用、数据、主机这几层怎么分工配合？",
+      "expected_behavior": "应激活 whitehat-defense-in-depth, 设计多层结构并划各层守护边界与衔接，保证任一层失效有下层兜底",
+      "notes": "正面: 整体防御体系设计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "机房要不要加装门禁和监控摄像头，这块预算该怎么申报？",
+      "expected_behavior": "不应激活本 skill, 因为这是物理安全与预算事务，不在本书各技能覆盖范围; 属物理安全行政事务, 无需调用书中任何技能",
+      "notes": "诱饵: 也是'防入侵'但属物理层事务"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "给 Cookie 加上 HttpOnly 之后，之前报的 XSS 漏洞工单能不能关闭？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-mitigation-vs-fix (问的是单个措施够不够格当修复结案即 HttpOnly 属减损控件，不是多层体系设计)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-mitigation-vs-fix, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们上了密钥管理系统，数据是不是就再也不会泄露了？",
+      "expected_behavior": "边界场景: 单一机制被寄予多个安全目标——密管系统守护边界有限，防拖库还需应用与数据层配合，应激活本 skill 按纵深划清各层边界 (期望激活: whitehat-defense-in-depth)",
+      "notes": "边界: 对单一机制寄予过宽期望"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

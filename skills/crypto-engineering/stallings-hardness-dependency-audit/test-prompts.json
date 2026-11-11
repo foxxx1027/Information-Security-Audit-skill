@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-hardness-dependency-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "供应商自研抗量子算法、密钥 8192 位，三句话问倒他该问什么？",
+      "expected_behavior": "应激活 stallings-hardness-dependency-audit, 并用陷门是什么/归约到哪/同族风险三问审查",
+      "notes": "正面场景: 8192 位话术审查, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们整套体系全押在离散对数族上，这种同族集中度风险怎么归并盘查？",
+      "expected_behavior": "应激活 stallings-hardness-dependency-audit, 并做算法族 correlated risk 归并",
+      "notes": "正面场景: 同族一亡盘点, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "RSA-3072、ECC-256、格基方案怎么放到同一个标尺上比较？",
+      "expected_behavior": "应激活 stallings-hardness-dependency-audit, 并换算对称等效位数(禁比原始位数)",
+      "notes": "正面场景: 跨算法统一标尺, A2 情境 3"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "两款防火墙硬件选型，吞吐和并发连接数哪个指标更重要？",
+      "expected_behavior": "不应激活本 skill, 因为是网络设备采购比较, 无难题归约对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 选型比较话语, 非密码难题审计"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "新出的轻量级分组算法选型，有没有公开的差分、线性分析该怎么查？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-analysis-cost-vs-brute-force (对称原语的结构捷径比价, 本 skill 审公钥难题归约)",
+      "notes": "跨 skill 混淆诱饵: A2 明列对称怕统计公钥怕数学可逆"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "格和离散对数算不算同一个难题族？迁到格上算不算分散风险？",
+      "expected_behavior": "应激活 stallings-hardness-dependency-audit, 因为同难题族判定与集中度归并正是其核心域 (expected: stallings-hardness-dependency-audit)",
+      "notes": "边界: 抗量子迁移话语, 考点是难题族相关性"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "isms-network-service-three-line-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "CDN、云备份、邮件网关全外包出去了，供应链安全审核从哪几条线取证？",
+      "expected_behavior": "应激活 isms-network-service-three-line-audit, 按合同/SLA 线（五类安全特性）、设计配置线、日志运行线三线取证",
+      "notes": "正面场景：外包服务三线审"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "合同里写明全程加密传输，怎么核实这家 CDN 没有偷偷用 HTTP 回源？",
+      "expected_behavior": "应激活 isms-network-service-three-line-audit, 沿合同↔配置↔运行三线核对，定位言行不一的断线层",
+      "notes": "正面场景：声明加密实为回源明文"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "托管安全服务的年度评审要看哪些证据？合同、配置、日志各查什么？",
+      "expected_behavior": "应激活 isms-network-service-three-line-audit, 给出三线各自的证据清单（五类安全特性/TLS 等实际配置/拦截量与故障时间）",
+      "notes": "正面场景：托管安全服务年度评审"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮采购部起草一份安全服务供应商的询价函。",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 采购文书起草，非审核取证",
+      "notes": "诱饵：采购流程事务"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "云备份服务商在合同里承诺 RTO 不超过 4 小时，怎么验证他们真做得到？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-recovery-time-verification",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-recovery-time-verification）：时效类承诺的专项实测，不是三线全景审核"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "供应商准入阶段想给两百家候选供应商群发安全问卷做初筛，问卷题怎么设计？",
+      "expected_behavior": "期望 none：问卷群发初筛属采购/尽调流程，不属本书技能范围（通过初筛进入深度审核后才用三线取证）",
+      "notes": "边界：供应商问卷初筛不等于对外包服务的审核"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

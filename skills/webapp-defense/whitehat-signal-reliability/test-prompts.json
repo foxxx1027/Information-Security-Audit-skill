@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-signal-reliability",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "用户流量全在 CDN 后面，我们直接取 X-Forwarded-For 的第一个 IP 做封禁，这样行吗？",
+      "expected_behavior": "应激活 whitehat-signal-reliability, 按可伪造性分级裁决 XFF 各跳可信度：封禁依据应取哪一跳、由可信层注入并校验",
+      "notes": "正面: XFF 取真实 IP 的可信度裁决"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "前端把订单金额算好、加个签名再提交，后端验签通过就直接入库，这可信吗？",
+      "expected_behavior": "应激活 whitehat-signal-reliability, 裁决客户端可控信号不能作为安全边界：金额与签名均可被篡改，裁决权收回服务端",
+      "notes": "正面: 前端签名方案的可靠性"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "做来源校验用 Referer 还是 Origin？Referer 偶尔缺失的请求该怎么处理？",
+      "expected_behavior": "应激活 whitehat-signal-reliability, 按可缺失性分级选主判据（Origin 优于 Referer），定缺失请求的处理策略与误杀权衡",
+      "notes": "正面: 候选信号的主判据选择"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "日志服务器的磁盘容量监控告警阈值应该怎么配置？",
+      "expected_behavior": "不应激活本 skill, 因为这是基础设施容量监控配置，不涉客户端信号可信度; 属运维监控, 无需调用书中任何技能",
+      "notes": "诱饵: '信号/告警'字面相关但属运维监控"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "要从零建一套垃圾账号识别体系，特征框架该怎么搭？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-abuse-feature-model (要的是特征体系架构即三维展开，不是裁决单个信号可不可靠)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-abuse-feature-model, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们用 Cookie 里的自增计数当接口限频的依据，好像不太靠得住？",
+      "expected_behavior": "边界场景: Cookie 属客户端可控字段，'能取到值'不等于'能作安全边界'，应激活本 skill 裁决计数信号须改服务端记账 (期望激活: whitehat-signal-reliability)",
+      "notes": "边界: 限频话题易与资源配额混淆，焦点在计数信号可信度"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

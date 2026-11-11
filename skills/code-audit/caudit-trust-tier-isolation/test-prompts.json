@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-trust-tier-isolation",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "前后台账号放在一张表里、加个 type 字段区分，评审说有风险，到底要不要拆开？",
+      "expected_behavior": "应激活 caudit-trust-tier-isolation, 跑判别式: 一次漏加条件即可跨边界=校验型边界, 应升级分表/独立凭证域的结构型隔离",
+      "notes": "正面场景: 前后台同表评审"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "多租户 SaaS 的数据隔离选型：共享表加 tenant_id、独立 schema 还是独立库，怎么权衡？",
+      "expected_behavior": "应激活 caudit-trust-tier-isolation, 按信任级切分存储并配存储层强制默认条件(行级安全/视图收窄)",
+      "notes": "正面场景: 多租户隔离选型"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "审计发现一个接口漏加租户条件就越权了，是修这个接口，还是干脆改数据结构？",
+      "expected_behavior": "应激活 caudit-trust-tier-isolation, 评估校验型修复与结构型隔离的升级时机",
+      "notes": "正面场景: 修接口还是改结构"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "MySQL 分库分表的中间件，ShardingSphere 的分片策略要怎么配？",
+      "expected_behavior": "不应激活任何本册技能, 同信任级的性能分片运维(技能明确排除同信任级分片)",
+      "notes": "诱饵: 分表话题但无信任边界"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "数据库和应用分机房部署了，但应用还是拿着全权账号直连，这种分离有意义吗？",
+      "expected_behavior": "不应激活 caudit-trust-tier-isolation, 应激活 caudit-api-relay-architecture (考点是访问路径收口与反迷思判别, 不是数据模型切分)",
+      "notes": "跨skill混淆诱饵: 数据域切分 vs 访问路径收口"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们后台有运营和客服两种角色，都在 admin 表里用字段区分，大部分功能都能操作，需要按信任级拆表吗？",
+      "expected_behavior": "边界判定: none。运营与客服同属内部信任级, 差异是功能权限(RBAC 粒度)而非信任边界, 不构成结构性隔离诉求",
+      "notes": "边界: 字段区分的是功能权限而非信任级"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

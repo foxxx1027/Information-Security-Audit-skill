@@ -1,0 +1,52 @@
+{
+  "skill": "isms-three-layer-evidence-chain",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "多因子认证这条控制，光听负责人口头确认加看策略文档我不放心，怎么证明它真的在运行？",
+      "expected_behavior": "应激活 isms-three-layer-evidence-chain, 按设计/文档→系统配置→运行记录三层逐层取证并互相比对",
+      "notes": "正面场景：控制运行验证"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "策略里写了全流量加密、系统里却查不到对应配置，这种断链怎么定位到底坏在哪一层？",
+      "expected_behavior": "应激活 isms-three-layer-evidence-chain, 用三层比对定位断链层（策略有配置无）",
+      "notes": "正面场景：断链定位"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "SaaS 控制台上数据显示数据防泄漏功能'已开启'，界面显示开了就等于实际生效吗？",
+      "expected_behavior": "应激活 isms-three-layer-evidence-chain, 配置开启≠运行生效，须下探运行记录层验证",
+      "notes": "正面场景：控制台显示陷阱"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我起草一份终端杀毒软件的采购技术规格书。",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 采购文书起草，非控制验证",
+      "notes": "诱饵：采购起草"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "内审要按 27001 的条款逐条过，每条要求先查什么再查什么、顺序怎么定？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-two-step-conformity-audit",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-two-step-conformity-audit）：条款符合性判定的总顺序（先存在后符合），不是单个控制的证据深度"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "运维说'日志留存一年的运行证据现在给不了，系统上线才八个月'，这条怎么处理？",
+      "expected_behavior": "期望激活 isms-degraded-evidence-fallback：运行层数据客观上未到期，以约定层+配置层替代并显式声明证据层级与复核时限，而非硬判",
+      "notes": "边界：三层走到底的例外——运行层客观不可得"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

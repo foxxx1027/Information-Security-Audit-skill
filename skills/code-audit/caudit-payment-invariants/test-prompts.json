@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-payment-invariants",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "商城的支付和退款流程要做安全审计，重点核对哪些东西？",
+      "expected_behavior": "应激活 caudit-payment-invariants, 逐条核对三条不变量(金额服务端真值/数值下限/原子幂等)并查回调链再加工",
+      "notes": "正面场景: 资金流程审计"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "业务要上'先享后付、随时退款'的玩法，资金安全上有哪些不变量必须守住？",
+      "expected_behavior": "应激活 caudit-payment-invariants, 对非标准资金流程逐条跑三条不变量再补业务特有检查",
+      "notes": "正面场景: 非标资金流程设计"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "红队进来之前想先把支付域自查一遍，有没有现成的核对清单？",
+      "expected_behavior": "应激活 caudit-payment-invariants, 输出三不变量+回调链检查的自查清单",
+      "notes": "正面场景: 支付域压测前自查"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们 App 要上苹果内购，对接 StoreKit 的流程和沙盒测试环境怎么搞？",
+      "expected_behavior": "不应激活任何本册技能, 支付渠道协议对接(技能明确排除)",
+      "notes": "诱饵: 支付话题但为渠道接入运维"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "每天限领一次的优惠券，有人删了 Cookie 就能反复领，这种资格限制要怎么设计？",
+      "expected_behavior": "不应激活 caudit-payment-invariants, 应激活 caudit-server-side-state-truth (考点是资格/次数状态的真值存放与裁决, 非资金流不变量)",
+      "notes": "跨skill混淆诱饵: 营销资产话题, 但归状态真值三问"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "积分商城用积分兑换礼品的流程，要不要按资金那套严防死守？积分又不能提现。",
+      "expected_behavior": "应激活 caudit-payment-invariants: 积分是可损耗虚拟资产, 金额真值/数值下限(负数兑换)/原子幂等等不变量同样适用",
+      "notes": "边界: 非现金资产, 但三条不变量照常适用"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-adversary-capability-goal-matrix",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "adversary-goal-matrix-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们在验收一个第三方开放平台，文档说所有回调都加了 HMAC-SHA256 签名所以防伪造防篡改，我要给验收结论，这句话够不够下结论，怎么审？",
+      "expected_behavior": "应激活 stinson-adversary-capability-goal-matrix, 把『用了 HMAC』拆成敌手能力×攻击目标双轴格子逐格评估（重放格子、选择明文格子、伪造目标等），指出未声明格子的缺口后再下结论",
+      "notes": "正面场景: 评审『用了 X 就安全』类安全声明（A2 #1）"
+    },
+    {
+      "id": "adversary-goal-matrix-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "威胁建模文档写到『敌手假设』这一节卡住了，不知道怎么把『防什么样的攻击者』写成可审计的定义，有没有固定套路？",
+      "expected_behavior": "应激活 stinson-adversary-capability-goal-matrix, 用能力轴（唯密文→已知明密文对→选择明文→选择密文→主动注入）×目标轴（区分→部分信息→伪造→恢复密钥）写出格子化的敌手假设",
+      "notes": "正面场景: 威胁建模中定义敌手假设（A2 #2）"
+    },
+    {
+      "id": "adversary-goal-matrix-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "红队这次只截获了一段加密流量就交报告了，结论栏写着『部分攻破』，我想搞清楚这在密码学上到底算破到什么程度，怎么定性？",
+      "expected_behavior": "应激活 stinson-adversary-capability-goal-matrix, 按目标轴给攻击成果定级（区分/部分信息/新密文解出/伪造/完全攻破），判定『部分攻破』落在哪个格子",
+      "notes": "正面场景: 渗透测试成果定性（A2 #4）"
+    },
+    {
+      "id": "adversary-goal-matrix-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "React 列表组件一滚动就掉帧，profiler 显示大量重复渲染，帮我定位一下性能问题出在哪。",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 纯功能性性能 bug，无对抗场景、无密码学组件",
+      "notes": "诱饵: 非对抗场景（description 明确排除性能/可用性问题）"
+    },
+    {
+      "id": "adversary-goal-matrix-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "我们支付回调被同一条请求原样重发了两百次，金额全都扣成功了，HMAC 校验也都是过的，先堵哪里？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-freshness-replay-decision-tree — 问题是时间维的旧消息重放，要走时间戳/随机挑战/幂等键三路线取舍",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-freshness-replay-decision-tree): HMAC 字样贴近本 skill 的 A2 案例，但用户要的是重放修复方案"
+    },
+    {
+      "id": "adversary-goal-matrix-edge-01",
+      "type": "edge_case",
+      "prompt": "面试官问 RSA 和 AES 哪个更安全，我想答得专业一点，怎么组织语言？",
+      "expected_behavior": "不应激活任何 skill (expected: none) — 泛比较的科普/面试题，没有具体方案、没有攻击者语境，不构成待拆格子的安全声明；若对方追问『我们用了 X 是否安全』才入格子",
+      "notes": "边界: 科普话术 vs 真实安全声明审计；格子化需要具体对象"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

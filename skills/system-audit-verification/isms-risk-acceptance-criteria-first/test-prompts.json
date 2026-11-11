@@ -1,0 +1,52 @@
+{
+  "skill": "isms-risk-acceptance-criteria-first",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "内审发现他们风险评估一做完就直接上了一批安全控制，事前没有任何风险接受标准，这一块怎么审？",
+      "expected_behavior": "应激活 isms-risk-acceptance-criteria-first, 先查事前准则+可接受级别是否文件化且先于处置决定存在（事后补写标尺=为既定结论找理由）",
+      "notes": "正面场景：准则缺失症状"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "技术团队自己开会拍板接受了数据出境的残余风险，这样处理站得住吗？",
+      "expected_behavior": "应激活 isms-risk-acceptance-criteria-first, 核对残余风险须管理者正式批准而非技术团队自决",
+      "notes": "正面场景：残余风险批准链"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "审风险处置方案的时候，除了看他们加了什么控制，还应查有没有考虑过别的处置选项？",
+      "expected_behavior": "应激活 isms-risk-acceptance-criteria-first, 核查处理/转移/规避/接受四选是否都被考虑而非默认加控制",
+      "notes": "正面场景：处置四选核查"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "这条风险发生概率打 3 分、影响打 5 分，按矩阵算高风险还是中风险？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 单条风险评估打分，非处置治理结构审查",
+      "notes": "诱饵：评估打分工具"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "适用性声明里挑了一堆控制，怎么判断这些选择各自有没有正当理由？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-soa-justification-traceback",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-soa-justification-traceback）：选控说理回溯发生在处置决定为'处理'之后，是下游"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "有个老风险年年评估年年原样留着，谁也说不上来当年是谁批准接受的，这条审出来算什么问题？",
+      "expected_behavior": "期望激活 isms-risk-acceptance-criteria-first：指向接受准则缺失/批准链断裂（无事后可查的标尺与管理者批准记录），按准则先行、四选考虑、管理者批准三个装置定位发现",
+      "notes": "边界：症状在'留着'，病灶在准则与批准链"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

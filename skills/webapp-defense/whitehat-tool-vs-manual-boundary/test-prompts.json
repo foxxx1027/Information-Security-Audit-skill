@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-tool-vs-manual-boundary",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "CI 里的 SAST 跑完零告警，能直接过安全评审发版吗？",
+      "expected_behavior": "应激活 whitehat-tool-vs-manual-boundary, 按可模式化判据评估覆盖面：注入/XSS 类可交工具但 0 告警可能是盲区，逻辑类必须人工，给出绿灯含金量结论",
+      "notes": "正面: 扫描绿灯的含金量判断"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "扫描器误报太多，开发已经麻了开始无视所有报告，这个问题怎么破？",
+      "expected_behavior": "应激活 whitehat-tool-vs-manual-boundary, 按误报分类处置流程，同时划清哪些类型本就不该交给扫描器",
+      "notes": "正面: 误报泛滥的处理"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "老板问越权漏洞为什么不能像 SQL 注入一样自动扫出来，我怎么给他解释清楚？",
+      "expected_behavior": "应激活 whitehat-tool-vs-manual-boundary, 用'漏洞是否可模式化'判据解释：越权依赖业务语义与上下文，特征不固定，须人工",
+      "notes": "正面: 可否自动化的判据解释"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "市面上几家 SAST 产品哪家好，帮我做个对比选型。",
+      "expected_behavior": "不应激活本 skill, 因为这是扫描器产品采购选型（本 skill 明确排除）; 属商业选型, 无需调用书中任何技能",
+      "notes": "诱饵: 扫描器话题的商业版"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "红队报告写着'未发现可利用问题'，这句话的含金量怎么判断？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-coverage-first (问的是结论如何随覆盖面表述即未发现不等于安全，不是工具与人的分工)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-coverage-first, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "想用大模型代替人工做代码安全评审，这事儿可行吗？",
+      "expected_behavior": "边界场景: 本质仍是'这类检查能否自动化'的划界问题——LLM 可承接条目化检查但业务逻辑类仍需人工，应激活本 skill 给出人机分工边界 (期望激活: whitehat-tool-vs-manual-boundary)",
+      "notes": "边界: 新工具形态下的自动化边界"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

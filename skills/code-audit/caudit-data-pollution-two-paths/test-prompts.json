@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-data-pollution-two-paths",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们的数据不全是用户传的：有定时抓第三方 RSS 入库的、有读服务器本地文件的，这些来源还要过滤吗？",
+      "expected_behavior": "应激活 caudit-data-pollution-two-paths, 把污染源建为被动接收/主动获取两条路径, 主动获取同样是污染源必须过滤",
+      "notes": "正面场景: 非请求入口的污染源"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "设计新系统的输入验证架构：统一中间件过滤和各个 handler 自行校验，这个边界怎么划？",
+      "expected_behavior": "应激活 caudit-data-pollution-two-paths, 按'入口统一+功能点专项'两层决策产出检查点矩阵",
+      "notes": "正面场景: 过滤体系两层部署决策"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "WAF 把 HTTP 入口都挡住了，帮我评估一下还有哪些污染源根本不走这个入口？",
+      "expected_behavior": "应激活 caudit-data-pollution-two-paths, 枚举主动获取路径(读文件/抓远程/回读数据库)作为残余污染源",
+      "notes": "正面场景: WAF 之后的残余通道"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "ETL 作业昨天跑失败了，排查下来是源表字段类型变了，谁有类似处理经验？",
+      "expected_behavior": "不应激活任何本册技能, 数据工程排障, 不是输入安全过滤决策",
+      "notes": "诱饵: 数据管道话题但为运维排障"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "用户昵称入库前已经过滤了，导出 Excel 和搜索高亮的时候还会出问题吗？",
+      "expected_behavior": "不应激活 caudit-data-pollution-two-paths, 应激活 caudit-second-order-vuln (考点是写入→取出→触发的链路判定, 不是过滤部署两层决策)",
+      "notes": "跨skill混淆诱饵: 两路模型的下游执行流程"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "回读数据库的数据要不要再过滤，团队吵了两周：一拨说入库前过滤过了，一拨说出库还得再处理，到底谁对？",
+      "expected_behavior": "边界判定: 应激活 caudit-second-order-vuln。争论已落到'取出消费点怎么判'的具体执行(取出即新输入/双控制点), 归二次漏洞判定流程",
+      "notes": "边界: 两路建模与二次漏洞判定的分界, 此问已进入消费点判定"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

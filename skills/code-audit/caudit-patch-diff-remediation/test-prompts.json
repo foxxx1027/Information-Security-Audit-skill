@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-patch-diff-remediation",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们用的那个开源框架昨天爆了 RCE 而且出了补丁，怎么分析对我们版本的影响？",
+      "expected_behavior": "应激活 caudit-patch-diff-remediation, diff 定位根因语句→提炼漏洞模式→按利用方式全库同成因检索→修复字面性检查",
+      "notes": "正面场景: 开源补丁响应"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "官方补丁打上了，但我们是 fork 魔改过的库，怎么确认魔改点也修到位了？",
+      "expected_behavior": "应激活 caudit-patch-diff-remediation, 对 fork 做补丁收敛核对(同成因检索覆盖魔改点)",
+      "notes": "正面场景: 内部 fork 的修复收敛"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "SRC 报了个洞，我们修完上线了，怎么验证修复是真闭环，不是换个写法还能打？",
+      "expected_behavior": "应激活 caudit-patch-diff-remediation, 修复字面性检查(限制须落在解析/重定向后的实际目标, 防等价表示绕过)",
+      "notes": "正面场景: 修复闭环验证"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "npm audit 跑出一堆红色告警，CI 里要不要配置依赖自动升级？",
+      "expected_behavior": "不应激活任何本册技能, 常规依赖升级运维(技能明确排除)",
+      "notes": "诱饵: 补丁话题但为升级流水线运维"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "想在代码里系统搜一遍命令注入的隐患，检索关键字从哪来？",
+      "expected_behavior": "不应激活 caudit-patch-diff-remediation, 应激活 caudit-mechanism-to-search-terms (无补丁语境, 是从机理推导搜索词的挖掘)",
+      "notes": "跨skill混淆诱饵: 检索动作相同但入口不同"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "内部审计自己挖出一个 0day，还没有任何补丁，接下来怎么把同类的地方都收敛掉？",
+      "expected_behavior": "边界判定: 应激活 caudit-mechanism-to-search-terms。无补丁可 diff, 同成因检索退回'从漏洞机理推导搜索词再全库回溯'的路径",
+      "notes": "边界: 想做同成因收敛但缺补丁入口(技能明确排除无补丁0day)"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

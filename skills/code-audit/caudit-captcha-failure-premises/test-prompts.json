@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-captcha-failure-premises",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "登录的图形验证码想换成行为滑块，怎么评估一家验证码服务商的方案到底靠不靠谱？",
+      "expected_behavior": "应激活 caudit-captcha-failure-premises, 用四前提(不刷新复用/无限次爆破/机器可识别/人比机器便宜)逐项验收",
+      "notes": "正面场景: 第三方验证码验收"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们四位数的短信验证码一晚上被爆破了几千次，问题可能出在哪里？",
+      "expected_behavior": "应激活 caudit-captcha-failure-premises, 核对可枚举爆破前提与错误后失效规则",
+      "notes": "正面场景: 验证码被爆破复盘"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "验证码组件验收的时候，怎么证明它防得住机器识别和打码平台？给我一套可检验的合格标准。",
+      "expected_behavior": "应激活 caudit-captcha-failure-premises, 产出四前提可检验标准+硬规则(错一次即失效/不进HTML/Cookie/只存Session判定)",
+      "notes": "正面场景: 可检验的验收标准"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "网站评论区每天几百条赌博垃圾评论，运营问怎么清理和屏蔽这些词。",
+      "expected_behavior": "不应激活任何本册技能, 内容运营的垃圾清理, 与人机验证控件有效性无关",
+      "notes": "诱饵: 同提'屏蔽词'但为运营治理"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "发短信的接口总被人拿脚本刷，一天烧掉好多短信费，下发频率限制怎么设计？",
+      "expected_behavior": "不应激活 caudit-captcha-failure-premises, 应激活 caudit-rate-limit-dual-edge (考点是限频策略的双端推演, 不是验证码控件)",
+      "notes": "跨skill混淆诱饵: 验证码与限频互为配套, 此问归限频"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "同事说验证码也能防 CSRF 伪造请求，让我把表单里的 token 换成验证码，这个说法对吗？",
+      "expected_behavior": "边界判定: none。验证码不承担 CSRF 防护职责(那是 Token 的事), 本册技能不应激活, 应直接纠正职责错位",
+      "notes": "边界: 同为'验证'控件但职责错位(技能明确排除 CSRF)"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

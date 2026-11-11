@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-auth-mechanism-axes",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "企业邮件防伪想上域级签名，高管合同又要个人签字效力，能不能一套方案通吃？",
+      "expected_behavior": "应激活 stallings-auth-mechanism-axes, 并按覆盖率/保护范围/摩擦/追责四轴打分得出叠加互补结论",
+      "notes": "正面场景: A2 情境 1 原文级场景"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "平台批量通知是平台统一签名还是每个发件人自己签，覆盖率和追责怎么取舍？",
+      "expected_behavior": "应激活 stallings-auth-mechanism-axes, 并做域级/个人级机制选型的四轴比较",
+      "notes": "正面场景: A2 情境 2 机制选型"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "SSO 要验到账户级还是设备链级，用户摩擦和可追责粒度怎么平衡？",
+      "expected_behavior": "应激活 stallings-auth-mechanism-axes, 并做联合身份粒度的四轴设计",
+      "notes": "正面场景: A2 情境 3 粒度设计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "全员都在同一个 AD 域里发内部邮件，还有没有必要再额外上一套签名防伪？",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'单一封闭域全员同构部署的场景'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 邮件签名话语, 但落在封闭同构部署排除域"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "SaaS 计费 webhook 用 HMAC 共享密钥还是平台数字签名？将来出了纠纷要能举证。",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-evidence-asymmetry-non-repudiation (证据由谁生成/可否仲裁, 本 skill 管机制覆盖与摩擦)",
+      "notes": "跨 skill 混淆诱饵: 认证机制话语 vs 证据不对称判定"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "对内公告只要证明是公司发的就行，对外合同要能追到具体人，这两类需求怎么拆方案？",
+      "expected_behavior": "应激活 stallings-auth-mechanism-axes, 因为域级(只证域)与个人级(绑个人)两类需求拆分正是四轴比选的典型结论 (expected: stallings-auth-mechanism-axes)",
+      "notes": "边界: 需求拆分问题, 落在机制选型轴上"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

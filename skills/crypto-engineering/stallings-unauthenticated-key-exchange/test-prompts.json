@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-unauthenticated-key-exchange",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "IoT 设备首次配对直接跑裸 DH，密钥是协商出来了，可对面到底是谁知道吗？",
+      "expected_behavior": "应激活 stallings-unauthenticated-key-exchange, 并逐公钥问'由谁背书'定位匿名接管风险",
+      "notes": "正面场景: 裸 DH 无背书, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "客户端弹出自签名证书告警，用户点了'继续访问'，风险到底是什么？",
+      "expected_behavior": "应激活 stallings-unauthenticated-key-exchange, 并评估无背书公钥的双钥替换整体接管",
+      "notes": "正面场景: 自签名证书可以吗, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "TLS 套件清单里还留着 DH_anon，为什么审计说必须禁掉？",
+      "expected_behavior": "应激活 stallings-unauthenticated-key-exchange, 并按匿名套件四形态核查协商信道",
+      "notes": "正面场景: anonymous DH, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "TLS1.3 比 1.2 握手快在哪？1-RTT 和 0-RTT 各是什么机制？",
+      "expected_behavior": "不应激活本 skill, 因为是性能机制科普, desc 明确排除'已认证会话内的性能优化讨论'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 密钥交换话语, 实为协议性能科普"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "自研的认证协议要做全流程安全审计，从哪入手比较好？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-protocol-belief-analysis (全协议三步法, 本 skill 是单一问句族快速入口)",
+      "notes": "跨 skill 混淆诱饵: A2 明列五分钟问句 vs 完整审计"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "配对时扫二维码比对密钥指纹来确认首次连接，能不能代替 PKI？",
+      "expected_behavior": "应激活 stallings-unauthenticated-key-exchange, 因为设计首次信任流程(TOFU/二维码指纹/预置根)正是 A2 情境 4 (expected: stallings-unauthenticated-key-exchange)",
+      "notes": "边界: 带指纹的正面流程设计, 落在首次信任域"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

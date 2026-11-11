@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-deterministic-pke-fails",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "deterministic-pke-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "数据库手机号列用 RSA 公钥直接加密存储，厂商说 RSA-2048 至今没被攻破所以安全，怎么评估这个声明？",
+      "expected_behavior": "应激活 stinson-deterministic-pke-fails, 第一审计项是明文空间大小：手机号空间可枚举，任何人拿公钥加密候选再比对即可恢复，与 RSA 是否被分解无关",
+      "notes": "正面场景: 数据库列加密方案评估（A2 #1）"
+    },
+    {
+      "id": "deterministic-pke-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们 API 返回的加密字段同一个用户永远是同一串密文，客户端拿它当稳定 ID 做关联，有密码学风险吗？",
+      "expected_behavior": "应激活 stinson-deterministic-pke-fails, 确定性加密的密文可识别/可链接问题：等值匹配以机密性为代价",
+      "notes": "正面场景: 确定性加密字段的链接追踪审计（A2 #2）"
+    },
+    {
+      "id": "deterministic-pke-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "身份证号就 18 位且格式固定，用对方 RSA 公钥加密后在公开信道传输，攻击者抓包能枚举出明文吗？",
+      "expected_behavior": "应激活 stinson-deterministic-pke-fails, 按明文空间可枚举性判定：18 位格式化空间离线枚举+公钥比对可行，必须随机化（OAEP 类）",
+      "notes": "正面场景: 低熵明文+公钥加密的枚举比对（A2 #4）"
+    },
+    {
+      "id": "deterministic-pke-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "MySQL 里 LIKE '%后四位%' 前置通配符导致全表扫描，索引怎么优化？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 纯数据库索引优化，无加密语境",
+      "notes": "诱饵: 字段查询话题的工程层"
+    },
+    {
+      "id": "deterministic-pke-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "用户口令直接 SHA-256 后落库，库被拖了，攻击者离线暴破的速度大概什么量级？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-low-entropy-password-offline-audit — 口令场景的验证面结构判定（salt/慢哈希/在线验证），是低熵口令 skill 的总框架；本 skill 管公钥枚举比对",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-low-entropy-password-offline-audit): 同一『低熵+免费验证』语法在口令侧的实例"
+    },
+    {
+      "id": "deterministic-pke-edge-01",
+      "type": "edge_case",
+      "prompt": "既然随机化加密的密文没法做等值查询，那 ECB 模式什么场景下还凑合能用？",
+      "expected_behavior": "应激活 stinson-encrypt-authenticate-composition (expected: stinson-encrypt-authenticate-composition) — 工作模式选型（ECB 禁用/CBC/CTR）是加密认证组合检查表的闸门；本 skill 的确定性失败论证只针对公钥场景",
+      "notes": "边界: 对称工作模式选型归组合检查表，不是本 skill 的公钥确定性范围"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

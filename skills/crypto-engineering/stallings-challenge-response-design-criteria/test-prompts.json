@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-challenge-response-design-criteria",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "蓝牙配对要做 challenge-response，应答里到底回什么？直接把挑战加密回传行不行？",
+      "expected_behavior": "应激活 stallings-challenge-response-design-criteria, 并按'对(挑战‖会话上下文)做持钥变换'判据设计应答",
+      "notes": "正面场景: 应答构造设计, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "握手协商完的套件没做密钥确认，会不会被中间人改掉套件做降级？",
+      "expected_behavior": "应激活 stallings-challenge-response-design-criteria, 并评估显式 key confirmation 握手",
+      "notes": "正面场景: key confirmation, A2 情境 3"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "登录二次验证用动态口令 OTP，新鲜性怎么保证？旧 OTP 截图重放行不行？",
+      "expected_behavior": "应激活 stallings-challenge-response-design-criteria, 并在应答里加新鲜性标记防旧应答重放",
+      "notes": "正面场景: 配对/登录挑战设计, A2 情境 1"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "短信验证码通道被人轰炸刷成本，怎么加发送限流和风控？",
+      "expected_behavior": "不应激活本 skill, 因为是通道风控运营问题, 无挑战-应答构造对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 验证码话语, 实为通道运营"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "API 网关用时间戳+nonce 防重放，5 分钟窗口是不是太宽？参数怎么定？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-anti-replay-window-engineering (窗口机制工程与参数, 本 skill 管应答本身的构造)",
+      "notes": "跨 skill 混淆诱饵: A2 明列不同层的衔接"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们私有协议把明文 challenge 和流密码密文放在同一个会话里，老工程师说这里有 WEP 同款的坑，到底错在哪？",
+      "expected_behavior": "应激活 stallings-challenge-response-design-criteria, 因为'明文挑战与流密码密文不得同现(异或即得密钥流)'是其明列判据 (expected: stallings-challenge-response-design-criteria)",
+      "notes": "边界: 像事故分析, 实为挑战-应答构造判据"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

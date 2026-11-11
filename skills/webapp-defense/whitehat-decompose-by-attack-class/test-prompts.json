@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-decompose-by-attack-class",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "安全组每天被钓鱼、撞库、蠕虫告警轮番轰炸，全在救火，人力到底该怎么组织？",
+      "expected_behavior": "应激活 whitehat-decompose-by-attack-class, 把告警归因到攻击类别，按类别设计一次性方案，逐类把被动救火转为主动免疫",
+      "notes": "正面: 多线告警下的人力组织"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "这个 XSS 修是修完了，可我总觉得同类的洞到处都是，怎么做到修一类而不是修一个？",
+      "expected_behavior": "应激活 whitehat-decompose-by-attack-class, 把个案归到注入类，制定覆盖该类成立条件的类别级方案与验收",
+      "notes": "正面: 从修一个到消一类"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "领导要我提明年的安全目标，怎么定才不是'加强安全意识'这种空话？",
+      "expected_behavior": "应激活 whitehat-decompose-by-attack-class, 按攻击类别把目标翻译成可排期、可验收的工作单元",
+      "notes": "正面: 年度目标的类别化拆解"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我把今年的安全工作整理成年终汇报的 PPT 大纲。",
+      "expected_behavior": "不应激活本 skill, 因为这是纯汇报文书工作，与按攻击类别组织工作无关; 属文书整理, 无需调用书中任何技能",
+      "notes": "诱饵: 安全工作话题的文书版"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "产品经理甩来一句'把账号体系做得更安全'，这个需求该怎么接？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-requirement-decomposition (需求期把口号分解为可判定威胁条目，与运营期把涌来的问题归类排期是两个阶段)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-requirement-decomposition, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "季度 OKR 里写了'消除注入类风险'，这个目标怎么拆成能落地执行的任务？",
+      "expected_behavior": "边界场景: 以攻击类别为工作单元做拆解排期——盘点注入类成立条件、设计类别级方案、逐项验收，应激活本 skill (期望激活: whitehat-decompose-by-attack-class)",
+      "notes": "边界: 看似 OKR 管理实为类别化分解"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

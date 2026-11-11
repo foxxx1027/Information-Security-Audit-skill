@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-cross-context-channel-enumeration",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "页面要嵌第三方的支付组件，用 postMessage 跟它双向通信，接收消息这边怎么写才安全？",
+      "expected_behavior": "应激活 whitehat-cross-context-channel-enumeration, 枚举该集成涉及的全部跨上下文通道，逐条落接收端校验（origin 白名单、消息结构校验）",
+      "notes": "正面: postMessage 接收端校验"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "微前端拆成了五个子应用，互相通过 window 传消息，这块的安全要怎么审？",
+      "expected_behavior": "应激活 whitehat-cross-context-channel-enumeration, 按通道清单逐条审计每条消息链路：谁可发、接收端验了什么、数据流向哪",
+      "notes": "正面: 微前端跨应用通信审计"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "公司要发一个浏览器插件，想提前评估下插件的攻击面主要在哪里。",
+      "expected_behavior": "应激活 whitehat-cross-context-channel-enumeration, 枚举扩展的消息总线、content script 与页面、后台之间的通道并逐条设防",
+      "notes": "正面: 浏览器扩展的通道枚举"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "纯后端 REST 服务的 JWT 鉴权中间件代码应该怎么写？",
+      "expected_behavior": "不应激活本 skill, 因为这是单应用服务端鉴权实现，无跨 iframe/跨源/跨扩展通信场景; 属编码实现问题, 无需调用书中任何技能",
+      "notes": "诱饵: 安全实现话题但无跨上下文通道"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "API 网关统一做鉴权，还是每个微服务自己校验？这个检查点应该摆在哪里？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-trust-boundary (用户问的是信任域划分与检查位置，不是浏览器运行时的跨上下文通道枚举)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-trust-boundary, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们把 CORS 配成了域名白名单，只允许自家域访问，跨域这块是不是就没什么洞了？",
+      "expected_behavior": "边界场景: CORS 只是众多通道之一，应激活本 skill 继续枚举 postMessage、拖拽、iframe 嵌套、扩展等侧门通道并逐条验证接收端校验 (期望激活: whitehat-cross-context-channel-enumeration)",
+      "notes": "边界: 单项配置正确不等于通道全覆盖"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

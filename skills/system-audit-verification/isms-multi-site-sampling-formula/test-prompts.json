@@ -1,0 +1,52 @@
+{
+  "skill": "isms-multi-site-sampling-formula",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "全国 180 家门店的年度内审，到底抽几家的依据怎么算？要能应对老板的质疑。",
+      "expected_behavior": "应激活 isms-multi-site-sampling-formula, 先过相似性闸门再按平方根×风险系数算最低样本量并留计算底稿",
+      "notes": "正面场景：门店抽样量依据"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "所有分部业务都差不多，老板说抽三家意思一下就行，这么处理有什么问题？",
+      "expected_behavior": "应激活 isms-multi-site-sampling-formula, 走相似性闸门与风险系数计算，说明凭'差不多'直接定样本量的风险",
+      "notes": "正面场景：拍脑袋抽样纠正"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "初审、监督审核、再认证三个周期的场所覆盖节奏和抽样量怎么排？",
+      "expected_behavior": "应激活 isms-multi-site-sampling-formula, 按审核类型套对应系数（初审/监审/再认证）并注意总部必查不可抽样",
+      "notes": "正面场景：多年审核节奏设计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "单一场地的现场审核，一天之内先查哪个部门后查哪个部门怎么排？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 单场所日程编排，无多场所抽样问题",
+      "notes": "诱饵：单场地日程"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "抽样方案定了抽 15 家店，审核报告里的结论怎么写才不算越权？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-sampling-uncertainty-disclosure",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-sampling-uncertainty-disclosure）：'抽多少'已定，进入'抽完怎么披露'，公式在前披露在后"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "40 家门店里有 5 家是去年新并购的，用的系统和流程跟其他家都不一样，这 5 家也能按公式抽吗？",
+      "expected_behavior": "期望激活 isms-multi-site-sampling-formula：不相似现场没有抽样豁免、必须全查——公式适用前提是相似性闸门先通过",
+      "notes": "边界：公式适用前提（现场相似性）被打破"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

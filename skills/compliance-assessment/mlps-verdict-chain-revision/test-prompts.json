@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-verdict-chain-revision",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "一堆单项判定出来了，从这到最终报告结论中间还要走哪些必经步骤？",
+      "expected_behavior": "应激活 mlps-verdict-chain-revision, 判定链固定顺序：单项→单元→整体测评→风险分析→结论→报告",
+      "notes": "正面: 判定链流程"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "物理机房那项不符合，但他们有异地托管的等价措施，结论里能不能体现弥补？",
+      "expected_behavior": "应激活 mlps-verdict-chain-revision, 整体测评发现弥补关系可回改单元结论，须书面写明关联项与弥补程度",
+      "notes": "正面: 弥补的合法体现"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "客户质疑：现场第一次说不符合，报告里却变成基本符合，中间发生了什么？",
+      "expected_behavior": "应激活 mlps-verdict-chain-revision, 回改机制解释：整体测评弥补是唯一合法修正通道且留痕",
+      "notes": "正面: 结论变化解释"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "测评报告的封面署名、编号和页眉页脚有什么格式模板要求？",
+      "expected_behavior": "不应激活本 skill, 报告格式模板问题，非判定链程序",
+      "notes": "诱饵: 报告话题但为格式规范"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这一项的证据一半指向符合一半指向不符合，先解决证据问题还是先出判定？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-preponderant-evidence（链第一环：单项判定内部的证据裁决）",
+      "notes": "跨 skill 混淆诱饵: 第一环证据裁决 vs 第一环之后的全链纪律"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "做整体测评时想直接把最终分数调上去反映弥补效果，单元判定就不动了，这样行吗？",
+      "expected_behavior": "应激活 mlps-verdict-chain-revision, 回改是唯一合法修正通道，必须回改单元并书面写明关联测评项与弥补程度",
+      "notes": "边界: 绕过回改直接调分的合法性"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

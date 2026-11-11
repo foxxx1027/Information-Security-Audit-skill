@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-public-key-parameter-hygiene",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "parameter-hygiene-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "验收 CA 的密钥生成器，抽检发现 RSA 的 p、q 离得很近，还有部分密钥的 d 偏短，列一份检查清单。",
+      "expected_behavior": "应激活 stinson-public-key-parameter-hygiene, 输出 RSA 侧结构检查表：p/q 距离（Fermat 分解）、小解密指数（Wiener）、共模、低指数广播逐项过",
+      "notes": "正面场景: 密钥生成器验收（A2 #1）"
+    },
+    {
+      "id": "parameter-hygiene-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "两个业务部门为了方便共用同一个 RSA 模数、各用不同公钥指数，这个配置有什么攻击？",
+      "expected_behavior": "应激活 stinson-public-key-parameter-hygiene, 共模攻击：不同指数下两把公钥可联立解出明文/私钥，模数必须每用户唯一",
+      "notes": "正面场景: 多用户密钥配置审计（A2 #3）"
+    },
+    {
+      "id": "parameter-hygiene-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "一把 RSA 私钥疑似泄露了，应急方案是只换新证书但保留原来的模数和指数，行不行？",
+      "expected_behavior": "应激活 stinson-public-key-parameter-hygiene, 泄露处置：泄露换模数不换指数无效——密钥对整体作废，按失陷半径（单钥/模数/历史数据）定处置动作",
+      "notes": "正面场景: 私钥泄露事件响应（A2 #2）"
+    },
+    {
+      "id": "parameter-hygiene-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "Jenkins 凭据库里堆了几十个 SSH 私钥，权限和轮换治理怎么收口？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 凭据治理流程，不是密钥参数结构问题",
+      "notes": "诱饵: 私钥管理话题的流程层"
+    },
+    {
+      "id": "parameter-hygiene-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "2026 年新签的 RSA-2048 证书还能安全用到 2030 之后吗？还是要现在就切 ECC？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-key-lifetime-rolling — 参数值随时间/算力进展的寿命预算与迁移策略；本 skill 管单次生成的结构卫生",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-key-lifetime-rolling): 结构维 vs 时间维的正交分工"
+    },
+    {
+      "id": "parameter-hygiene-edge-01",
+      "type": "edge_case",
+      "prompt": "同事自选了一条椭圆曲线，参数随机生成、群阶也验证过是素数，是不是就过关了？",
+      "expected_behavior": "应激活 stinson-public-key-parameter-hygiene (expected: 本 skill) — 素数阶不够：还要查嵌入次数（超奇异/MOV）、迹一曲线、p-1 与群阶因子分解、参数生成种子可复现性——自定义曲线验收清单",
+      "notes": "边界: 『随机+素数阶』看似达标的辩护，结构卫生清单更长"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

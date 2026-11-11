@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-composition-not-amplification",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "composition-not-amplification-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "团队提议对敏感字段先 AES 加密再叠一层 ChaCha，两把密钥都从同一个主密钥派生，这样强度到底提升多少？",
+      "expected_behavior": "应激活 stinson-composition-not-amplification, 按非幂等性/组件独立性/密钥独立性三要素核算：同源派生密钥使穷举界塌缩回单钥，默认增益为零",
+      "notes": "正面场景: 双重加密提议评审（A2 #1）"
+    },
+    {
+      "id": "composition-not-amplification-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "老板说混淆器把同一段变换连跑 8 遍，轮数多总归更安全，我怎么专业地评估这个增益？",
+      "expected_behavior": "应激活 stinson-composition-not-amplification, 判断变换是否幂等：幂等组件迭代白做，可交换幂等组件的乘积仍幂等",
+      "notes": "正面场景: 多轮相同变换叠加评审（A2 #3）"
+    },
+    {
+      "id": "composition-not-amplification-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "同事想随机数同时取 /dev/urandom 和硬件 RNG 再混在一起用，说是双保险，这个组合值得上吗？",
+      "expected_behavior": "应激活 stinson-composition-not-amplification, 评估两套随机源混用的独立性假设：无独立性论证的组合默认零增益",
+      "notes": "正面场景: 两套随机源混用提议（A2 #2）"
+    },
+    {
+      "id": "composition-not-amplification-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "微服务链路加了三层重试又叠两层幂等控制，还是偶发重复下单，可靠性行不行怎么梳理？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 系统可靠性设计，无密码学组合对象",
+      "notes": "诱饵: 『多层叠加』字面相近的分布式系统工程"
+    },
+    {
+      "id": "composition-not-amplification-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "报文用 AES-CBC 加密之后再在尾部附一个 HMAC，加密钥和 MAC 钥要不要分开？先加密后认证还是反过来？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-encrypt-authenticate-composition — 加密+MAC 是两种功能的分工拼接（顺序/密钥分离/构造标准化），不是同类组件叠加",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-encrypt-authenticate-composition): AES+AES 是叠加（本 skill），加密+MAC 是分工（兄弟 skill）"
+    },
+    {
+      "id": "composition-not-amplification-edge-01",
+      "type": "edge_case",
+      "prompt": "三重 DES 不也是同一个算法跑三遍吗？为什么它就被认为是有效的，跟我这双重加密有什么本质区别？",
+      "expected_behavior": "应激活 stinson-composition-not-amplification (expected: 本 skill) — 3DES 是正面样本：密钥独立时增益也只到 2^112 而非 3×56=2^168，密钥相关时退回单钥强度；用同一框架解释真实增益而非启动审查",
+      "notes": "边界: 标准构造是正面案例（description 排除『审查对象』但解释其组合增益正是本 skill 的机制）"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

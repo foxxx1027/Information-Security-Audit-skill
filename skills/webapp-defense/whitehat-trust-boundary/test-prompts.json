@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-trust-boundary",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "同一个 K8s 集群里的服务互相调用，还要做认证吗？都是自己人写的服务啊。",
+      "expected_behavior": "应激活 whitehat-trust-boundary, 按信任域建模反驳'同集群=互信'：划信任边界，低信任到高信任的数据流必须过边界检查",
+      "notes": "正面: 内网互信的边界论证"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "参数校验放在 API 网关统一做，还是下沉到每个微服务里自己做？",
+      "expected_behavior": "应激活 whitehat-trust-boundary, 按数据流向与信任等级决定检查位置：网关挡跨边界流量，服务内校验各自的边界职责",
+      "notes": "正面: 校验层的摆位"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "同事图方便把 session id 拼在 URL 里做跳转，我说不行又讲不清道理。",
+      "expected_behavior": "应激活 whitehat-trust-boundary, 按信任边界与数据流解释：URL 会流经日志/Referer/代理等低信任区，凭据跨边界外泄",
+      "notes": "正面: 凭据传递路径的越界分析"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "这个校验函数的正则怎么写得更优雅一点？",
+      "expected_behavior": "不应激活本 skill, 因为这是单个函数的实现问题，无边界建模诉求; 属编码重构, 无需调用书中任何技能",
+      "notes": "诱饵: 校验话题的编码版"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "页面里 iframe 嵌的第三方组件和主页面之间怎么安全地传数据？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-cross-context-channel-enumeration (浏览器跨上下文通道的枚举与设防，不是服务间信任域划分)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-cross-context-channel-enumeration, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们系统里到处都在做校验，攻击者还是能绕进来，是不是校验放的位置本身有问题？",
+      "expected_behavior": "边界场景: '处处校验仍被绕过'说明检查没卡在边界数据流上，应激活本 skill 按数据流重画信任边界并重新归位校验层 (期望激活: whitehat-trust-boundary)",
+      "notes": "边界: 校验数量足够但摆位错误的诊断"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

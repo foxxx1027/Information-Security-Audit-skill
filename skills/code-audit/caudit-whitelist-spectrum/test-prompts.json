@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-whitelist-spectrum",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "用户自定义 slug 的参数没法穷举所有合法值，白名单是不是就做不了了？",
+      "expected_behavior": "应激活 caudit-whitelist-spectrum, 开放参数走全串锚定的结构正则形态, 不是放弃白名单",
+      "notes": "正面场景: 开放参数的白名单"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "校验命中白名单之外的字符时，把非法部分清掉再放行，这样处理行不行？",
+      "expected_behavior": "应激活 caudit-whitelist-spectrum, 处置规则=命中即拦截, 不得替换为空/部分清除",
+      "notes": "正面场景: 处置规则审查"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "报表的筛选条件是开放式组合的表达式，怎么用结构约束的方式做白名单？",
+      "expected_behavior": "应激活 caudit-whitelist-spectrum, 三形态选型(枚举/类型锁定/形态正则)+统一处置规则",
+      "notes": "正面场景: 结构正则设计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "防火墙的访问控制列表怎么配？允许哪些网段进来比较合理？",
+      "expected_behavior": "不应激活任何本册技能, 网络 ACL 配置, 不是应用参数校验",
+      "notes": "诱饵: 同为'允许清单'但为网络层"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "我们禁了 concat、information_schema 这些词，还是被拖库了，这份黑名单到底漏了什么？",
+      "expected_behavior": "不应激活 caudit-whitelist-spectrum, 应激活 caudit-blacklist-failure-modes (问的是黑名单为何失败, 不是白名单怎么建设)",
+      "notes": "跨skill混淆诱饵: 否定与肯定两面的归属"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "金额参数要求只能是正整数，这种用白名单的话属于哪一种形态？跟值能穷举的枚举白名单是一回事吗？",
+      "expected_behavior": "应激活 caudit-whitelist-spectrum: 属'类型锁定'形态(语义已知为正整数), 与固定枚举不同形, 本技能管三形态之间的选型",
+      "notes": "边界: 与类型判据交叉, 但问的是形态选型, 归本技能(结论落类型锁定形态)"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

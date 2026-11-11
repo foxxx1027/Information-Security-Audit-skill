@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-personnel-lifecycle-controls",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "人员安全管理这块测评要查录用、在职、离岗哪些记录？列个取证清单。",
+      "expected_behavior": "应激活 mlps-personnel-lifecycle-controls, 全周期框架：录用背景审查/保密协议、在职培训三链互证、离岗三步收权、外部人员四步留痕",
+      "notes": "正面: 人员域取证清单"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "核心运维要离职了，他手上的权限和设备怎么收才不留后门？",
+      "expected_behavior": "应激活 mlps-personnel-lifecycle-controls, 离岗三步：终止权限+收回资产+手续与保密义务，缺一即留后门",
+      "notes": "正面: 离岗收权"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "外部人员能进机房和开发区的都要管吗？快递、驻场乙方这些怎么算？",
+      "expected_behavior": "应激活 mlps-personnel-lifecycle-controls, 按能否触达受控区/系统穷举识别，申请→批准→陪同→登记四步留痕",
+      "notes": "正面: 外部人员识别"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "研发团队的季度绩效考核指标怎么设计才不流于形式？",
+      "expected_behavior": "不应激活本 skill, 绩效管理属纯人事域（本 skill 排除域）",
+      "notes": "诱饵: 人员话题但为绩效考核"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "查出来一个账号的主人既是操作系统管理员又是数据库管理员，这个怎么判？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-separation-of-duties-dual-axis（纵向跨层互斥求交集）",
+      "notes": "跨 skill 混淆诱饵: 人员进出周期 vs 在岗角色互斥"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "疫情之后外部工程师全是远程运维，陪同这一步做不了，等价措施是什么？",
+      "expected_behavior": "应激活 mlps-personnel-lifecycle-controls, 远程“陪同”等价物=会话录制与操作审计",
+      "notes": "边界: 陪同控制的远程形态"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

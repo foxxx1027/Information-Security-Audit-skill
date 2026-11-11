@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-attacker-first-function-design",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "下周要上线一个邀请返利功能，代码还没写，趁这个机会帮我出一版安全设计，该注意什么？",
+      "expected_behavior": "应激活 caudit-attacker-first-function-design, 先枚举攻击面并逐项推演利用方式(改参数/并发重放/刷量), 完成利用分析后才写安全设计",
+      "notes": "正面场景: 新功能上线前安全设计"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我是架构师，明天要评审一批新功能的方案，想用攻击者视角的系统提问框架过一遍，应该怎么提问？",
+      "expected_behavior": "应激活 caudit-attacker-first-function-design, 提供攻击面→利用→对策的强制顺序清单",
+      "notes": "正面场景: 设计评审提问框架"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "要给业务方写工单功能的安全需求，要求每条需求都能追溯到对应的威胁，怎么组织这份文档？",
+      "expected_behavior": "应激活 caudit-attacker-first-function-design, 按'利用推演在前、对策在后'产出可追溯到威胁的需求清单",
+      "notes": "正面场景: 功能安全需求可追溯"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们要过等保测评，安全需求文档有现成模板吗？发我一份照着填。",
+      "expected_behavior": "不应激活任何本册技能, 合规模板索取, 与功能级威胁推演无关",
+      "notes": "诱饵: 同提'安全需求文档'但为合规对标(技能明确排除)"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "新项目的找回密码功能下周开始开发，整个流程怎么设计才安全？",
+      "expected_behavior": "不应激活 caudit-attacker-first-function-design, 应激活 caudit-password-reset-three-stages (凭证重发域有具体技能实例化, 领域技能优先)",
+      "notes": "跨skill混淆诱饵: 总纲与领域实例化的抢调, 应激活更具体的领域技能"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "功能已经开发完了，下周上线，现在想补一版安全上的检查还来得及吗？应该怎么做？",
+      "expected_behavior": "边界判定: 应激活 caudit-logic-vuln-audit。代码已存在, 从'设计前推演'切换为'对既有代码做应然/实然对照'的审计侧方法",
+      "notes": "边界: 同样想做安全, 但代码已存在, 设计流程不再适用"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

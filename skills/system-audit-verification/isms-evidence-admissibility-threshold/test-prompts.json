@@ -1,0 +1,52 @@
+{
+  "skill": "isms-evidence-admissibility-threshold",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "访谈时对方说'这些我们都有定期做'，就凭这一句能写进审核结论吗？",
+      "expected_behavior": "应激活 isms-evidence-admissibility-threshold, 按相关/可证实/已记录三道门槛判定：口头表态只是线索，须索取可证实载体交叉印证后才可升格为证据",
+      "notes": "正面场景：口头表态的证据资格"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "供应商电话里口头保证他们机房是双路供电，这句保证能当审核证据用吗？",
+      "expected_behavior": "应激活 isms-evidence-admissibility-threshold, 判定口头保证为线索非证据并给出升格取证路径",
+      "notes": "正面场景：口头承诺"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "写不符合报告时被对方质问'你这条的依据到底是什么'，怎么自查这条发现的证据资格？",
+      "expected_behavior": "应激活 isms-evidence-admissibility-threshold, 对该发现逐条过三道门槛自查",
+      "notes": "正面场景：发现依据自查"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "打官司的时候电子证据的采信标准是什么？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 法律诉讼证据规则属另一领域（同名不同域）",
+      "notes": "诱饵：司法证据问题"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这条杀毒控制已确认需要硬证据支撑，具体按什么路径取证、取到哪一层算够？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-three-layer-evidence-chain",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-three-layer-evidence-chain）：资格门槛已过，进入取证路径设计"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "会议纪要里记着对方部门主任当场承认去年没做风险评估，这份纪要能不能直接支撑开不符合？",
+      "expected_behavior": "期望激活 isms-evidence-admissibility-threshold：书面转述的承认仍须核验纪要本身可证实并与客观记录交叉印证，过三道门槛后才可作为证据使用；门槛在前、定级在后",
+      "notes": "边界：书面载体与传闻转述的分界，仍先过证据资格"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

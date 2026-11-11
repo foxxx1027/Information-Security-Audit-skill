@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-birthday-bound-variant-substitution",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们用 64 位截断哈希做文件去重指纹，听说 2^32 就能撞出来，风险到底多大？",
+      "expected_behavior": "应激活 stallings-birthday-bound-variant-substitution, 并按 m/2 折算+现实搜索成本标尺评估撞库风险",
+      "notes": "正面场景: 截断指纹去重, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "电子合同签名前算摘要，担心文档里能塞空白字符做出同哈希版本被调包，怎么防？",
+      "expected_behavior": "应激活 stallings-birthday-bound-variant-substitution, 并按变式攻击(Yuval)核算签名场景抗性",
+      "notes": "正面场景: 签名后同码替换, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "对象存储想用 128 位内容寻址指纹，撞库概率和被刷指纹的风险怎么算？",
+      "expected_behavior": "应激活 stallings-birthday-bound-variant-substitution, 并量化 hash length 与碰撞搜索成本",
+      "notes": "正面场景: 内容寻址指纹长度, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "分库分表用哈希取模分桶，有几个桶数据倾斜严重，怎么重新分布？",
+      "expected_behavior": "不应激活本 skill, 因为是数据架构性能问题, 无碰撞攻击对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 哈希撞桶话语, 语义为数据倾斜"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "口令存储、文件去重、合同存证想统一用 SHA-256，各自需要哪种抗性？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-hash-property-application-mapping (应用→抗性映射, 本 skill 管碰撞档的量化折算)",
+      "notes": "跨 skill 混淆诱饵: A2 明列映射在前折算在后"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "文件传输的完整性校验想把哈希截短到 96 位省带宽，碰撞窗口会不会变大？",
+      "expected_behavior": "应激活 stallings-birthday-bound-variant-substitution, 因为截断哈希的位数折算正是本 skill 量化域, 期望给出 2^48 量级与工程可达性判断 (expected: stallings-birthday-bound-variant-substitution)",
+      "notes": "边界: 完整性话语偏第二原像, 但考的是截断长度量化"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

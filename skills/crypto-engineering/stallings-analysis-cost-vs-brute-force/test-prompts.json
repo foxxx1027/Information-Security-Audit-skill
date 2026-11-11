@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-analysis-cost-vs-brute-force",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "有厂商来推一个国产轻量级分组算法，PPT 上写 256 位密钥、抗差分，我们选型评审该问它哪些公开分析的问题？",
+      "expected_behavior": "应激活 stallings-analysis-cost-vs-brute-force, 并用'最优分析代价 vs 穷举'比价判据+security margin 检查组织评审问题",
+      "notes": "正面场景: 新轻量级算法选型评审, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "性能团队把认证加密的轮数砍了一半去跑分，我想认真评估一下减轮之后 security margin 还剩多少。",
+      "expected_behavior": "应激活 stallings-analysis-cost-vs-brute-force, 并做减轮实现的安全边际检查",
+      "notes": "正面场景: 减轮安全边际, A2 情境 3"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "打算给传感器节点引入 ASCON 这类 lightweight cipher，怎么判断它是不是真的和 AES 同档强度？",
+      "expected_behavior": "应激活 stallings-analysis-cost-vs-brute-force, 并按公开分析生态比价而非只看密钥长度",
+      "notes": "正面场景: lightweight 选型, desc 明列适用域"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "小区门禁的机械钥匙据说有几百万种齿形组合，物业说配不出万能钥匙，这话靠谱吗？",
+      "expected_behavior": "不应激活本 skill, 因为这是物理锁具问题, 不存在密码原语的分析/穷举比价对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 物理钥匙'组合数'话术, 非密码域"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "供应商号称自研抗量子算法、密钥 8192 位，怎么审它的难题假设和归约靠不靠谱？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-hardness-dependency-audit (公钥方案的陷门/难题族/归约审查是其核心域, 本 skill 审对称原语的结构捷径)",
+      "notes": "跨 skill 混淆诱饵: 对称比价 vs 公钥难题归约, A2 明列区分"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "想引入一个只有一两篇第三方分析的 MAC 算法，密钥 128 位、标签 96 位，实际强度该怎么估？",
+      "expected_behavior": "应激活 stallings-analysis-cost-vs-brute-force, 因为 MAC 的 min(2^k, 2^n) 短板路径封顶正是本 skill 的比价判据; 期望按最便宜攻击路径折算 (expected: stallings-analysis-cost-vs-brute-force)",
+      "notes": "边界: 像参数治理问题, 实为 MAC 强度被短板路径封顶的比价题"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

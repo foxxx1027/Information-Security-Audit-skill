@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-tool-test-typology",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "编制测评方案，工具这块怎么配？扫描、实时监测、渗透各承担什么、各出什么证据？",
+      "expected_behavior": "应激活 mlps-tool-test-typology, 三分工具绑定证据形态，指标×证据形态对应矩阵防错配",
+      "notes": "正面: 工具配置与证据矩阵"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "报告里拿抓包工具的截图证明有入侵检测告警能力，这个证据成立吗？",
+      "expected_behavior": "应激活 mlps-tool-test-typology, 观测≠检测告警，证据形态错配",
+      "notes": "正面: 抓包证告警的错配"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "客户问：漏洞扫描都做了为什么还要渗透？怎么把层次关系讲清楚？",
+      "expected_behavior": "应激活 mlps-tool-test-typology, 渗透是扫描的验证，须对应扫描发现项",
+      "notes": "正面: 扫描与渗透分工"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "扫描器装好了 license 激活失败，插件更新也卡住了，怎么排查？",
+      "expected_behavior": "不应激活本 skill, 工具安装运维故障，非类型学选配",
+      "notes": "诱饵: 工具话题但为安装排障"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这次测试从 DMZ 接入还是从核心区接入？探测点放几个合适？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-test-vantage-point-placement（接入点的空间设计）",
+      "notes": "跨 skill 混淆诱饵: 用什么工具 vs 工具放哪里"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "新出的 eBPF 观测能力很强，能不能替代渗透测试直接出验证结论？",
+      "expected_behavior": "应激活 mlps-tool-test-typology, 观测类证据形态不能互换为验证结论，eBPF 属实时监测类",
+      "notes": "边界: 新技术归入类型学"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

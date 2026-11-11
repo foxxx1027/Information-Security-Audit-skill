@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-api-blindspot-priority",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们在制定渗透测试计划，Web 主站、App、小程序、开放 API 这几块都摸得到，先测哪块漏洞产出最高？",
+      "expected_behavior": "应激活 caudit-api-blindspot-priority, 按'漏洞密度与检测覆盖率成反比'排序, 优先测扫描器爬不到的面(App专用接口/无链接API/回调)",
+      "notes": "正面场景: 测试资源分配决策"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "系统上了 GraphQL，还有一堆内部服务接口，扫描器根本爬不全，这个 API 盲区怎么系统盘点？",
+      "expected_behavior": "应激活 caudit-api-blindspot-priority, 先协议级枚举全部入口(抓包/反编译/文档)补爬虫盲区, 再按未授权与数据遍历优先排序",
+      "notes": "正面场景: 扫描器覆盖盲区评估"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "给客户写报告，怎么解释 App 专用接口那边未授权访问和数据遍历的问题密度比主站高得多？",
+      "expected_behavior": "应激活 caudit-api-blindspot-priority, 用检测覆盖率反比定律解释盲区漏洞密度更高",
+      "notes": "正面场景: 报告解释漏洞密度差异"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "OpenAPI 的文档规范怎么写比较专业？swagger 注解的最佳实践有哪些？",
+      "expected_behavior": "不应激活任何本册技能, 是接口文档写作规范问题, 不是测试资源分配",
+      "notes": "诱饵: API 话题但与安全测试无关"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "扫描器扫我们商城全绿，结果支付和越权还是被人打了，为什么扫描器测不出这类问题？",
+      "expected_behavior": "不应激活 caudit-api-blindspot-priority, 应激活 caudit-logic-vuln-audit (盲区在'业务语义机器模拟不了'维, 不在'入口爬不到'维)",
+      "notes": "跨skill混淆诱饵: 同提'扫描器测不到', 但考点是逻辑漏洞语义盲区"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们的内网管理系统一共就五个接口，扫描器全都能爬到，还需要专门做一轮入口枚举吗？",
+      "expected_behavior": "边界判定: none。入口少且全部可达时'覆盖盲区'前提不成立, 不应激活, 直接按常规方法逐个测即可",
+      "notes": "边界: 盲区定律的前提(入口不可枚举)不成立"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

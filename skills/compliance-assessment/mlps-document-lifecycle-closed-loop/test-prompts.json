@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-document-lifecycle-closed-loop",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "安全管理制度从 2019 年到现在一次都没修订过，这条怎么判？",
+      "expected_behavior": "应激活 mlps-document-lifecycle-closed-loop, 修订记录时间线断裂=断链，判制度停止运营",
+      "notes": "正面: 制度多年未动"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "怎么核实一套制度是真在运营还是纸面摆设？评审记录、修订记录之外还有什么招？",
+      "expected_behavior": "应激活 mlps-document-lifecycle-closed-loop, 闭环三证据：定期评审记录+修订记录+掌握度访谈",
+      "notes": "正面: 纸面制度识破"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "制度出了 V3，但机柜里还贴着 V1 的操作流程图，新旧版本并存这种怎么查？",
+      "expected_behavior": "应激活 mlps-document-lifecycle-closed-loop, 版本控制两追问：当前有效版本是哪版、旧版是否回收",
+      "notes": "正面: 版本并存"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "这份应急预案的处理流程帮我通读一遍，看看步骤设计得合不合理。",
+      "expected_behavior": "不应激活本 skill, 文档内容质量评审属本 skill 排除域",
+      "notes": "诱饵: 制度话题但为内容评审"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "我们要搭安全制度体系，总纲、管理办法、操作规程、记录表单各层怎么配齐？缺了哪层？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-policy-four-layer-pyramid（四层结构完整性）",
+      "notes": "跨 skill 混淆诱饵: 时间维（活着吗） vs 结构维（全吗）"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "评审记录修订记录都有，可历次测评发现的问题从没回流进制度改过一版，这算闭环吗？",
+      "expected_behavior": "应激活 mlps-document-lifecycle-closed-loop, 测评结果须回流修订，活文档回路缺失即判弱",
+      "notes": "边界: 有更新动作但无问题回流"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

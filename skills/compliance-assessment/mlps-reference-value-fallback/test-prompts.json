@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-reference-value-fallback",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "标准只要求口令“有一定复杂度”，没说几位以上，这条判定依据怎么写才可复核？",
+      "expected_behavior": "应激活 mlps-reference-value-fallback, 三段式：承认留白→自建参考值表→结合被测方策略判定",
+      "notes": "正面: 无参数指标的判定依据"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "会话超时标准没给具体时长，被测方自己定了 30 分钟，我们按什么参考值判？",
+      "expected_behavior": "应激活 mlps-reference-value-fallback, 参考值表作建议基线，策略有合理说明可部分符合，完全无策略则不符合",
+      "notes": "正面: 策略与参考值不一致"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "容器镜像的高危漏洞修复时限，现行标准里没有规定，判定基线怎么建？",
+      "expected_behavior": "应激活 mlps-reference-value-fallback, 新技术场景建表兜底并同表声明性质",
+      "notes": "正面: 新场景建基线"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "标准白纸黑字写了口令不少于 8 位，被测方设的是 6 位，这条还用查别的依据吗？",
+      "expected_behavior": "不应激活本 skill, 标准已有明确参数，直接引用标准判定（本 skill 排除域）",
+      "notes": "诱饵: 口令话题但标准有参数"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这项控制做了但只做了一半，判部分符合还是不符合？缺口位置怎么写？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-verdict-tiers（档位语义与判定纪律）",
+      "notes": "跨 skill 混淆诱饵: 判定依据 vs 判定档位"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们整理的参考值表被客户拿去当成强制红线，反过来要求全员整改，这个后果怎么避免？",
+      "expected_behavior": "应激活 mlps-reference-value-fallback, 纪律：参考值表须同表声明性质（无标准出处、经验值），防误用成强制红线",
+      "notes": "边界: 参考值的误用风险"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

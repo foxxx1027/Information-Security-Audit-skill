@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-risk-assessment-six-steps",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "要给一个多租户 SaaS 平台做第一次风险分析，完全不知道从哪起步，流程怎么走？",
+      "expected_behavior": "应激活 mlps-risk-assessment-six-steps, 资产盘点→CIA 赋值→重要性阈值→威胁→脆弱性→风险值排序",
+      "notes": "正面: 首次风险分析起步"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "资产清出来四百多项，不可能都重点分析，评估范围怎么收敛才站得住？",
+      "expected_behavior": "应激活 mlps-risk-assessment-six-steps, 相加取重要性、仅 4/5 级为重要资产的显式阈值防范围膨胀",
+      "notes": "正面: 范围收敛"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "供应商演示“全自动定量风险打分”平台，纯定量的结果能信吗？",
+      "expected_behavior": "应激活 mlps-risk-assessment-six-steps, 纯定量是伪精确，综合法=定性划范围→定量→定性解释",
+      "notes": "正面: 纯定量话术"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "把风险登记册做成 Excel 跟踪模板，列头和状态色怎么设计好用？",
+      "expected_behavior": "不应激活本 skill, 表格模板制作，非风险分析实操",
+      "notes": "诱饵: 风险话题但为工具模板"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "测评得了 86 分基本符合，客户问这个分数是不是说明系统风险很低。",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-compliance-vs-risk-boundary（合规分数≠风险水平）",
+      "notes": "跨 skill 混淆诱饵: 风险值语义 vs 合规分语义"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "客户核心库 CIA 赋值全是 5，是不是它就是头号风险，明年预算该全砸它？",
+      "expected_behavior": "应激活 mlps-risk-assessment-six-steps, CIA 价值高≠风险高，资源按风险值（威胁×脆弱性）分配",
+      "notes": "边界: 价值最高≠风险最大"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

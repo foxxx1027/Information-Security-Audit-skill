@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-fail-direction-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "认证中心超时的时候，网关该放行还是拒绝？几种异常态分别什么行为？",
+      "expected_behavior": "应激活 stallings-fail-direction-audit, 并对每条校验做三态问句(空配置/不匹配/组件崩)的方向审计",
+      "notes": "正面场景: 依赖挂了还放行吗, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "SPF 记录配错一个字符，防护是静默失效还是显式报错？这类怎么审？",
+      "expected_behavior": "应激活 stallings-fail-direction-audit, 并用 SPF 教训审'部署错误=静默失去防护还制造已部署错觉'",
+      "notes": "正面场景: 静默失效排查, A2 情境 3"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "策略引擎规则不命中时的默认动作怎么定？组件挂了还继续放行吗？",
+      "expected_behavior": "应激活 stallings-fail-direction-audit, 并显式声明 fail-open/fail-close 与默认动作",
+      "notes": "正面场景: 规则不命中默认, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "Grafana 大盘有块图表一直没数据，数据源配置怎么排查？",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'不影响判定的纯观测组件'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 组件故障话语, 实为观测面板修复"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "认证通过但会话密钥还没建立好，业务流量先放过去吗？这个状态机怎么设计？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-two-phase-gated-access (认证与开门的全局状态机结构, 本 skill 定每道门异常输入下的方向)",
+      "notes": "跨 skill 混淆诱饵: A2 明列结构审计之后逐门方向审计"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "WAF 引擎崩溃后流量直接透传过去了，这算 fail-open 吗？怎么定性整改？",
+      "expected_behavior": "应激活 stallings-fail-direction-audit, 因为'组件崩溃时返回什么'正是三态问句之一, 需定性与整改 (expected: stallings-fail-direction-audit)",
+      "notes": "边界: 像事故应急, 实为崩溃方向审计"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

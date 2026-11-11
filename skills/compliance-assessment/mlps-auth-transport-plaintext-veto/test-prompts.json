@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-auth-transport-plaintext-veto",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "现场发现交换机的管理通道还在用 Telnet，鉴别信息传输保护这条是不是直接判不符合？还要补什么证据吗？",
+      "expected_behavior": "应激活 mlps-auth-transport-plaintext-veto, 明文协议一票否决，Telnet 传管理凭证即判不符合，无需逐流量取证",
+      "notes": "正面: Telnet 明文否决"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "服务网格厂商说平台支持 mTLS，是不是传输加密就合规了？permissive 模式算不算数？",
+      "expected_behavior": "应激活 mlps-auth-transport-plaintext-veto, 能力存在≠默认启用，证据须落在 STRICT 显式配置开关与抓包实测",
+      "notes": "正面: mTLS 能力 vs 默认启用"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "应用的登录接口还在用 HTTP 明文提交口令，这条风险怎么定？整改完成后按什么口径复核？",
+      "expected_behavior": "应激活 mlps-auth-transport-plaintext-veto, 一票否决判不符合，以显式开关+抓包作为复核口径",
+      "notes": "正面: 明文口令提交"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "给新入职的运维开通远程 VPN 账号，双因素用短信还是令牌 App 合适？",
+      "expected_behavior": "不应激活本 skill, 双因素方案选型非传输保护判定",
+      "notes": "诱饵: 鉴别话题但为方案选型"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "数据安全这块要系统性地查一遍，传输中、存储中各自要查什么才不漏项？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-data-transit-storage-grid（传输×存储×完整性×保密性的 2×2 防漏检查格）",
+      "notes": "跨 skill 混淆诱饵: 单格判据 vs 全格网结构"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "远程管理通道都换成 SSH 了，但有台老设备的 Telnet 服务还开着，说是没人用了，这条还判不符合吗？",
+      "expected_behavior": "应激活 mlps-auth-transport-plaintext-veto, 在判据内裁决：明文管理通道存在本身触发核查，处置口径为关闭明文服务",
+      "notes": "边界: 遗留明文服务的判定"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

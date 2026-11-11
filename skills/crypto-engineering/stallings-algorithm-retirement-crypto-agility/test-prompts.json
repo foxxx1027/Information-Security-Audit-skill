@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-algorithm-retirement-crypto-agility",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "公司要做密码现代化盘点，SHA-1、3DES、RSA-1024 这些存量算法得按风险排个退役顺序，最好按算力外推给出几年内必须下线的时间点，VPN 网关那一批再按强度分档打包升级路径。",
+      "expected_behavior": "应激活 stallings-algorithm-retirement-crypto-agility, 并用结构相似预警→难度外推→套件档位的治理链产出退役路线图",
+      "notes": "正面场景: 退役路线图+分档打包, 核心种群/时间维度诉求"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "老板让我牵头 post-quantum 迁移规划，我不想像当年 SHA-1 那样拖到最后一刻，证书格式也得留好算法标识位，免得以后换算法要动整个格式。",
+      "expected_behavior": "应激活 stallings-algorithm-retirement-crypto-agility, 并给出抗量子迁移排期、格式算法中立与双算法冗余的落地方案",
+      "notes": "正面场景: 抗量子迁移路线图+格式中立, A2 情境 1/4"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "内部还有一批老系统在跑 3DES，按现在的算力增长外推，还能给它们留多长的兼容期？什么时候必须强制淘汰？",
+      "expected_behavior": "应激活 stallings-algorithm-retirement-crypto-agility, 并按难度倍数+时间跨度外推 deprecation 时点",
+      "notes": "正面场景: 单一算法退役期外推, 语言信号'还能用多久'"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "HSM 供应商推了个固件升级包，运维问我今晚要不要申请停机窗口把它装上。",
+      "expected_behavior": "不应激活本 skill, 因为这是纯运维排期问题, 没有算法种群治理对象; 该 prompt 不属于本书任何 skill 的 trigger 域, 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 运维窗口排期, 与算法生命周期治理无关"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "TLS1.0 老客户端还占两成流量，升级到 1.3 的过渡期怎么治理，兼容层什么时候砍掉？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-protocol-migration-governance (协议新旧过渡治理/砍 legacy 窗口是其核心域, 本 skill 管算法种群退役而非协议过渡治理)",
+      "notes": "跨 skill 混淆诱饵: 协议迁移治理 vs 算法退役链, 近缘极高"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "浏览器厂商宣布明年起全面拒绝 SHA-1 证书，我们内网还有几十张在用，是当天全部换掉还是按批次排期退场？",
+      "expected_behavior": "应激活 stallings-algorithm-retirement-crypto-agility, 因为'标准发布将废弃 X 公告后的响应排期'是 A2 明列情境; 期望按风险分批排退役而非单纯当天替换 (expected: stallings-algorithm-retirement-crypto-agility)",
+      "notes": "边界: 听起来像应急运维, 实为废弃公告的响应排期, 属本 skill"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

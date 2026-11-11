@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-data-transit-storage-grid",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "客户说全站都上了 HTTPS，数据安全测评是不是就没什么可查的了？帮我理一遍到底要查哪些块。",
+      "expected_behavior": "应激活 mlps-data-transit-storage-grid, 用传输×存储×完整性×保密 2×2 检查格防漏，多数缺口在存储列与备份块",
+      "notes": "正面: 上了 HTTPS 够吗"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "数据出境场景，链路加密做了，境外落盘那一块保护怎么核？怕漏项。",
+      "expected_behavior": "应激活 mlps-data-transit-storage-grid, 境外链路+境外落盘双列核查，重点盯存储列",
+      "notes": "正面: 跨境双列核查"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "完整性这块对方说有校验码，检测出被改和能恢复是什么关系？验收要看成对吗？",
+      "expected_behavior": "应激活 mlps-data-transit-storage-grid, 完整性格须检测+恢复成对验收",
+      "notes": "正面: 检测与恢复成对"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "数据库透明加密选 SM4 还是 AES-256，性能影响大不大？",
+      "expected_behavior": "不应激活本 skill, 加密算法选型属本 skill 排除域",
+      "notes": "诱饵: 数据保护话题但为算法选型"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "系统还有个老接口在用 HTTP 明文传登录口令，这条是不是一票否决直接不符合？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-auth-transport-plaintext-veto（传输×保密格的深度判据）",
+      "notes": "跨 skill 混淆诱饵: 格网全景 vs 单格否决"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "存储加密做了、传输也加密了，完整性对方压根没提，这算不算结构性缺口？",
+      "expected_behavior": "应激活 mlps-data-transit-storage-grid, 定位存储×完整性格为空，结构性防漏",
+      "notes": "边界: 只做了保密列的缺口定位"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

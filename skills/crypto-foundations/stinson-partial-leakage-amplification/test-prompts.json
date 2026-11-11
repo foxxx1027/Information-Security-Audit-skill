@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-partial-leakage-amplification",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "partial-leakage-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "评审一个新公钥方案，密文上能直接算出明文的奇偶性，对方说就一比特无伤大雅，怎么反驳？",
+      "expected_behavior": "应激活 stinson-partial-leakage-amplification, 一位泄漏可被同态运算+二分查找放大为全明文恢复（half 谕示逐次倍乘 O(log n) 步），『只泄一比特』不成立",
+      "notes": "正面场景: 一比特泄漏评估（A2 #1）"
+    },
+    {
+      "id": "partial-leakage-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们的加密变体带乘法同态，架构师说同态只是功能特性不算风险，怎么系统清点它的泄漏面？",
+      "expected_behavior": "应激活 stinson-partial-leakage-amplification, 按谓词×同态两轴清点：密文上可计算哪些明文谓词、同态性允许怎样的放大链",
+      "notes": "正面场景: 同态性质利弊核算（A2 #2）"
+    },
+    {
+      "id": "partial-leakage-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "论文辩解说『方案只是被区分了，没有被破解』，这句话在语义安全的定义下站得住吗？",
+      "expected_behavior": "应激活 stinson-partial-leakage-amplification, 区分器存在即语义安全破绽：『未恢复全明文』不是安全证据，可区分=可计算的泄漏谓词存在",
+      "notes": "正面场景: 『只是被区分』辩护的反驳（A2 #3/#4）"
+    },
+    {
+      "id": "partial-leakage-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "日志里把用户手机号打了中间四位，数据合规上怎么定级和整改？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 业务数据脱敏合规，不是密文谓词泄漏",
+      "notes": "诱饵: 『泄漏四位』字面相近的数据合规问题"
+    },
+    {
+      "id": "partial-leakage-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "两条旧 RSA 签名相乘居然能拼出一条新消息的合法签名，这是什么类型的问题？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-signature-homomorphism-breaking — 签名侧的同态组合伪造；本 skill 是加密侧的谓词×同态放大",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-signature-homomorphism-breaking): 同一同态性质攻不同目标"
+    },
+    {
+      "id": "partial-leakage-edge-01",
+      "type": "edge_case",
+      "prompt": "RSA 密文任何人都能算 Jacobi 符号，这算泄漏吗？还是公钥系统的公开性质而已？",
+      "expected_behavior": "应激活 stinson-partial-leakage-amplification (expected: 本 skill) — 免费可计算谓词就是泄漏起点：Jacobi 符号泄漏明文一位，配合谕示可二分放大到全恢复；『公开性质』不豁免泄漏面清点",
+      "notes": "边界: 『公开性质 vs 泄漏面』的直觉模糊处，判据是能否用作区分/放大"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

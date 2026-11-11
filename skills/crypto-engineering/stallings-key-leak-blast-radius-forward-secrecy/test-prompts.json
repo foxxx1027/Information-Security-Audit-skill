@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-key-leak-blast-radius-forward-secrecy",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "TLS 服务要不要强制 ECDHE、禁掉静态 RSA 密钥交换？改造成本和收益怎么评估？",
+      "expected_behavior": "应激活 stallings-key-leak-blast-radius-forward-secrecy, 并按'会话钥必须由临时材料派生'的架构判据评估 PFS 改造",
+      "notes": "正面场景: PFS 改造决策, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "车联网平台集中保管几十万台设备的私钥，HSM 失陷会是什么后果？",
+      "expected_behavior": "应激活 stallings-key-leak-blast-radius-forward-secrecy, 并按消息级/密钥级/主密钥级三档爆炸半径定损",
+      "notes": "正面场景: 集中保管风险评估, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "一把私钥泄露了，到底要轮换哪些东西？历史流量要不要通知用户？",
+      "expected_behavior": "应激活 stallings-key-leak-blast-radius-forward-secrecy, 并用'拿走这把钥能解多少历史/未来'划定定损范围",
+      "notes": "正面场景: 事故定损, A2 情境 3"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "ECC 证书和 RSA 证书哪个握手更省 CPU？老设备该配哪种？",
+      "expected_behavior": "不应激活本 skill, 因为是性能选型问题, desc 明确排除算法强度与证书运营之外的性能比较; 预期不激活 (expected: none)",
+      "notes": "诱饵: 证书密钥话语, 实为性能取舍"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "全公司系统信任多少个根 CA？任何一家被攻陷能波及多少域名和身份？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-trust-topology-blast-radius (信任方集中度拓扑, 本 skill 管单把密钥的失陷半径)",
+      "notes": "跨 skill 混淆诱饵: A2 明列'一个是结构问题一个是钥匙问题'"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "长期身份密钥只放 HSM 里做签名、会话密钥每次临时协商，这个架构算不算合格？",
+      "expected_behavior": "应激活 stallings-key-leak-blast-radius-forward-secrecy, 因为'长期钥只认证+会话钥临时派生+零留存'正是其架构判据 (expected: stallings-key-leak-blast-radius-forward-secrecy)",
+      "notes": "边界: 像架构确认题, 落在前向安全判据逐项判定"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

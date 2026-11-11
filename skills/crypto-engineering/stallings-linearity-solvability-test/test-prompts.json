@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-linearity-solvability-test",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "有人提交了一套自研'加密'，明文过一遍线性查表再异或个固定串，密钥号称 128 位，这种要不要认真评估？",
+      "expected_behavior": "应激活 stallings-linearity-solvability-test, 并做线性度检测——线性映射=可解方程组=密钥公开, 一票否决",
+      "notes": "正面场景: 移位异或自研加密, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "评审自定义混淆变换，第一道测试做线性度还是先做统计量？",
+      "expected_behavior": "应激活 stallings-linearity-solvability-test, 并按'先线性闸一票否决, 再统计阶'的顺序评",
+      "notes": "正面场景: 评审顺序决策, A2 情境 3"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "CTF 里碰到一个未知编码变换，几对已知明密文能不能直接代数解出来？",
+      "expected_behavior": "应激活 stallings-linearity-solvability-test, 并判定线性结构下已知明文攻击退化为解方程",
+      "notes": "正面场景: CTF 快判, A2 情境 2"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我推导一下 AES 列混合在 GF(2^8) 上的矩阵运算，下周教学用。",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'标准算法'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 线性代数话语, 对象是标准算法教学"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "同音替换把单字母频率抹平了，但双字母还残留，要多少密文样本能破？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-statistical-residual-order-analysis (统计残留与样本量渐近攻击, 本 skill 是一击致命的代数判定)",
+      "notes": "跨 skill 混淆诱饵: A2 明列两道闸先后"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "供应商只给看唯密文样本，宣称抗频率分析，这个声明够不够？",
+      "expected_behavior": "应激活 stallings-linearity-solvability-test, 因为按攻击能力分级追问(唯密文≠抗已知明文)正是 A2 情境 4 (expected: stallings-linearity-solvability-test)",
+      "notes": "边界: 声明审查话语, 考点是攻击能力分级"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

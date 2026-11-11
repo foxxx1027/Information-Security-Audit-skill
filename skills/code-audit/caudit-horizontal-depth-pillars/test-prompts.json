@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-horizontal-depth-pillars",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "今年安全预算就这么多，人也就俩，到底是先买设备、先上 WAF 还是先改代码？",
+      "expected_behavior": "应激活 caudit-horizontal-depth-pillars, 按横向细化边际收益+纵深防御两支柱和木桶原理排投入优先级",
+      "notes": "正面场景: 有限预算的投入排序"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "领导要求再买一层防护、再加一批规则，怎么评估这么堆下去边际收益还剩多少？",
+      "expected_behavior": "应激活 caudit-horizontal-depth-pillars, 用边际拦截低于维护成本即停的判据评估提案",
+      "notes": "正面场景: 加层提案的边际值评审"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "复盘一下：攻击者连续穿透了我们五层防御，每一层到底是不是按'上一层会失效'来设计的？",
+      "expected_behavior": "应激活 caudit-horizontal-depth-pillars, 按上一层失效推演逐层检查是真纵深还是功能堆叠",
+      "notes": "正面场景: 穿透复盘检查层次设计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "等保三级的整改清单还有哪些项没落实，帮我对照着过一遍？",
+      "expected_behavior": "不应激活任何本册技能, 合规清单核对(技能明确排除合规对标)",
+      "notes": "诱饵: 安全建设话题但为合规符合性"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "新上的拼团功能下周要过安全评审，从攻击者视角应该问哪些问题？",
+      "expected_behavior": "不应激活 caudit-horizontal-depth-pillars, 应激活 caudit-attacker-first-function-design (单功能的设计评审流程, 不是跨功能的体系投资)",
+      "notes": "跨skill混淆诱饵: 粒度不同——体系投资 vs 单功能设计"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "一个具体的注入点修了一周还没修干净，上纵深防御能帮上忙吗？",
+      "expected_behavior": "边界判定: none。单点漏洞修复(技能明确排除), 体系投资框架不适用, 应回到该漏洞本身的修复收敛方法",
+      "notes": "边界: 防御体系词汇但粒度是单点修复"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

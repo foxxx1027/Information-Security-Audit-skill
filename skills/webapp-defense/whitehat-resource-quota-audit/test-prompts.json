@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-resource-quota-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "商品查询接口是完全开放的，会不会被人写个脚本无限调用把它刷挂？",
+      "expected_behavior": "应激活 whitehat-resource-quota-audit, 列出该接口消耗的全部有限资源（连接/缓存/DB 查询），逐项问匿名用户能否无限制触发，再设计三层防御",
+      "notes": "正面: 开放接口的抗滥用评估"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "限流方案按 IP 维度限可以吗？阈值怎么定才不会误伤公司出口共享 IP 的用户？",
+      "expected_behavior": "应激活 whitehat-resource-quota-audit, 审计限流维度与资源的对应关系，设计多维限频与分层阈值，评估误伤面",
+      "notes": "正面: 限频维度与阈值设计"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "监控显示 QPS 不高，但 CPU 和数据库连接池全满了，像是被打了又找不到明显攻击流量，怎么排查？",
+      "expected_behavior": "应激活 whitehat-resource-quota-audit, 按资源消耗画像排查（单请求重计算、深查询、大分页），定位被滥用的有限资源",
+      "notes": "正面: 流量正常但资源耗尽的画像排查"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "首页接口响应从 200ms 涨到了 2 秒，帮我做一轮性能优化。",
+      "expected_behavior": "不应激活本 skill, 因为这是单点性能优化，无对抗滥用视角; 属性能工程, 无需调用书中任何技能",
+      "notes": "诱饵: 接口变慢的表象但无对抗方"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "我们限流按 IP 加 Cookie 计数，结果还是被批量刷穿了，是不是这两个标识本身就不靠谱？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-signal-reliability (问题聚焦在限流所依赖的客户端信号可不可伪造，是信号可靠性裁决)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-signal-reliability, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "图片上传接口要不要限制文件大小和分辨率？限制到多大合适？",
+      "expected_behavior": "边界场景: 文件大小/分辨率正是可被无限制滥用的有限资源（解析内存、存储、带宽），应激活本 skill 按'匿名用户能否无限制消耗资源'的审计思路定配额 (期望激活: whitehat-resource-quota-audit)",
+      "notes": "边界: 看似产品参数问题实为资源滥用审计"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

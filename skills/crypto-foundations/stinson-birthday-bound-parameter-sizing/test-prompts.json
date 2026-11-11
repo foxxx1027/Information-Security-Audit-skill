@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-birthday-bound-parameter-sizing",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "birthday-parameter-sizing-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们要生成随机短链 ID，打算用 64 位随机数，日活一亿的场景下会不会撞？随机重试的预算怎么算？",
+      "expected_behavior": "应激活 stinson-birthday-bound-parameter-sizing, 按 Q≈1.17√M 的生日界换算 64 位空间在 10^8 量级生成下的碰撞概率，并反推所需位长",
+      "notes": "正面场景: 随机 ID/token 位长设计与碰撞概率预算（A2 #1）"
+    },
+    {
+      "id": "birthday-parameter-sizing-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "HMAC 标签想从 256 位截断到 64 位省带宽，攻击者伪造一条消息的实际代价变成多少？能接受吗？",
+      "expected_behavior": "应激活 stinson-birthday-bound-parameter-sizing, 标签截断后伪造代价按 2^(t/2) 生日界而非 2^t 计算，结合敌手可承受查询量评估 64 位截断的安全档",
+      "notes": "正面场景: MAC 截断长度评估（A2 #2）"
+    },
+    {
+      "id": "birthday-parameter-sizing-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "给老板解释为什么 128 位摘要的抗碰撞强度要按 2^64 算，他坚持认为位数就是强度，怎么讲清楚？",
+      "expected_behavior": "应激活 stinson-birthday-bound-parameter-sizing, 用平方根标度解释 n 位空间只给 n/2 位碰撞安全，区分碰撞与原像两档计算口径",
+      "notes": "正面场景: 解释『128 位只挡 2^64』的误解（A2 #3）"
+    },
+    {
+      "id": "birthday-parameter-sizing-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "MySQL 分表主键纠结用 UUID 还是雪花 ID，高并发插入怕冲突，DBA 视角怎么选型？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 数据库工程选型，无对抗性安全诉求（无攻击者查询预算）",
+      "notes": "诱饵: 『随机 ID 怕撞』字面相近，但语境是无对抗的工程选型"
+    },
+    {
+      "id": "birthday-parameter-sizing-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "ECC 256 位和 RSA 3072 位是不是一个安全等级？给长期系统选型时这种跨体制的等价强度怎么对齐？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-key-lifetime-rolling — 跨体制按各自最优攻击对齐等价强度并叠加时间衰减做寿命预算，是密钥寿命 skill 的范围",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-key-lifetime-rolling): 同是『位长对齐』，本 skill 只管静态生日界换算，等价强度与寿命归兄弟 skill"
+    },
+    {
+      "id": "birthday-parameter-sizing-edge-01",
+      "type": "edge_case",
+      "prompt": "口令存储用 SHA-256，输出 256 位，是不是原像碰撞都稳了，不用再换算法了吧？",
+      "expected_behavior": "应激活 stinson-hash-property-usage-matching (expected: stinson-hash-property-usage-matching) — 先定性『该用途需要哪条性质』：口令存储需要原像+慢哈希，与碰撞强度无关；定量换算之前必须先过用途匹配",
+      "notes": "边界: 位长问题之前先要做用途-性质定性，属兄弟 skill 的层"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-fix-at-highest-leverage",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们用的一个 npm 包爆出 RCE 漏洞，官方补丁还没发，公司一堆项目都依赖它，现在怎么办？",
+      "expected_behavior": "应激活 whitehat-fix-at-highest-leverage, 按杠杆排序：优先推动上游修复，等待期在自己层做标注'临时'的缓解并统一收口",
+      "notes": "正面: 上游依赖漏洞的响应"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "这个漏洞既能在各业务代码里逐个绕过，也能在公共网关统一修，两个团队互相扯皮，该谁修？",
+      "expected_behavior": "应激活 whitehat-fix-at-highest-leverage, 以'哪层修一次全体受益'为判据裁决修在哪层，另一层做临时缓解",
+      "notes": "正面: 该谁修的扯皮裁决"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "上游修复遥遥无期，我们要不要自己 fork 一份打补丁长期维护下去？",
+      "expected_behavior": "应激活 whitehat-fix-at-highest-leverage, 评估 fork 维护成本与升级滞留风险，给出 fork 作为过渡的退出条件",
+      "notes": "正面: fork 维护补丁的抉择"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "给开源项目提交 PR 的贡献者指南应该怎么写？",
+      "expected_behavior": "不应激活本 skill, 因为这是开源社区流程文书，与修复位置裁决无关; 属社区流程文档, 无需调用书中任何技能",
+      "notes": "诱饵: 同样涉及上游与 PR 话题"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "开发提交的补丁就是把恶意关键字替换成空字符串，这个修法能合入吗？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-root-cause-patch-discipline (裁决的是修的方式即按 POC 还是按成因，不是修在哪一层)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-root-cause-patch-discipline, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "这个解析漏洞可以在公司公共网关统一修一次，也可以推动二十几个业务团队各自修，你觉得推哪边？",
+      "expected_behavior": "边界场景: 虽都在公司内部，但网关层修一次全体受益杠杆最高，应激活本 skill 裁决；推动期间各业务可做临时缓解 (期望激活: whitehat-fix-at-highest-leverage)",
+      "notes": "边界: 内部多层之间的杠杆选择"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

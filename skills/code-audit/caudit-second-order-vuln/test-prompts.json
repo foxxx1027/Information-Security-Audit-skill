@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-second-order-vuln",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "评论和附件名都入库了，会在后台报表、CSV 导出、邮件通知里被引用，这条链路怎么审？",
+      "expected_behavior": "应激活 caudit-second-order-vuln, 取出即新输入, 按表/字段锚点追踪全部消费点, 写入点与消费点是两个独立控制点",
+      "notes": "正面场景: 入库数据的消费点追踪"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "低权限用户填的工单备注，客服在管理端打开就触发注入，这种二次注入怎么排查？",
+      "expected_behavior": "应激活 caudit-second-order-vuln, 写入→取出→触发的链式追踪与判定",
+      "notes": "正面场景: 二次注入排查"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "库里的数据入库前统一转义过了，直接拼进页面输出还有没有风险？",
+      "expected_behavior": "应激活 caudit-second-order-vuln, 信任判定只看'本次进入哪个解释器', 与来源无关",
+      "notes": "正面场景: '入库已过滤'声明的有效性"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "数据库迁移工具选型，Flyway 和 Liquibase 哪个更适合我们团队？",
+      "expected_behavior": "不应激活任何本册技能, 工具选型, 与存储数据消费链路无关",
+      "notes": "诱饵: 数据库话题但为工程选型"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "存储型 XSS 有没有什么办法能打到管理员的会话？哪些注入点值得优先打？",
+      "expected_behavior": "不应激活 caudit-second-order-vuln, 应激活 caudit-privilege-delta-dataflow (考点是按权限差给数据流排序选目标)",
+      "notes": "跨skill混淆诱饵: 链路机制与目标排序之辨"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "搜索框输入的内容立刻回显到页面，完全没有入库环节，这也算二次漏洞吗？",
+      "expected_behavior": "边界判定: none。无'写入→取出'分离的单请求即时反射(技能明确排除), 按普通过滤判据处理即可",
+      "notes": "边界: 名义相近但无跨请求时域分离"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

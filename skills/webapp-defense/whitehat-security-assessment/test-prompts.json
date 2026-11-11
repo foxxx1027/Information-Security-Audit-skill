@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-security-assessment",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "刚接手一条新业务线，领导说'做一下安全'，我该从哪一步开始？",
+      "expected_behavior": "应激活 whitehat-security-assessment, 按四阶段推进：先访谈业务做资产分级，再威胁分析，再风险排序，最后出方案",
+      "notes": "正面: 接手新系统的评估入手点"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "要交付一份安全评估报告，除了漏洞清单还应该有什么结构？",
+      "expected_behavior": "应激活 whitehat-security-assessment, 按资产→威胁→风险→方案四段组织报告，漏洞附风险排序与处置建议",
+      "notes": "正面: 评估报告的结构化"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "扫描出 200 多个告警，先修哪些后修哪些，依据是什么？",
+      "expected_behavior": "应激活 whitehat-security-assessment, 按概率×损失做风险排序，结合资产等级给修复优先级",
+      "notes": "正面: 漏洞优先级排序"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "AWVS 这款扫描器怎么配置登录态扫描我们的后台？",
+      "expected_behavior": "不应激活本 skill, 因为这是纯扫描工具配置使用问题; 属工具使用咨询, 无需调用书中任何技能",
+      "notes": "诱饵: 评估工具话题"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "产品提了句'让登录更安全'，怎么把它落成可以开发的任务？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-requirement-decomposition (输入是一句需求口号属需求期分解，不是对已有系统的评估)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-requirement-decomposition, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "这套系统纯内网部署、只有员工能访问，还有必要专门做威胁分析吗？",
+      "expected_behavior": "边界场景: 内网不等于可信——评估的入手点是资产价值与威胁面（内部人员、失陷跳板），应激活本 skill 论证四阶段方法同样适用 (期望激活: whitehat-security-assessment)",
+      "notes": "边界: '内网免检'直觉与评估必要性的冲突"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

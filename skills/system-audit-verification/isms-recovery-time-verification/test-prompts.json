@@ -1,0 +1,52 @@
+{
+  "skill": "isms-recovery-time-verification",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "云灾备服务商承诺 RPO 一小时、RTO 四小时，验收审核怎么证明不是纸面数字？",
+      "expected_behavior": "应激活 isms-recovery-time-verification, 查约定层（合同/策略的 RPO/RTO）后要求真实恢复演练，用全程耗时对照承诺值",
+      "notes": "正面场景：RTO/RPO 承诺实测"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "备份策略有、自动备份任务也在跑，但恢复演练从没做过，这条控制算符合吗？",
+      "expected_behavior": "应激活 isms-recovery-time-verification, 缺演练记录即视为未验证，不得视为符合",
+      "notes": "正面场景：无演练即未验证"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "备份这块怎么审才不是看一眼任务成功截图就完事？",
+      "expected_behavior": "应激活 isms-recovery-time-verification, 把'有没有备份'升级为'实测恢复耗时是否落在承诺时限内'",
+      "notes": "正面场景：备份审法升级"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "数据量翻倍以后备份窗口不够用了，备份策略怎么调整？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 存储容量与窗口规划咨询",
+      "notes": "诱饵：容量规划"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "整体审一家托管安全服务商，从合同条款到实际配置到运行日志都要看，方案怎么搭？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-network-service-three-line-audit",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-network-service-three-line-audit）：供应商全景三线审，时效实测只是其中运行线的一环"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "刚签的容灾服务要到下个季度才有第一个演练窗口，这次内审这部分怎么处理？",
+      "expected_behavior": "期望激活 isms-degraded-evidence-fallback：演练客观上尚未发生，按约定层+配置层降级取证、显式披露并约期实测，不得视为已验证也不得硬开不符合",
+      "notes": "边界：时效验证与证据降级的衔接场景"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-protocol-belief-analysis",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "自研的登录票据协议想整体审一遍，消息时序逐条过，从哪入手？",
+      "expected_behavior": "应激活 stallings-protocol-belief-analysis, 并写设计者信念断言→攻击反例→修补再审三步法",
+      "notes": "正面场景: 自研协议审计, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "上周给协议打了个补丁，修补本身会不会引入新的假设？",
+      "expected_behavior": "应激活 stallings-protocol-belief-analysis, 并做最小修补后的新假设再审",
+      "notes": "正面场景: 修补后还安全吗, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "协议第三步那个 nonce 到底防的是什么攻击？逐条理一下。",
+      "expected_behavior": "应激活 stallings-protocol-belief-analysis, 并把每条断言当攻击面逐条找反例",
+      "notes": "正面场景: 这个 nonce 防什么, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "把 nginx 的 tls1.0 和 tls1.1 关掉的变更单怎么写、怎么灰度？",
+      "expected_behavior": "不应激活本 skill, 因为是配置变更操作, 非协议时序逻辑审计; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: TLS/协议话语, 实为变更管理"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "IoT 设备首次配对没有 PKI，协商的公钥谁背书？TOFU 行不行？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-unauthenticated-key-exchange (公钥背书单一问句族, 本 skill 是全协议三步法)",
+      "notes": "跨 skill 混淆诱饵: A2 明列前者是后者的快速入口"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "想用形式化验证工具证明协议安全，ProVerif 这类工具怎么选？",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'需要形式化证明的场合(本方法是工程师清单而非证明器)'; 预期不激活 (expected: none)",
+      "notes": "边界: 协议安全话语, 但诉求是形式化证明工具"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

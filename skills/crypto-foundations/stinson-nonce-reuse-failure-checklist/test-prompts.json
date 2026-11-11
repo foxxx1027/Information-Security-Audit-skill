@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-nonce-reuse-failure-checklist",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "nonce-reuse-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "嵌入式设备每次启动拿『时间戳+设备序列号』播种 CSPRNG，产线批量出货后两台设备生成了相同密钥流，影响面怎么圈？",
+      "expected_behavior": "应激活 stinson-nonce-reuse-failure-checklist, 判定同种子→同密钥流的失陷半径（所有用该流加密/认证的数据），列生成端修复项（每设备唯一熵、状态持久化）",
+      "notes": "正面场景: 嵌入式播种事故（A2 #1）"
+    },
+    {
+      "id": "nonce-reuse-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "日志巡检发现两条 ECDSA 签名的 r 值完全一样，这是不是意味着私钥已经泄了？多快要处置？",
+      "expected_behavior": "应激活 stinson-nonce-reuse-failure-checklist, k 值复用→两条签名解线性方程出私钥：立即轮换私钥并评估已签内容",
+      "notes": "正面场景: 签名随机数复用事故（A2 #2）"
+    },
+    {
+      "id": "nonce-reuse-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "CTR 模式的计数器从 0 起跳、进程重启后也不持久化，这会造成什么级别的后果？",
+      "expected_behavior": "应激活 stinson-nonce-reuse-failure-checklist, 计数器回退=密钥流复用=two-time pad：异或两条密文即消密钥流，代数级崩溃非概率削弱",
+      "notes": "正面场景: 计数器回退审计（A2 #3/#4）"
+    },
+    {
+      "id": "nonce-reuse-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "snowflake ID 生成器在时钟回拨后出了重复 ID，分布式层面怎么修？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 业务 ID 生成的工程缺陷，无密码学一次性值语义",
+      "notes": "诱饵: 『重复/回拨』字面相近的分布式 ID 问题"
+    },
+    {
+      "id": "nonce-reuse-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "挑战应答里的 nonce 被同一个人提交了两次，服务端是该记录已用 nonce 直接拒绝，还是绑定会话就行？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-freshness-replay-decision-tree — nonce 作为挑战的消费端语义（新鲜性来源与覆盖）；本 skill 管生成端的复用灾难",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-freshness-replay-decision-tree): 同一个 nonce，生成端事故与消费端语义分属两个 skill"
+    },
+    {
+      "id": "nonce-reuse-edge-01",
+      "type": "edge_case",
+      "prompt": "GCM 的 96 位 IV 用纯随机生成，我们每秒加密一万条消息，多久会撞一次？撞了会怎样？",
+      "expected_behavior": "应激活 stinson-nonce-reuse-failure-checklist (expected: 本 skill) — 高频下 96 位随机 IV 按生日界约 2^48 条触发碰撞，但决定性的是『复用即代数崩溃』：GCM 下 IV 复用直接泄露认证钥， confidentiality 和完整性同时失守；应改单调计数器（碰撞换算可与生日界参数 skill 联动）",
+      "notes": "边界: 前半是概率换算，决定性判定在复用后果与修复路线"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

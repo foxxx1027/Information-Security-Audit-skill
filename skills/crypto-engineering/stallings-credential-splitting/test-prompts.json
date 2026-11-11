@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-credential-splitting",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "raw API key 又泄露了一个，想重构凭证体系，access/refresh 两层怎么拆？",
+      "expected_behavior": "应激活 stallings-credential-splitting, 并拆成'可重用载体凭据+一次性使用证明'各配各的寿命",
+      "notes": "正面场景: API key 泄露重构, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "session token 有效期设 15 分钟用户骂、设 7 天安全骂，这个两难怎么破？",
+      "expected_behavior": "应激活 stallings-credential-splitting, 并用拆分凭据替代折中取值",
+      "notes": "正面场景: token lifetime trade-off, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "设备注册发的长效凭证要支持续期，续期策略和故障隔离怎么设计？",
+      "expected_behavior": "应激活 stallings-credential-splitting, 并把昂贵协商产出做成可复用句柄+按最小单元隔离故障",
+      "notes": "正面场景: 可续期凭证, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "内部低价值查询接口用个 24 小时过期的静态 token 就够了吧？要不要上复杂方案？",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'低价值场景用一次性短命凭据即可满足'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 凭证有效期话语, 但落在低价值排除域"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "代码签名证书吊销之后，离线构建机上旧的还能用多久？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-revocation-as-propagation (失效何时生效的传播语义, 本 skill 生成凭据结构)",
+      "notes": "跨 skill 混淆诱饵: A2 明列组合使用的先后"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "TLS session resumption 的票据寿命要不要跟主认证绑死成一样长？",
+      "expected_behavior": "应激活 stallings-credential-splitting, 因为'昂贵协商产出可复用句柄'的寿命分层正是其设计域 (expected: stallings-credential-splitting)",
+      "notes": "边界: 协议参数问题, 落在凭据拆分寿命设计"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-control-effectiveness-four-checks",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "防火墙三年前就部署了，控制台里策略也都配着，为什么测评还判不符合？我该怎么核实它到底生效没有？",
+      "expected_behavior": "应激活 mlps-control-effectiveness-four-checks, 按粒度/覆盖/生效/强制四查验收，“已配置”只是存在性证据",
+      "notes": "正面: 已配置≠生效"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "安全组规则翻了一圈几乎全是 ALLOW，默认策略也是放行，这算配置了访问控制吗？",
+      "expected_behavior": "应激活 mlps-control-effectiveness-four-checks, 防 ACCEPT 式空转，核查默认策略与规则集实际运转",
+      "notes": "正面: 策略空转"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "供应商宣称产品支持命令级过滤，怎么实测验证这个粒度声明？",
+      "expected_behavior": "应激活 mlps-control-effectiveness-four-checks, 第一查粒度：端口级≠命令级，设计实测验证粒度声明",
+      "notes": "正面: 粒度声明实测"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "WAF 采购标书里吞吐量和并发连接数这些指标怎么定才合理？",
+      "expected_behavior": "不应激活本 skill, 采购性能指标制定，非控制有效性核查",
+      "notes": "诱饵: 控制措施话题但属采购参数"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "平台默认配置达不到三级那条强制访问控制的要求，厂商宣传的能力和默认状态对不上，这种缺口怎么判？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-native-capability-gap-chain（原生能力边界→第三方补偿→缺即不符合）",
+      "notes": "跨 skill 混淆诱饵: 灵不灵（有效性） vs 有没有（能力缺口）"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "口令复杂度制度里写了，服务器上也配了强制策略，但只覆盖管理员账号，普通用户全靠自觉，这条怎么判？",
+      "expected_behavior": "应激活 mlps-control-effectiveness-four-checks, 覆盖查+强制等级查：覆盖不全、管理约定顶替技术强制，落部分符合",
+      "notes": "边界: 部分覆盖+混合强制的档位"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

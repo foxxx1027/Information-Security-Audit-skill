@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-var-overwrite-chain",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "代码里搜到一处 extract($_POST)，这是真漏洞还是噪音？怎么判断可利用性？",
+      "expected_behavior": "应激活 caudit-var-overwrite-chain, 三点连线(覆盖点×前文关键变量×后文消费点), 搜到可覆盖本身不算漏洞",
+      "notes": "正面场景: 覆盖点判定"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "Spring 的表单直接绑定到实体对象，用户要是多传一个 role 字段会发生什么？这块怎么审？",
+      "expected_behavior": "应激活 caudit-var-overwrite-chain, 审请求绑定的批量赋值链(mass assignment), 连线敏感字段消费点",
+      "notes": "正面场景: 框架批量绑定审计"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "报告里这个变量覆盖点该定高危还是低危？覆盖之后到底能影响到什么？",
+      "expected_behavior": "应激活 caudit-var-overwrite-chain, 按链条是否连得成定级, 修复同构为绑定白名单+敏感字段服务端赋值",
+      "notes": "正面场景: 覆盖点定级"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "PHP 的 extract 和 compact 这两个函数平时都用在什么地方？语法老是记混。",
+      "expected_behavior": "不应激活任何本册技能, 语言语法学习, 无漏洞判定对象",
+      "notes": "诱饵: extract 话题但为语法查询"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "表单里带了个隐藏的 role 字段，用户抓包改一下是不是就提权了？",
+      "expected_behavior": "不应激活 caudit-var-overwrite-chain, 应激活 caudit-security-metadata-pollution (考点是角色这类元数据不得由请求携带的来源判定)",
+      "notes": "跨skill混淆诱饵: 覆盖链条判定 vs 参数归属定性"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "搜到一个 $$ 可变变量，但前后翻了一圈，被覆盖的变量后面没人用，报告里还要不要写？",
+      "expected_behavior": "应激活 caudit-var-overwrite-chain: 三点连线连不上消费点即不成立, 用判定框架本身得出'不报或仅作低危记录'的结论",
+      "notes": "边界: 覆盖点存在但链条断, 仍需本技能的连线判定来裁决"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

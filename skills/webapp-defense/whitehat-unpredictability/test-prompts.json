@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-unpredictability",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "订单号是数据库自增的，有人写脚本从 1 一直爬到 100 万，这个怎么防？",
+      "expected_behavior": "应激活 whitehat-unpredictability, 把资源标识改随机不可预测并配授权校验，抬高批量枚举成本",
+      "notes": "正面: 自增 id 被批量遍历"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "放票瞬间票全被脚本抢光，正常用户根本抢不到，从设计上怎么破？",
+      "expected_behavior": "应激活 whitehat-unpredictability, 让关键参数不可预构造（随机化入口/凭证），使脚本无法提前拼好请求",
+      "notes": "正面: 预构造请求打穿稀缺资源发放"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "生成分享链接的 token 用 md5(用户id) 可以吗？",
+      "expected_behavior": "应激活 whitehat-unpredictability, 裁决可预测构造不合格，换安全随机数并评估枚举成本",
+      "notes": "正面: 可预测 token 的裁决"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "订单表主键用自增 int 还是雪花 id，主要考虑写入性能和页分裂，怎么选？",
+      "expected_behavior": "不应激活本 skill, 因为这是性能视角的主键选型，无对抗枚举场景; 属数据库设计, 无需调用书中任何技能",
+      "notes": "诱饵: 同为 id 选型但无安全诉求"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "写操作接口的防 CSRF token 一整套流程怎么设计？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-csrf-intent-token (该原则在 CSRF 场景的完整工程化即生成/绑定/校验/依赖顺序有专门技能)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-csrf-intent-token, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "有个老组件的漏洞彻底修不动，除了干等着被利用还能做点什么？",
+      "expected_behavior": "边界场景: 缺陷修不掉时'让利用条件失效'（随机化配置/路径/地址使预测落空）是正当防御路径，应激活本 skill 设计缓解 (期望激活: whitehat-unpredictability)",
+      "notes": "边界: 从'修漏洞'跳到'让利用失效'的路径选择"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

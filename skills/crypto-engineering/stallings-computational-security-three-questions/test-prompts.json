@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-computational-security-three-questions",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "智能电表的计量数据要保密 30 年，现在该选什么强度档位？",
+      "expected_behavior": "应激活 stallings-computational-security-three-questions, 并按防谁/防多久/值多少三问推导档位",
+      "notes": "正面场景: 长期数据选强度, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "选型会上吵 128 还是 256 位密钥，怎么论证而不是拍脑袋？",
+      "expected_behavior": "应激活 stallings-computational-security-three-questions, 并用三问给密钥长度提供论证链",
+      "notes": "正面场景: 128 还是 256, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "担心 harvest now decrypt later，长期档案库的加密参数怎么配？",
+      "expected_behavior": "应激活 stallings-computational-security-three-questions, 并按信息生命期×算力外推定年限路线",
+      "notes": "正面场景: HNDL 应对, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "公司要买网络安全保险，保额和免赔额怎么选？",
+      "expected_behavior": "不应激活本 skill, 因为是保险采购决策, 无密码强度论证对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 风险/价值话语, 非密码强度"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "4 位 PIN 码的穷举面在哪？最便宜的断点是哪一段？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-brute-force-three-conditions (给定方案的穷举面分析, 本 skill 定需求侧档位)",
+      "notes": "跨 skill 混淆诱饵: A2 明列自下而上体检 vs 自上而下预算"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "有厂商卖'一次一密、信息论安全、永不可破'的加密产品，这话说得通吗？",
+      "expected_behavior": "应激活 stallings-computational-security-three-questions, 因为 OTP 三条件验收判据(密钥等长/真随机/一次性)正是其明列适用域 (expected: stallings-computational-security-three-questions)",
+      "notes": "边界: 审查话术, 落在一次一密验收判据"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

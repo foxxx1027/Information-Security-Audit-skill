@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-audit-path-selection",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "接了个审计委托，48 小时、三十万行的老系统，要出'有没有高危漏洞'的结论，这个活儿怎么安排？",
+      "expected_behavior": "应激活 caudit-audit-path-selection, 按时间预算/目标归属在四条审计路径中选型, 先黑盒排雷再白盒跳过已测点, 输出含放弃声明的作业方案",
+      "notes": "正面场景: 时间紧的审计选型"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "下周开始对我们产品做代码审计，时间不算充裕，是先黑盒点一遍再白盒读码，还是直接全文通读？",
+      "expected_behavior": "应激活 caudit-audit-path-selection, 输出路径选型决策与放弃声明",
+      "notes": "正面场景: 自有产品的读码路径决策"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "审计报告里的覆盖范围和剩余风险怎么声明？上次漏了个逻辑漏洞被质疑，想说明白当时为什么没覆盖到。",
+      "expected_behavior": "应激活 caudit-audit-path-selection, 用路径能力边界与放弃声明解释覆盖范围",
+      "notes": "正面场景: 报告覆盖范围声明"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "审计做到一半卡在一个可疑点上了：这个 substr 截断到底能不能绕过校验，帮我看看这段代码。",
+      "expected_behavior": "不应激活任何本册技能, 已在执行中的单点漏洞分析, 路径选型阶段已过",
+      "notes": "诱饵: 审计语境但粒度是单点分析(技能明确排除)"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "审计路子定了就做定向挖掘：帮我在这个 ThinkPHP 项目里把 SQL 注入系统搜一遍，怎么搜才全？",
+      "expected_behavior": "不应激活 caudit-audit-path-selection, 应激活 caudit-mechanism-to-search-terms (选型已定, 考点是执行层的搜-判流程)",
+      "notes": "跨skill混淆诱饵: 路径选型的下游执行层"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "公司每年有固定的安全预算，想规划每个季度在自家产品上投入多少代码审计、审到什么深度，这该怎么规划？",
+      "expected_behavior": "应激活 caudit-audit-path-selection, 长期安全运营下的审计投入与路径配比规划, 属本技能'规划季度审计投入'场景",
+      "notes": "边界: 与安全投入体系规划相近, 但对象是审计作业而非防御建设, 应激活本技能"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

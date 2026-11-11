@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-whitelist-first",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "同事提议加一条黑名单，把 php、asp 这些危险后缀全封掉，这个思路对吗？",
+      "expected_behavior": "应激活 whitehat-whitelist-first, 论证黑名单失败开放（漏一个即失守，大小写/双后缀/新格式绕过），改为只允许已知类型的白名单",
+      "notes": "正面: 黑名单式后缀拦截的形态裁决"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "CORS 图省事配了个星号，反正接口也不要登录，有什么风险？",
+      "expected_behavior": "应激活 whitehat-whitelist-first, 指出通配符把白名单退化成全开，按已知来源收敛允许集",
+      "notes": "正面: 通配符授权的退化风险"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "权限系统赶上线，先把所有接口默认放开，出了事再收紧，这样行吗？",
+      "expected_behavior": "应激活 whitehat-whitelist-first, 论证默认拒绝原则：白名单失败关闭（漏配即不可达），默认放开是失败开放",
+      "notes": "正面: 默认放开 vs 默认拒绝"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "上传白名单里到底该放 jpg 还是把 heic 也加上，产品和法务吵起来了。",
+      "expected_behavior": "不应激活本 skill, 因为这是白名单具体条目的业务取舍，不是规则形态选择; 属产品决策, 无需调用书中任何技能",
+      "notes": "诱饵: 白名单话题的条目版"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "请求从网关进来再到各个服务，参数校验应该在哪一跳做？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-trust-boundary (问的是检查位置即哪条边界，不是规则写成允许集还是禁止集)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-trust-boundary, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们已经按建议把黑名单换成了白名单，为什么还是被绕过了？",
+      "expected_behavior": "边界场景: 白名单本身也是信任假设——写成通配符或条目过宽即退化为全开，应激活本 skill 对白名单自身做审计 (期望激活: whitehat-whitelist-first)",
+      "notes": "边界: 白名单已实施后的失效诊断"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-security-notion-calibration",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "notion-calibration-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "加密厂商宣传『信息论级安全、理论上绝对不可破』，这句口号在密码学口径上站得住吗？",
+      "expected_behavior": "应激活 stinson-security-notion-calibration, 先定口径：无条件安全/可证明安全/计算安全三把尺子不可混用，核查宣传说的是哪把、结构上能否达到",
+      "notes": "正面场景: 绝对安全宣传核实（A2 #1）"
+    },
+    {
+      "id": "notion-calibration-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "两个竞品一个自称计算安全、一个自称可证明安全，谁更强？这两个口径能直接比吗？",
+      "expected_behavior": "应激活 stinson-security-notion-calibration, 判定口径不可直接比：不同尺度的声明要先统一度量口径再比较",
+      "notes": "正面场景: 两个安全声明的强度比较（A2 #2）"
+    },
+    {
+      "id": "notion-calibration-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "能不能做出信息论安全的数字签名？还是这个档位结构上就到不了？",
+      "expected_behavior": "应激活 stinson-security-notion-calibration, 判定档位可达性：签名/公钥类方案在信息论档结构上不可达，只能落在计算/可证明档",
+      "notes": "正面场景: 档位可达性判断（A2 #3）"
+    },
+    {
+      "id": "notion-calibration-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "等保测评里『安全通信网络』这一项要准备哪些佐证材料？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 合规材料准备，不是安全度量口径问题",
+      "notes": "诱饵: 『安全』字眼的合规流程任务"
+    },
+    {
+      "id": "notion-calibration-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "OTP 方案要审密钥均匀性、一钥一次、密钥供给三条，具体怎么逐项核？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-perfect-secrecy-formalization — 定档之后深入无条件档内部的三查流程；本 skill 管选尺",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-perfect-secrecy-formalization): 选尺与用尺的先后分工"
+    },
+    {
+      "id": "notion-calibration-edge-01",
+      "type": "edge_case",
+      "prompt": "Shamir 门限方案宣称『信息论安全』，这句话是说任意 t-1 份都拿不到一点信息吗？口径对得上吗？",
+      "expected_behavior": "应激活 stinson-security-notion-calibration (expected: 本 skill) — 核实口径：『信息论安全』指无界敌手下未授权子集零信息，该口径在门限场景确实成立；深入验收 t-1 份时转门限 skill",
+      "notes": "边界: 口径核实优先，深挖门限验收属兄弟 skill 的层"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

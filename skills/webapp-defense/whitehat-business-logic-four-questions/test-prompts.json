@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-business-logic-four-questions",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "新的代付功能下周上线，怎么系统地过一遍有没有业务逻辑上的洞？",
+      "expected_behavior": "应激活 whitehat-business-logic-four-questions, 用四问逐项审查：他人能否触发状态变更、变更是否覆盖全部关联体系、每条状态转移边是否挂校验、敏感步骤是否重新认证",
+      "notes": "正面: 新业务功能上线前的逻辑审查"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "用户反馈把地址栏里的订单号改一下就能看到别人的订单，这类问题怎么全面排查？",
+      "expected_behavior": "应激活 whitehat-business-logic-four-questions, 按'校验是否挂在所有状态转移边上'与水平越权维度展开排查清单",
+      "notes": "正面: 水平越权(IDOR)类问题的系统排查"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "我们加了'密码连错 5 次锁账户'的保护，结果有人蓄意输错密码把竞争对手的账户全锁了，这种设计缺陷怎么在上线前发现？",
+      "expected_behavior": "应激活 whitehat-business-logic-four-questions, 用第一问（惩罚性控制能否被第三方反制）审查此类状态变更触发逻辑",
+      "notes": "正面: 惩罚性控制被反制的场景"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "订单状态流转用状态机引擎还是 if-else 硬写，从架构上怎么选型？",
+      "expected_behavior": "不应激活本 skill, 因为这是纯技术架构选型，无安全与对抗视角; 属软件设计问题, 无需调用书中任何技能",
+      "notes": "诱饵: 同样谈状态机但无安全诉求"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "接手一个 PHP 老项目，帮我系统查一遍代码里哪些地方有 SQL 注入和命令执行。",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-source-sink-audit (用户要的是代码库里注入面的枚举审计即 source/sink 追踪，不是业务流程状态逻辑审查)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-source-sink-audit, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "测试报了个 bug：优惠券领完之后页面不刷新还能再领一次，这算功能 bug 还是安全问题？",
+      "expected_behavior": "边界场景: '领完还能再领'是状态转移边缺少校验的业务逻辑漏洞（第三问），应激活本 skill 以四问排查同类旁路，而非当普通功能 bug 处理 (期望激活: whitehat-business-logic-four-questions)",
+      "notes": "边界: 功能 bug 与逻辑漏洞的模糊地带"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

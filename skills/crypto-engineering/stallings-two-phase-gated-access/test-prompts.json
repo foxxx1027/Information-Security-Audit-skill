@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-two-phase-gated-access",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "802.1X 认证成功了端口还不开，非要等四次握手装好密钥才放行，这是什么设计？",
+      "expected_behavior": "应激活 stallings-two-phase-gated-access, 并解释'身份认证'与'密钥就绪'两道门分离消除明文窗口",
+      "notes": "正面场景: controlled port, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "gRPC sidecar 做零信任接入，怎么消灭'已认证但明文'的窗口期？",
+      "expected_behavior": "应激活 stallings-two-phase-gated-access, 并设计先建 SA 再跑业务的状态机",
+      "notes": "正面场景: 明文窗口期, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "策略命中了但安全关联还没建立好，这股流量默认放过去还是丢掉？",
+      "expected_behavior": "应激活 stallings-two-phase-gated-access, 并按 default deny before key install 定默认动作",
+      "notes": "正面场景: 策略与密钥联动, A2 情境 3"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "登录页的滑块验证码在 Safari 上拖不动，前端要怎么修？",
+      "expected_behavior": "不应激活本 skill, 因为是前端兼容 bug, 无握手状态机对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 验证/准入话语, 实为前端 bug"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "认证服务宕机的时候，网关应该 fail-open 还是 fail-close？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-fail-direction-audit (每道门异常输入下的方向, 本 skill 定门的结构)",
+      "notes": "跨 skill 混淆诱饵: A2 明列结构审计之后逐门方向审计"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "受控端口旁边还留着一条只放认证流量的窄通道，为什么这么设计？",
+      "expected_behavior": "应激活 stallings-two-phase-gated-access, 因为'为管控流预留最小专用通道'正是其明列机制 (expected: stallings-two-phase-gated-access)",
+      "notes": "边界: 像网络配置问答, 考点是管控流通道设计"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

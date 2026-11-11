@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-score-aggregation-chain",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "报告综合得分 86、结论基本符合，这个数是怎么一步步算出来的？帮我复核。",
+      "expected_behavior": "应激活 mlps-score-aggregation-chain, 重演聚合链：测评项赋值→多对象平均→权重加权→控制点 5 分制→层面百分制→修正因子",
+      "notes": "正面: 复核综合得分"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "报告里权重 1、0.5、0.2 和修正因子 0.5–0.9 都是哪来的？合法吗？",
+      "expected_behavior": "应激活 mlps-score-aggregation-chain, 声明权重与修正因子是合规记分参数而非风险度量",
+      "notes": "正面: 参数来源质询"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "为什么那么多不符合项，最终结论还是基本符合？分数和结论怎么对上的？",
+      "expected_behavior": "应激活 mlps-score-aggregation-chain, 结论三档由“有无问题×是否高等级风险”二维交叉+综合得分公式",
+      "notes": "正面: 分数与结论的关系"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "把历年测评得分做成领导驾驶舱大屏，用折线图还是雷达图好？",
+      "expected_behavior": "不应激活本 skill, 数据可视化选型，非分数复算",
+      "notes": "诱饵: 分数话题但为可视化"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "单项判了部分符合之后，这个档位和原始分怎么落到 0–5 分制？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-verdict-tiers（单测评项档位与 0–5 原始分）",
+      "notes": "跨 skill 混淆诱饵: 聚合复算 vs 单项打分"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "管理层要拿我们的 86 分和同业公司的 82 分排名次，这个比法有什么问题？",
+      "expected_behavior": "应激活 mlps-score-aggregation-chain, 解释分数构成与局限：合规记分参数非风险度量，跨组织直接排名不成立",
+      "notes": "边界: 分数被跨组织比较"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

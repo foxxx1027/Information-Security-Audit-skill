@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-authenticated-key-establishment",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "authenticated-key-establishment-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们 IoT 设备配网流程是设备广播自己的公钥、App 回一个公钥，两边各自 ECDH 出对称密钥就开始传数据，安全上还缺什么？",
+      "expected_behavior": "应激活 stinson-authenticated-key-establishment, 按认证交织（裸 DH 无认证必遭中间人）、签名覆盖域、持有证明、密钥确认四层检查配网流程缺哪层",
+      "notes": "正面场景: IoT 配网/设备接入协议审计（A2 #1）"
+    },
+    {
+      "id": "authenticated-key-establishment-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "TLS 握手里证书链全验证通过了，怎么确认对端真的是私钥持有者而不是实时转发的人？要不要在应用层再加一轮挑战应答做密钥确认？",
+      "expected_behavior": "应激活 stinson-authenticated-key-establishment, 区分『证书验证通过』与『对端持有私钥』两件事，评估 PoP/密钥确认回合的必要性",
+      "notes": "正面场景: 证书之后的持有证明与密钥确认（A2 #2/#3）"
+    },
+    {
+      "id": "authenticated-key-establishment-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "审计自研信道协议：服务端拿长期身份私钥对 g^a 和 g^b 签了名，但双方用户 ID 和会话上下文都没盖进签名里，这个绑定够不够？",
+      "expected_behavior": "应激活 stinson-authenticated-key-establishment, 核对签名覆盖域：身份+双方瞬时值+会话上下文是否全部覆盖，缺项即 unknown key-share/中间人窗口",
+      "notes": "正面场景: 签名覆盖域审计（A2 #2）"
+    },
+    {
+      "id": "authenticated-key-establishment-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "Redis 分布式锁的 SETNX 和过期时间打架了，两个定时任务同时拿到了锁，帮忙重写一下加锁逻辑。",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 分布式系统工程问题，无密码学组件",
+      "notes": "诱饵: 『锁/密钥』字面的工程问题"
+    },
+    {
+      "id": "authenticated-key-establishment-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "网关的证书校验代码只比对了证书链上的签名，有效期、吊销状态和域名 SAN 都没查，这个漏洞面有多大？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-certificate-validation-checklist — 问题是证书链验证四步本身，属于证书清单；本 skill 在证书验证通过之后才接管",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-certificate-validation-checklist): 证书话题贴近密钥建立，但缺的是验证四步而非认证绑定"
+    },
+    {
+      "id": "authenticated-key-establishment-edge-01",
+      "type": "edge_case",
+      "prompt": "朋友问：他们俩在聊天软件里互发了公钥然后直接加密消息，中间人能看到内容吗？我该怎么回答？",
+      "expected_behavior": "应激活 stinson-authenticated-key-establishment (expected: 本 skill) — 语气日常但问题本质是未认证的密钥建立：公钥交换无认证绑定，中间人可实时替换公钥；按四层检查回答",
+      "notes": "边界: 日常口吻的『交换公钥就能加密吗』（description 明确触发语），非正式语境不改变问题性质"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

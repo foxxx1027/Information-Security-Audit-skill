@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-report-validity-retest",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "手里一份一年半之前的测评报告，下周投标要用，还有效吗？",
+      "expected_behavior": "应激活 mlps-report-validity-retest, 结论仅对测评时点有效，按年测频次判定过期",
+      "notes": "正面: 旧报告投标"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "系统刚从机房整体迁到云上，去年的测评结论还算数吗？",
+      "expected_behavior": "应激活 mlps-report-validity-retest, 组件变更即失效，迁移属系统构成变化触发重测",
+      "notes": "正面: 大改造后失效"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "我们团队一天发三个版本，每年测一次有什么意义？重测策略该怎么设计？",
+      "expected_behavior": "应激活 mlps-report-validity-retest, 高频发布环境改“基线测评+变更触发增量测评”",
+      "notes": "正面: 高频发布的重测策略"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "这份测评报告的封面、目录和页码编号格式合不合规范，帮我过一遍。",
+      "expected_behavior": "不应激活本 skill, 报告格式校对，非效力判定",
+      "notes": "诱饵: 报告话题但为排版校对"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "客户拿着符合基线的报告问是不是就安全了，怎么专业地回答？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-compliance-vs-risk-boundary（结论证明什么、不证明什么）",
+      "notes": "跨 skill 混淆诱饵: 结论的射程 vs 结论的意义"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "就换了一台接入交换机，业务系统和服务器都没动，需要重新测评吗？",
+      "expected_behavior": "应激活 mlps-report-validity-retest, 变更是否触发重测取决于是否涉及系统构成组件，接入设备属构成组件须评估",
+      "notes": "边界: 小变更的重测触发判定"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

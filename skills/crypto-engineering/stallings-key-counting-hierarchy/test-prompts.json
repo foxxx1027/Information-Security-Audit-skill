@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-key-counting-hierarchy",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "5000 个服务互相调用的 mTLS，pairwise 证书组合数先算一下，架构怎么收敛？",
+      "expected_behavior": "应激活 stallings-key-counting-hierarchy, 并做 N(N-1)/2 计数→层次坍缩→按成本×频次分层",
+      "notes": "正面场景: 密钥数量爆炸, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "K8s 集群的证书运维成本失控了，要不要上中心化签发和管理？",
+      "expected_behavior": "应激活 stallings-key-counting-hierarchy, 并用计数论证链评估集中化架构",
+      "notes": "正面场景: 中心化决策, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "密钥轮换策略怎么分层？哪些常换哪些不动，换的代价怎么算？",
+      "expected_behavior": "应激活 stallings-key-counting-hierarchy, 并按'单位成本×发生频率'定低频换根/高频换叶",
+      "notes": "正面场景: key rotation policy, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "三个兄弟服务点对点互调，密钥放环境变量里共享行不行？",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'小规模点对点(<10 对且无增长预期)'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 密钥管理话语, 但落在小规模排除域"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "拿到服务器私钥能解多少历史流量？前向安全怎么改？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-key-leak-blast-radius-forward-secrecy (单钥失陷半径与 PFS, 本 skill 用数量算架构)",
+      "notes": "跨 skill 混淆诱饵: A2 明列同一层次结构两问不同"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "现在就 10 个节点，但明年要扩到 500 个，密钥架构现在就要分层吗？",
+      "expected_behavior": "应激活 stallings-key-counting-hierarchy, 因为'计数→架构'论证链本就要求把增长预期算进组合数 (expected: stallings-key-counting-hierarchy)",
+      "notes": "边界: 当前小规模诱向排除域, 但含增长预期属设计域"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-separation-of-duties-dual-axis",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "系统管理员和审计员能不能是同一个人？这条怎么核查才有力？",
+      "expected_behavior": "应激活 mlps-separation-of-duties-dual-axis, 横向角色互斥：管理员与审计员双向制约，导出两组权限求交集",
+      "notes": "正面: 管理员 vs 审计员"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "怎么查有没有人同时握着操作系统管理员和数据库管理员两组权限？",
+      "expected_behavior": "应激活 mlps-separation-of-duties-dual-axis, 纵向跨层互斥：导出两组管理员求交集，非空即不符合",
+      "notes": "正面: OS 管理员兼 DBA"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "复盘发现变更和应急流程里两个岗位互相甩锅，这说明什么？",
+      "expected_behavior": "应激活 mlps-separation-of-duties-dual-axis, 高风险流程当显影剂反推职责边界不闭合",
+      "notes": "正面: 甩锅显影"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "安全岗应该设几个编制？岗位说明书怎么写？",
+      "expected_behavior": "不应激活本 skill, 岗位编制设计属人事咨询（本 skill 排除域）",
+      "notes": "诱饵: 岗位话题但为编制设计"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "把系统账号列表和人事名单对一遍，查查有没有人离职了账号还挂着的。",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-reconciliation-style-checking（账↔人差集对账）",
+      "notes": "跨 skill 混淆诱饵: 角色交集 vs 账实差集"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "这套系统上没装数据库，“操作系统管理员兼数据库管理员”这项还要查吗？",
+      "expected_behavior": "应激活 mlps-separation-of-duties-dual-axis, 未装 DB 判不适用，仍需留痕说明",
+      "notes": "边界: 前提缺失时的适用性"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

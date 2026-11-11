@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-server-side-state-truth",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "签到功能限制每人每天一次，怎么设计才防得住刷？这个状态应该存在哪里？",
+      "expected_behavior": "应激活 caudit-server-side-state-truth, 三问裁决(真值存哪/迁移是否原子/资格判定来源可否伪造)+删Cookie等验收用例",
+      "notes": "正面场景: 次数限制设计"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "复盘：抽奖活动被刷了几万次，删 Cookie、换 IP 都能再来一轮，问题出在哪一层？",
+      "expected_behavior": "应激活 caudit-server-side-state-truth, 定位真值层失效(客户端可重置的计数不构成限制)",
+      "notes": "正面场景: 活动被刷复盘"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "开通会员和扣费是两步操作不是原子的，中间被打时间差重复请求，这种怎么审、怎么防？",
+      "expected_behavior": "应激活 caudit-server-side-state-truth, 迁移原子性裁决(防时间差与并发重放)",
+      "notes": "正面场景: 时间差重放"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们用 Redis 做会话存储，偶尔会丢会话，是持久化配置的问题吗？",
+      "expected_behavior": "不应激活任何本册技能, Redis 运维排障, 不是限制状态的设计裁决",
+      "notes": "诱饵: 状态存储话题但为运维"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "商城退款接口被人重复请求，造成了双倍退款，资金类的这类问题怎么系统排查？",
+      "expected_behavior": "不应激活 caudit-server-side-state-truth, 应激活 caudit-payment-invariants (资金域有预编译的三条不变量清单, 直接逐条跑)",
+      "notes": "跨skill混淆诱饵: 通用三问与资金域实例化之辨"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "评论的'是否已读'状态放在 localStorage 里，用户改了也只是自己骗自己，这样安全上有问题吗？",
+      "expected_behavior": "边界判定: none。已读是低价值展示状态, 不属资格/次数/额度/身份/结果类安全关键限制, 客户端存放不构成可利用绕过",
+      "notes": "边界: 同为客户端状态, 但非安全关键裁决状态"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-test-vantage-point-placement",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "网络层测试方案要做评审，接入点选几个、放在什么位置，有什么原则可循？",
+      "expected_behavior": "应激活 mlps-test-vantage-point-placement, 信任梯度五原则：低→高、外→内、同级互探、隔离设备两侧各测",
+      "notes": "正面: 接入点设计"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "怎么验证两个安全区域之间是真的隔离？东西向流量要不要专门测？",
+      "expected_behavior": "应激活 mlps-test-vantage-point-placement, 每个信任域至少一个探测点、隔离设备两侧各测一次，区域间接入对比反证",
+      "notes": "正面: 隔离验证"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "微分段做得细的环境，探测点怎么布？总不能每个负载都放吧？",
+      "expected_behavior": "应激活 mlps-test-vantage-point-placement, 按信任域而非负载布点，沿信任梯度外推",
+      "notes": "正面: 微分段布点"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "测试用的 VPN 账号到期了，现在连不上客户内网，续期要找谁走什么流程？",
+      "expected_behavior": "不应激活本 skill, 账号行政事务，非布点设计",
+      "notes": "诱饵: 接入话题但为账号事务"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "漏洞扫描都做过了，客户问为什么还要安排渗透，怎么解释两者的分工？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-tool-test-typology（扫描发现/监测观测/渗透验证的证据形态分工）",
+      "notes": "跨 skill 混淆诱饵: 在哪测 vs 用什么测"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "之前有份测试报告只从外网口扫了一遍，就下了“内网区域安全”的结论，这个结论可信吗？",
+      "expected_behavior": "应激活 mlps-test-vantage-point-placement, 复盘布点缺失：未在内部信任域设点，区域结论不可信",
+      "notes": "边界: 布点缺失的结论效力复盘"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

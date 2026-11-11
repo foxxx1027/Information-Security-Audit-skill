@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-method-role-allocation",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "要给 Serverless 平台设计测评取证方案，访谈、检查、测试这三种怎么搭配？",
+      "expected_behavior": "应激活 mlps-method-role-allocation, 按对象层可见性×测试副作用风险分配三法角色",
+      "notes": "正面: 新对象方案设计"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "管理域的制度类控制点，有同事建议上自动化工具扫一遍出结论，这合理吗？",
+      "expected_behavior": "应激活 mlps-method-role-allocation, 管理域只用访谈+检查，禁用工具测试",
+      "notes": "正面: 管理域禁工具"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "方案评审被问“这项为什么只用访谈不上工具”，我怎么论证方法组合的合理性？",
+      "expected_behavior": "应激活 mlps-method-role-allocation, 访谈=辅助补背景、检查=基本证据、测试=验证手段，分配非个人偏好",
+      "notes": "正面: 论证方法组合"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "现场访谈时对方总说“这块我不清楚”，有什么访谈技巧能撬开话匣子？",
+      "expected_behavior": "不应激活本 skill, 访谈技巧属沟通方法，非三法角色分配",
+      "notes": "诱饵: 访谈话题但为技巧层面"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "管理员访谈说开了某功能，配置核查显示没开，两份证据打架听谁的？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-preponderant-evidence（证据强度分级裁决）",
+      "notes": "跨 skill 混淆诱饵: 收集什么证据 vs 证据谁说了算"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "这套生产系统一秒都不能停，能不能整份测评全用访谈做完，一点不碰系统？",
+      "expected_behavior": "应激活 mlps-method-role-allocation, 访谈只补背景绝不能单独支撑“符合”，不可中断系统应以检查为主、测试最小化",
+      "notes": "边界: 极端约束下的方法底线"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

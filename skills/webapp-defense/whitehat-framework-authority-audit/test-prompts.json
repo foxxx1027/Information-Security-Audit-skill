@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-framework-authority-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们完全按照 Spring 官方文档示例写的认证模块，应该不会有什么问题吧？",
+      "expected_behavior": "应激活 whitehat-framework-authority-audit, 对'官方文档=安全'做两面审计：对其安全特性构造绕过 PoC 验证，并查组件 CVE 历史",
+      "notes": "正面: '按官方文档实现'的信任验证"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "选型会上厂商一直强调'大厂出品、GitHub 十万 star'，安全上这就能信了吗？",
+      "expected_behavior": "应激活 whitehat-framework-authority-audit, 以'权威与流行不构成安全证据'为立场，做安全能力验证+自身可靠性两面审计",
+      "notes": "正面: 以流行度论证安全性的反驳"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "模板引擎开了自动转义，是不是就不用担心 XSS 了？",
+      "expected_behavior": "应激活 whitehat-framework-authority-audit, 对 auto-escape 默认特性做对抗性验证（js/url/属性等边界语境），确认覆盖面后再依赖",
+      "notes": "正面: 框架默认安全特性的验证"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "React 和 Vue 在万级长列表渲染上谁性能更好，怎么选？",
+      "expected_behavior": "不应激活本 skill, 因为这是功能与性能选型，不涉安全论证; 属前端技术选型, 无需调用书中任何技能",
+      "notes": "诱饵: 框架话题但无安全维度"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "同事不想引加密库，自己用异或写了个'加密'函数，说别人看不懂就是安全，这行吗？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-crypto-misuse-audit (自制密码学构造的审计属密码学误用，不涉及对框架/组件权威的验证)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-crypto-misuse-audit, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我们锁死在一个老版本框架上，官方早停止维护了，业务一直不敢升级，这个状态怎么评估？",
+      "expected_behavior": "边界场景: 升级滞留与停止维护正是依赖自身可靠性的审计面，应激活本 skill 查该版本 CVE 堆积与补丁断供风险并制定升级路径 (期望激活: whitehat-framework-authority-audit)",
+      "notes": "边界: 看似升级项目管理实为依赖可靠性审计"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

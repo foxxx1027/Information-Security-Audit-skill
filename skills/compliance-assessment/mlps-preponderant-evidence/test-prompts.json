@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-preponderant-evidence",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "管理员访谈说远程管理都走加密通道，配置核查却发现 Telnet 还开着，这条结论听谁的？",
+      "expected_behavior": "应激活 mlps-preponderant-evidence, 检查>访谈，强证据压倒弱证据，弱证据须补做升级",
+      "notes": "正面: 访谈与配置矛盾"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "厂商口头承诺平台具备审计能力，实测看不到任何审计产物，怎么裁决？",
+      "expected_behavior": "应激活 mlps-preponderant-evidence, 测试/检查压倒口头宣称，访谈不能单独支撑“符合”",
+      "notes": "正面: 口头宣称 vs 实测"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "审一份第三方报告，十几条结论全靠访谈记录撑着，这个报告的证据链站得住吗？",
+      "expected_behavior": "应激活 mlps-preponderant-evidence, 访谈只补背景，全访谈结论不成立",
+      "notes": "正面: 报告证据链审查"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我起草一份给运维团队的现场访谈提纲，问题别太生硬。",
+      "expected_behavior": "不应激活本 skill, 访谈提纲撰写，无证据冲突待裁决",
+      "notes": "诱饵: 访谈话题但为文案起草"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "报告里用抓包工具的截图去证明入侵检测有告警能力，这个证据成立吗？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-tool-test-typology（证据形态与指标错配审查）",
+      "notes": "跨 skill 混淆诱饵: 冲突裁决 vs 形态匹配"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "访谈、配置导出、监控截图三方证据两两矛盾，其中只有配置是亲手核查得来的，直接按配置出结论吗？",
+      "expected_behavior": "应激活 mlps-preponderant-evidence, 按取证方式可靠性排序裁决，检查强于访谈",
+      "notes": "边界: 多方冲突时按来源强度排序"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-active-verification-perturbation",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "现场测评遇到“应保护审计进程不被中断”这类指标，光看配置截图我觉得证据不够硬，能不能设计个实验，让普通权限用户去试试停掉审计，看能不能成功？",
+      "expected_behavior": "应激活 mlps-active-verification-perturbation, 设计低权限主体干扰审计进程的可控扰动实验，以“改不动/被拒绝”的否定式结果作为符合证据",
+      "notes": "正面: 审计进程保护指标的否定式验证"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "程序完整性这条，我想先备份，然后用低权限账号试着改一下重要配置文件，看系统能不能检测到，这个扰动实验怎么做才稳妥？",
+      "expected_behavior": "应激活 mlps-active-verification-perturbation, 给出先备份可回退、扰动最小、事后恢复留证的实验设计",
+      "notes": "正面: 程序完整性保护的扰动验证设计"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "通信完整性指标，对方说报文有校验。我想篡改一条报文发过去，验证对端能不能识别出被改过，这种 negative test 怎么设计？",
+      "expected_behavior": "应激活 mlps-active-verification-perturbation, 设计篡改报文的验证实验并以对端识别与否判定",
+      "notes": "正面: 通信完整性的否定式验证"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我把这批配置截图按测评项编号重命名归档，下周要交底稿。",
+      "expected_behavior": "不应激活本 skill, 纯资料整理归档，既非验证实验也非任何测评判定场景",
+      "notes": "诱饵: 无验证需求的日常事务"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "厂商说设备支持 SSL，传输加密这条到底怎么取证？是不是抓个包看密文就行？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-auth-transport-plaintext-veto（传输加密取证的判据是显式配置开关+实测抓包）",
+      "notes": "跨 skill 混淆诱饵: 传输保护取证属明文否决规则"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "客户生产系统正在业务高峰，我想现在就用普通账号试试改数据库审计配置，验证一下保护机制，可以吗？",
+      "expected_behavior": "不应激活本 skill（生产高峰期扰动属本 skill 排除域），正确处置是建议避峰期再做或改用只读配置核查",
+      "notes": "边界: 验证诉求真实但时机在排除域内"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

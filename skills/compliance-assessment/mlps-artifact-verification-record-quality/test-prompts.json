@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-artifact-verification-record-quality",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "被测单位搬来一摞季度安全分析报告，纸很新，内容清一色“运行正常、未见异常”，这能当管控有效的证据吗？",
+      "expected_behavior": "应激活 mlps-artifact-verification-record-quality, 对记录做四要素实质质检（测试条件/测试数据/处置人/签字），判定形式合规并穿透",
+      "notes": "正面: 突击补记录识别"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "访谈时运维说每个月都做漏洞巡检，我下一步该怎么核？要不要让他们把巡检记录原件拿出来看？",
+      "expected_behavior": "应激活 mlps-artifact-verification-record-quality, 走两步法：访谈只确认流程与意图，第二步必须核验巡检记录实物（从未生成=不符合）",
+      "notes": "正面: 两步法核验过程产物"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "这批扫描报告的生成日期全都挤在检查启动前一周，之前每季度本该有的报告一份都没有，这怎么判？",
+      "expected_behavior": "应激活 mlps-artifact-verification-record-quality, 按时间戳分布识别突击补记录，判部分符合并穿透",
+      "notes": "正面: 时间戳聚集的形式合规"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "Windows 的口令策略配置怎么用 secedit 导出来，现场核对要导哪几个项？",
+      "expected_behavior": "不应激活本 skill, 技术配置类取证属本 skill 排除域",
+      "notes": "诱饵: 取证话题但为技术配置导出"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "安全管理制度写着每季度评审一次，我想确认这套制度现在还在被运营，评审记录和修订记录该怎么查？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-document-lifecycle-closed-loop（制度文档的生命周期证据核查）",
+      "notes": "跨 skill 混淆诱饵: 制度“是否还活着”属文档闭环"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "他们的处置记录里测试条件、测试数据、处置人都有，就是没有签字，说内部走的是电子审批流，这算要素齐全吗？",
+      "expected_behavior": "应激活 mlps-artifact-verification-record-quality, 在四要素框架内实质判断电子审批是否构成有效签署，而非机械判缺",
+      "notes": "边界: 要素形式变化但仍是记录效力判定"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

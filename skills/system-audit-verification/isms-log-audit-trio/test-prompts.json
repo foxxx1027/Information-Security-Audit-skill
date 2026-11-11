@@ -1,0 +1,52 @@
+{
+  "skill": "isms-log-audit-trio",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "帮我审一下这套日志体系，看真出了安全事件能不能查得回来。",
+      "expected_behavior": "应激活 isms-log-audit-trio, 逐项核对三件套：字段完备性、架构适配、跨系统联合分析",
+      "notes": "正面场景：日志体系整体评估"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "上次数据外发事件里日志都在，就是跨系统拼不出完整时间线，问题出在哪？",
+      "expected_behavior": "应激活 isms-log-audit-trio, 诊断联合分析断点（位置/类型/时钟对齐）",
+      "notes": "正面场景：时间线拼不出来"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "准备采购日志平台，先盘点一下现有各系统的日志字段和格式够不够事后调查用。",
+      "expected_behavior": "应激活 isms-log-audit-trio, 用三件套做可审计性盘点",
+      "notes": "正面场景：采购前日志盘点"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "ELK 集群接下来一年的存储扩容容量怎么估算？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 基础设施容量规划，非日志可审计性审核",
+      "notes": "诱饵：容量规划"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "日志配置核对着挺全的，我想验证异常登录真的会被记下来、告警真的会发出去，怎么主动测一把？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-test-event-method",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-test-event-method）：静态核对已过，进入动态受控触发验证"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "我在登录日志里发现一个账号凌晨三点有一连串提权操作，帮我分析是谁干的、怎么进来的。",
+      "expected_behavior": "期望 none：日志内容的个案取证归因（数字取证）不属本书技能范围，不应激活任何技能；可建议转专门的事件取证流程",
+      "notes": "边界：个案分析超出日志体系完备性审核的域"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

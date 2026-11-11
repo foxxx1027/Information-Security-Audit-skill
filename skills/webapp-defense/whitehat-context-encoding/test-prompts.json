@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-context-encoding",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们对用户昵称明明做了转义，怎么最后还是被 XSS 了？",
+      "expected_behavior": "应激活 whitehat-context-encoding, 排查输出语境与编码方式是否错配（如 HTML 编码进了 script/属性/href），按语境逐跳重编码",
+      "notes": "正面: '转义了仍被 XSS'的编码错配排查"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "聊天消息从接口返回 JSON，前端图方便直接 innerHTML 塞进去渲染，这块该怎么处理才安全？",
+      "expected_behavior": "应激活 whitehat-context-encoding, 按渲染语境选编码或改用安全渲染方式，说明服务器端编码管不到 JS 中段需逐跳处理",
+      "notes": "正面: 前端渲染用户数据的处理选型"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "用户头像的链接要填进 a 标签的 href 里，这个也要处理吗？处理的话用什么方式？",
+      "expected_behavior": "应激活 whitehat-context-encoding, 判定 href 语境需 URLEncode 加协议白名单，防 javascript: 伪协议注入",
+      "notes": "正面: 变量进 href 的语境判定"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我把项目从 React 17 升到 18，列一下需要注意的 breaking changes。",
+      "expected_behavior": "不应激活本 skill, 因为这是框架升级的事务性工作，并非评估框架的上下文感知编码能力; 属升级迁移任务, 无需调用书中任何技能",
+      "notes": "诱饵: 框架升级话题看似相关"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "团队吵了一周：特殊字符到底该在入口统一过滤掉，还是等到渲染的时候再编码？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-defense-at-interpretation (用户问的是防线放在哪一环的位置裁决，不是某语境选哪种编码函数)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-defense-at-interpretation, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "WebSocket 推过来的消息我们用 textContent 显示，这样还要不要额外做转义？",
+      "expected_behavior": "边界场景: 判断'该渲染方式下按语境是否需要编码'正是本 skill 职责，应激活本 skill 并得出 textContent 非解释型 sink、无需编码的结论 (期望激活: whitehat-context-encoding)",
+      "notes": "边界: 安全 sink 下是否还需要编码处理"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

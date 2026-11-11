@@ -1,0 +1,52 @@
+{
+  "skill": "isms-auditor-independence-checks",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们在排今年的内审分工，有个内审员平时就是信息安全管理员，整套体系文件还是他牵头写的，文件管理这块能安排他自己去审吗？",
+      "expected_behavior": "应激活 isms-auditor-independence-checks, 按不审自己工作的分工回避原则处理（参与体系文件编写者不得审该块）",
+      "notes": "正面场景：内审分工的自我评审威胁"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "公司两年前请过一家咨询公司帮我们建体系，现在启动内审，当时的项目经理想进审核组，可以吗？",
+      "expected_behavior": "应激活 isms-auditor-independence-checks, 核对近两年认证咨询回避规则并给出进组安排建议",
+      "notes": "正面场景：咨询顾问进审核组的两年回避"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "审核组里带了位外聘的工控安全专家帮忙看产线那块，现场他能不能以审核员名义开不符合项？",
+      "expected_behavior": "应激活 isms-auditor-independence-checks, 说明技术专家仅提供建议不计人天、不能作为审核员开单的角色红线",
+      "notes": "正面场景：技术专家角色权限界定"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "内审计划提前一周发通知还是提前三天发通知给受审部门比较合适？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 这只是流程时点安排问题，与人员独立性无关",
+      "notes": "诱饵：行政流程类问题"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "内审启动前要给每个审核员配检查表，帮我针对访问控制这个条款设计一张不走过场的审核检查表。",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-four-column-checklist-design",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-four-column-checklist-design）：同是内审准备，但这是检查表设计而非人员准入"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "受审部门经理说这次安排来的审核员去年绩效考核时跟他们部门结过怨，要求换人，这个要求怎么处理？",
+      "expected_behavior": "期望激活 isms-auditor-independence-checks：受审方对审核组组成的异议权与更换程序正是本 skill 的装置，应受理异议并走更换评估，而不是当作普通人际纠纷",
+      "notes": "边界：表面是人事纠纷，实质落在受审方异议权程序，期望激活"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

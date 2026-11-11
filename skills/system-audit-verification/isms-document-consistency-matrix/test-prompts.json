@@ -1,0 +1,52 @@
+{
+  "skill": "isms-document-consistency-matrix",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "第一阶段文件评审下周开始，除了翻翻目录看文件齐不齐，到底要核对哪些对应关系才算审到位？",
+      "expected_behavior": "应激活 isms-document-consistency-matrix, 执行四组一致性核对（强制文件差集/风险评估程序↔评估报告/处置程序↔处置计划/SoA 完备合理）",
+      "notes": "正面场景：一阶段文件评审方法"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "云厂商的安全白皮书和认证材料看着像套模板抄的，怎么穿透判断这些文件是真运行还是表演？",
+      "expected_behavior": "应激活 isms-document-consistency-matrix, 用程序↔产出物对应核对识别'为审核而编的表演性文件'",
+      "notes": "正面场景：白皮书穿透"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "并购尽调要判断目标公司的制度文件有没有和实际运行脱节，给我一套核对方法。",
+      "expected_behavior": "应激活 isms-document-consistency-matrix, 按四组一致性关系核对断链",
+      "notes": "正面场景：尽调文件核对"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我把这 200 页手册统一编排版本号和修订记录格式。",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 文档格式整理，非一致性核对",
+      "notes": "诱饵：文档排版事务"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这份保密协议里的安全条款，单看文本本身写得可不可执行、缺不缺要素？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-counterfactual-document-review",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-counterfactual-document-review）：单份文本自身要素质量——先单份后关系"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "手上只有一份孤零零的应急预案，还没有对应的执行记录可对，从哪一步下手审？",
+      "expected_behavior": "期望激活 isms-counterfactual-document-review：只有单份文本、无跨文件配对对象时先审文本自身要素与可证实性；待有程序↔产出配对材料后再进入一致性核对",
+      "notes": "边界：单份文本 vs 关系核对的顺序分界"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-audit-log-offsite-retention",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "网络设备的日志就存在本机，空间写满了自动覆盖，审计记录留存这条怎么判？",
+      "expected_behavior": "应激活 mlps-audit-log-offsite-retention, 按三重可灭失形态判定：本地可灭失且无异地日志基础设施即默认不符合",
+      "notes": "正面: 本地日志可覆盖"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "K8s 集群的审计日志跟着 Pod 走，Pod 一删日志就没了，这种形态达标吗？怎么整改？",
+      "expected_behavior": "应激活 mlps-audit-log-offsite-retention, 判定容器日志随 Pod 销毁即灭失，须建集中日志/归档等异地基础设施",
+      "notes": "正面: 容器日志形态"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "管理员随手就能把数据库的审计日志清掉，这条判什么？我得跟客户讲清楚判定逻辑。",
+      "expected_behavior": "应激活 mlps-audit-log-offsite-retention, 最高权限者可消灭证据=可灭失形态，无异地留存判不符合",
+      "notes": "正面: 管理员可删日志"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我写一条 SIEM 规则：同一账号五分钟内登录失败超过五次就触发告警。",
+      "expected_behavior": "不应激活本 skill, 日志分析告警规则设计，非留存防灭失判定",
+      "notes": "诱饵: 日志话题但属分析能力域（排除域）"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "要全面评估这套系统的安全审计能力，除了日志留存之外还要查哪些方面？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-audit-six-dimension-assessment（审计能力六维完备拆解）",
+      "notes": "跨 skill 混淆诱饵: 留存单维 vs 六维全景"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "他们建了日志服务器，但只采集了防火墙日志，操作系统和数据库的日志还在各自本机，这条整体判符合还是不符合？",
+      "expected_behavior": "应激活 mlps-audit-log-offsite-retention, 按产品逐个枚举判定——未接入集中日志的产品仍属本地可灭失",
+      "notes": "边界: 部分异地化的逐产品判定"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

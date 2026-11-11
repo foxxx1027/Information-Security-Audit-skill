@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-parser-consistency-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "前端明明做了文件后缀白名单校验，为什么文件传上去还是能被当脚本执行？",
+      "expected_behavior": "应激活 whitehat-parser-consistency-audit, 画出从浏览器到 Web 服务器到解析器的全部解释环节，逐对核对后缀/解析口径差异（多后缀、分号截断）",
+      "notes": "正面: 后缀校验被解析差异绕过"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "防 SSRF 我们校验了 URL 必须是 https 开头，结果还是被内网请求打穿了，哪里不一致了？",
+      "expected_behavior": "应激活 whitehat-parser-consistency-audit, 枚举校验端与应用端（重定向、DNS 解析、协议处理）的解析差异，按执行端口径重做校验",
+      "notes": "正面: SSRF 白名单的口径差"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "历史系统是 GBK 编码，宽字节把转义符吃掉了，这类编码问题怎么系统地排查？",
+      "expected_behavior": "应激活 whitehat-parser-consistency-audit, 梳理字符集在连接层/存储层/展示层的全部转换点，逐对核对编码口径一致性",
+      "notes": "正面: 宽字节类编码口径审计"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我写一个校验用户名只能包含字母数字下划线的正则。",
+      "expected_behavior": "不应激活本 skill, 因为这是单解释器内的校验逻辑编写，无跨组件口径问题; 属编码问题, 无需调用书中任何技能",
+      "notes": "诱饵: 校验实现话题"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "特殊字符到底是入口统一过滤，还是输出的时候再编码？",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-defense-at-interpretation (问的是防线放在哪一环即位置，不是两端解析口径是否一致)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-defense-at-interpretation, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "WAF 明明拦截了 union select 的请求，数据库最后还是被拖库了，是不是规则写得不够多？",
+      "expected_behavior": "边界场景: 问题在 WAF 与数据库对同一输入的解析口径不一致（编码/注释/截断差异），应激活本 skill 核对两端口径而非堆规则 (期望激活: whitehat-parser-consistency-audit)",
+      "notes": "边界: 看似 WAF 规则运营问题"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}

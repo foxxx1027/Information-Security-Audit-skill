@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-feasibility-ceiling-first",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "feasibility-ceiling-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "需求方要求密钥分片后的总存储比原始密钥还短 30%，说机房空间紧张，这个需求数学上能做到吗？",
+      "expected_behavior": "应激活 stinson-feasibility-ceiling-first, 先证信息论上界：秘密共享信息率 ρ≤1，份额总长不可能短于秘密，需求不可满足，应回退需求而非选型",
+      "notes": "正面场景: 份额比秘密短类需求判定（A2 #1）"
+    },
+    {
+      "id": "feasibility-ceiling-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "既要完美保密又要密钥能重复使用省管理成本，这两个目标能同时成立吗？先别急着提方案。",
+      "expected_behavior": "应激活 stinson-feasibility-ceiling-first, 不可能性判定先行：完美保密要求密钥熵不低于消息熵且一次性，两个目标互斥，先判可满足性",
+      "notes": "正面场景: 『既要 X 又要 Y』类需求评估（A2 #1）"
+    },
+    {
+      "id": "feasibility-ceiling-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "供应商 PPT 说他们的方案『突破了信息论极限』，压缩一半还能保密，给我一套快速证伪的思路。",
+      "expected_behavior": "应激活 stinson-feasibility-ceiling-first, 用信息论上界快速证伪：压缩+保密的组合违反熵界，属于营销话术",
+      "notes": "正面场景: 供应商宣称突破极限的证伪（A2 #3）"
+    },
+    {
+      "id": "feasibility-ceiling-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "产品要求 app 既支持 offline 模式又要多端实时同步，这两个需求技术上能不能同时要？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 产品功能需求的取舍，无信息论约束",
+      "notes": "诱饵: 『既要又要』句式相同的非密码学权衡"
+    },
+    {
+      "id": "feasibility-ceiling-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "门限系统马上上线，验收测试用例怎么设计才能证明任意 t-1 份真的恢复不出来？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-collusion-threshold-verification — 设计后的验收门（双验证+独立性测试）；本 skill 是设计前的可行性门",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-collusion-threshold-verification): 先后接力关系，此处已到验收阶段"
+    },
+    {
+      "id": "feasibility-ceiling-edge-01",
+      "type": "edge_case",
+      "prompt": "老板想要『审计方能验证总票数但看不到任何一张单票』的电子投票，数学上到底允不允许？先回答能不能再做。",
+      "expected_behavior": "应激活 stinson-feasibility-ceiling-first (expected: 本 skill) — 用户明确要求先做存在性判定：信息论约束下两个目标能否同真，可满足性结论先于方案设计",
+      "notes": "边界: 用户点名『先答能不能』，正是不可能性判定先行的场景"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

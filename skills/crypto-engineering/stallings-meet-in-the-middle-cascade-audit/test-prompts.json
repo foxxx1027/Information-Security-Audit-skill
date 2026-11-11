@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-meet-in-the-middle-cascade-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "有同事提议把 AES 加密两遍当双保险，强度是不是翻倍了？",
+      "expected_behavior": "应激活 stallings-meet-in-the-middle-cascade-audit, 并按中间相遇重算双重加密的实际成本",
+      "notes": "正面场景: 双重加密强度核算, A2 情境 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "KDF 里用了 H1 和 H2 双哈希拼接，实际安全位数怎么算？",
+      "expected_behavior": "应激活 stallings-meet-in-the-middle-cascade-audit, 并对复合构造按时间×存储×数据三维核算",
+      "notes": "正面场景: 双哈希拼接评审, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "多重加密用双钥还是三钥结构？各自值多少位强度？",
+      "expected_behavior": "应激活 stallings-meet-in-the-middle-cascade-audit, 并比较双钥/三钥结构的实际安全位数",
+      "notes": "正面场景: 多重加密设计, A2 情境 4"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "两台防火墙串接是不是就等于双保险？网络层面怎么评估这个冗余？",
+      "expected_behavior": "不应激活本 skill, 因为是网络拓扑冗余问题, 无密码级联构造对象; 预期不激活任何 skill (expected: none)",
+      "notes": "诱饵: 双层保险话语, 实为网络高可用"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "这个新算法有没有比穷举更快的差分或结构捷径，怎么查证？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-analysis-cost-vs-brute-force (分析 vs 穷举比价, 本 skill 专管复合结构的成本核算错误)",
+      "notes": "跨 skill 混淆诱饵: A2 明列'即使组件理想级联也可能不叠加'"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "双重 DES 名义 112 位、实际 2^56，那个 56 是怎么算出来的？",
+      "expected_behavior": "应激活 stallings-meet-in-the-middle-cascade-audit, 因为两头夹击的确定性匹配成本推导正是其核心机理 (expected: stallings-meet-in-the-middle-cascade-audit)",
+      "notes": "边界: 史实问答, 考点是中间相遇成本核算"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

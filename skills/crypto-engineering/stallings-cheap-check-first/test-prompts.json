@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-cheap-check-first",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "UDP 服务被伪造源地址的握手洪泛打满 CPU，怎么先证可达再做昂贵的 DH 计算？",
+      "expected_behavior": "应激活 stallings-cheap-check-first, 并用 stateless cookie 往返把昂贵计算排在可达性证明之后",
+      "notes": "正面场景: clogging/握手洪泛, 核心语言信号"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "TLS 握手放大把网关打挂了，除了限流之外结构上还有什么招？",
+      "expected_behavior": "应激活 stallings-cheap-check-first, 并重排认证/握手流程的检查次序(廉价带钥校验前置)",
+      "notes": "正面场景: 握手洪泛的结构性缓解, A2 情境 2"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "高吞吐包处理能不能在解密前就把伪造包丢掉？ICV 对密文计算可行吗？",
+      "expected_behavior": "应激活 stallings-cheap-check-first, 并把 ICV 对密文计算使解密前即丢伪造包",
+      "notes": "正面场景: 两级快速过滤结构, A2 情境 3"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "接口响应慢，想加 Redis 缓存预热热点数据做个快速路径，这算不算同类优化？",
+      "expected_behavior": "不应激活本 skill, 因为是不带密钥的纯性能 fail-fast, desc 明确排除; 预期不激活 (expected: none)",
+      "notes": "诱饵: 快速路径话语, 无安全语义"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "高吞吐 HMAC 每条消息的 ipad/opad 预处理能不能提前算好缓存起来提速？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-precompute-offline-split (与输入无关量的离线预计算, 本 skill 管廉价校验前置挡 DoS)",
+      "notes": "跨 skill 混淆诱饵: A2 明列目标相反可同管线并用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "内网受控环境登录流程里加的前置校验拖慢了响应，能直接砍掉吗？",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'威胁模型无资源耗尽的内网受控环境'; 预期不激活 (expected: none)",
+      "notes": "边界: 检查次序话语, 但落在排除的环境前提上"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

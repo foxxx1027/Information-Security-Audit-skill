@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-triple-consistency-check",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "制度是有的，就是没人说得清落地没落地，这种从哪里查起？",
+      "expected_behavior": "应激活 mlps-triple-consistency-check, 三重一致性：文档↔文档、实地↔制度、记录↔制度，任一环断裂即降档",
+      "notes": "正面: 落地不明"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "供应商交的材料特别齐全，但总感觉是纸面合规，怎么识破突击补的记录？",
+      "expected_behavior": "应激活 mlps-triple-consistency-check, 时间戳分布与业务周期比对+访谈交叉验证",
+      "notes": "正面: 纸面合规识破"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "零信任方案宣称已经落地，策略声明和实际配置怎么对得上？",
+      "expected_behavior": "应激活 mlps-triple-consistency-check, 技术侧同构：策略文档→系统配置→实测三级比对",
+      "notes": "正面: 新架构落地验证"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "把三个事业部的安全制度合并成一本集团总册，章节怎么编排？",
+      "expected_behavior": "不应激活本 skill, 文档合并编辑事务，非落地一致性核查",
+      "notes": "诱饵: 制度文档话题但为编辑工作"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "他们交的巡检记录通篇“正常”，日期还全挤在一起，这批记录本身的效力怎么评？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-artifact-verification-record-quality（记录四要素实质质检）",
+      "notes": "跨 skill 混淆诱饵: 三角互证框架 vs 记录内部效力质检"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "文档之间都对得上，就是没人去过机房实地核对，制度与实地这一环必须去现场吗？",
+      "expected_behavior": "应激活 mlps-triple-consistency-check, 实地↔制度是三链之一，纸面对齐不能替代实地核查",
+      "notes": "边界: 缺一环的完整性要求"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

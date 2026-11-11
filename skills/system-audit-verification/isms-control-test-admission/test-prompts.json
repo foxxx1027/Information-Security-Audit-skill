@@ -1,0 +1,52 @@
+{
+  "skill": "isms-control-test-admission",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们打算对生产环境做一次渗透测试，开始前要准备哪些授权文书和评估事项？",
+      "expected_behavior": "应激活 isms-control-test-admission, 给出五条准入约束（专家执行/评估运行影响/事先书面批准/运行窗口之外/低投入易再现环境优先）",
+      "notes": "正面场景：渗透测试前的准入清单"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "领导想搞一次不打招呼的钓鱼邮件演练，测员工的真实反应，这种盲测可以直接做吗？",
+      "expected_behavior": "应激活 isms-control-test-admission, 按双方信息对称度选档并明确盲测应尽量避免、灰盒有限使用的纪律",
+      "notes": "正面场景：盲测选档约束"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "上次紫队演练把订单系统打挂了半天，帮我复盘一下立项程序上到底缺了哪几条约束？",
+      "expected_behavior": "应激活 isms-control-test-admission, 用五条准入逐条对照复盘缺项（影响评估、变更窗口、书面批准等）",
+      "notes": "正面场景：事故复盘查准入缺口"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我看看这份防火墙规则导出里有没有明显放宽的条目。",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 纯被动配置核查，不涉及对运行环境的主动测试",
+      "notes": "诱饵：被动检查"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "授权和变更窗口都批下来了，现在想往邮件网关投一封受控的模拟钓鱼邮件，验证告警会不会真的联动，这个测试事件具体怎么设计？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-test-event-method",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-test-event-method）：准入已过，进入测试事件的执行设计"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "审核现场我想亲手输错一次口令、点两下系统界面，看看有没有账号锁定的提示，这算不算需要走准入流程的主动测试？",
+      "expected_behavior": "期望激活 isms-control-test-admission：对运行环境的任何主动触碰（哪怕低侵入）性质上都属主动测试，须先过准入评估（可按低投入易再现档位从简处理），而不是绕过流程",
+      "notes": "边界：低侵入动作看似无妨，仍属主动测试范畴"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "mlps-policy-four-layer-pyramid",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "公司要从零建安全制度体系，文档从哪一层建起？总共要哪几层？",
+      "expected_behavior": "应激活 mlps-policy-four-layer-pyramid, 方针→制度→规程→记录四层，多数缺的不是方针而是第四层",
+      "notes": "正面: 从零建体系"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们三十人的小公司，制度能简化吗？简化到什么程度不算缺失？",
+      "expected_behavior": "应激活 mlps-policy-four-layer-pyramid, 小组织可简化流程不可缺失闭环",
+      "notes": "正面: 小组织简化"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "管理类测评都查什么文档？帮我把取证清单按层次理一下。",
+      "expected_behavior": "应激活 mlps-policy-four-layer-pyramid, 按四层组织取证并逐层判档",
+      "notes": "正面: 按层列取证清单"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "这份《数据安全管理办法》的条款内容帮我审一遍，看看有没有漏写什么。",
+      "expected_behavior": "不应激活本 skill, 制度内容质量评审属本 skill 排除域",
+      "notes": "诱饵: 制度话题但为内容质量"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "四层文档倒是都配齐了，但最近三年一个字没修订过，这套体系还活着吗？",
+      "expected_behavior": "不应激活本 skill, 应激活 mlps-document-lifecycle-closed-loop（时间维：是否仍在被运营）",
+      "notes": "跨 skill 混淆诱饵: 结构维 vs 时间维"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "接手前任留下的体系，总纲和制度都挺全，就是找不到操作规程和任何运行记录，缺口在哪一层？",
+      "expected_behavior": "应激活 mlps-policy-four-layer-pyramid, 自下而上定位：缺第三四层（规程/记录），多数组织的通病",
+      "notes": "边界: 部分层的缺口定位"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 指明应激活的 sibling slug），诱饵容错为 0。"
+}

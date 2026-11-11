@@ -1,0 +1,52 @@
+{
+  "skill": "isms-interview-questioning-discipline",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "远程视频访谈一线运维，对方紧张得一直顺着我说'是的是的'，怎么问才能问到真实情况？",
+      "expected_behavior": "应激活 isms-interview-questioning-discipline, 应用面谈八注意（请对方描述其工作开场、避免引导性提问、结尾总结评审、致谢等）",
+      "notes": "正面场景：顺着说的破解"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "访谈开场怎么起头才不算诱导？结尾要不要把要点复述确认一遍？",
+      "expected_behavior": "应激活 isms-interview-questioning-discipline, 给出开场（描述其工作）与结尾（总结评审）的提问纪律",
+      "notes": "正面场景：开场与结尾纪律"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "事故复盘谈话每次都问出'理想版流程'，是我的问法有问题吗？",
+      "expected_behavior": "应激活 isms-interview-questioning-discipline, 排查引导性提问并改为开放式取证问法",
+      "notes": "正面场景：复盘谈话诱导"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "给新员工做安全意识培训，开场用什么破冰活动比较好？",
+      "expected_behavior": "不应激活本 skill, 也不应激活同书其他 skill; 培训宣讲沟通，非取证访谈",
+      "notes": "诱饵：培训场景"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "下周进场，访谈名单怎么定？管理层和一线分别要谈到什么深度才够下结论？",
+      "expected_behavior": "不应激活本 skill, 应激活 isms-interview-tiering",
+      "notes": "跨 skill 混淆诱饵（兄弟 slug: isms-interview-tiering）：访谈前的对象与深度规划，不是单场提问技巧"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "访谈中对方顺口说漏'例外情况我们就不记录了'，这句口误能直接拿来开不符合吗？",
+      "expected_behavior": "期望激活 isms-evidence-admissibility-threshold：纠正性口头陈述在交叉证实前只是线索，须索取可证实载体印证后才可升级为发现依据",
+      "notes": "边界：访谈产物直接引用的诱惑——证据资格优先于定级"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过（诱饵容错为 0），且其中至少 1 条为同书兄弟技能抢调诱饵（见 notes 中的 sibling slug）。edge_case 的 expected_behavior 已写明期望激活的 slug 或 none。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "stinson-linearity-kills-ciphers",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "linearity-kills-should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "同事设计的认证码是把消息块各乘系数再模加密钥，tag = Σ(aᵢ·mᵢ)+K mod 2^64，他坚称分布均匀难伪造，怎么快速判死？",
+      "expected_behavior": "应激活 stinson-linearity-kills-ciphers, 线性/仿射构造在已知明文下退化为解方程组：收集足够消息-tag 对即可解出等效密钥，强度=0 与位长无关",
+      "notes": "正面场景: 自制线性 MAC 判死（A2 #1）"
+    },
+    {
+      "id": "linearity-kills-should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "手写的混淆层只有固定矩阵乘和异或链，密钥只是其中一个加数，已知明文攻击下这个能解出来吗？",
+      "expected_behavior": "应激活 stinson-linearity-kills-ciphers, 数方程给代数证明：未知数（密钥）个数 vs 线性无关方程数，够了就整解",
+      "notes": "正面场景: 矩阵/异或混淆的方程组攻击（A2 #2）"
+    },
+    {
+      "id": "linearity-kills-should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "轻量方案想直接拿 LFSR 输出当密钥流，序列过 NIST 测试看着很随机，为什么密码学上不行？",
+      "expected_behavior": "应激活 stinson-linearity-kills-ciphers, LFSR 是线性递推：少量连续输出即可解出抽头系数重构整条序列，统计随机≠代数安全",
+      "notes": "正面场景: LFSR 密钥流评估（A2 #4）"
+    },
+    {
+      "id": "linearity-kills-should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "神经网络如果只有线性层为什么不行？激活函数在数学上起了什么作用？",
+      "expected_behavior": "不应激活本 skill, 也不应激活任何密码学 skill — 机器学习的线性代数问题（description 明确排除非密码学线性代数）",
+      "notes": "诱饵: 『没有非线性就不行』原理同源但对象是 ML"
+    },
+    {
+      "id": "linearity-kills-should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "自研分组密码的 S 盒差分均匀度做到多少算合格？轮数怎么从活动 S 盒数目推出来？",
+      "expected_behavior": "不应激活本 skill, 应激活 stinson-structural-security-bound — 非线性组件的质量与结构安全界（差分均匀度/宽轨道）是设计侧 skill；本 skill 判死全线性构造",
+      "notes": "跨 skill 混淆诱饵 (sibling: stinson-structural-security-bound): 一个管有无非线性（本 skill），一个管非线性够不够好"
+    },
+    {
+      "id": "linearity-kills-edge-01",
+      "type": "edge_case",
+      "prompt": "方案里 tag = Σ cᵢ·mᵢ mod p，系数 cᵢ 全部保密不公开，系数保密的线性应该没事吧？",
+      "expected_behavior": "应激活 stinson-linearity-kills-ciphers (expected: 本 skill) — 保密系数不改变线性结构：已知明文对把 tag 变成关于系数的线性方程，收集到 p 的自由度即可解出等效密钥再伪造",
+      "notes": "边界: 『系数保密』的辩护词，代数结构与系数公开性无关"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger（含至少 1 条同书兄弟技能抢调诱饵，expected_behavior 已写明 sibling slug）+ 1 条 edge_case（expected_behavior 已写清期望 slug 或 none）。全部 should_not_trigger 容错为 0。盲测时将整包 31 个 skill 的 name+description 列表给 sub-agent 做选择题。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-password-reset-three-stages",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们的找回密码流程要重做，从发验证码到改密码整个过程怎么设计才安全？",
+      "expected_behavior": "应激活 caudit-password-reset-three-stages, 拆发码-校验-执行三阶段逐阶段核对缺陷谱(收件地址来源/凭证四性/执行复验绑定)",
+      "notes": "正面场景: 找回密码流程设计"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "接入了第三方 OAuth 登录，用户绑定和换绑邮箱的流程要评审，重点看哪些环节？",
+      "expected_behavior": "应激活 caudit-password-reset-three-stages, 换绑流程按三阶段缺陷谱审查(验A改B/收件地址取服务端绑定值)",
+      "notes": "正面场景: 换绑流程评审"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "应急响应：有用户说重置链接被人猜出来了，token 是拿 md5(用户名+邮箱) 生成的，这流程哪里出了问题？",
+      "expected_behavior": "应激活 caudit-password-reset-three-stages, 判别'确定性材料推导的 Token=可重算签名, 不可当随机凭证'",
+      "notes": "正面场景: 可预测 token 的账号接管"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "我们登录页想加个'记住我'的功能，cookie 里存什么比较合适？",
+      "expected_behavior": "不应激活任何本册技能, 登录流程自身的会话设计(技能明确排除登录流程本身)",
+      "notes": "诱饵: 账号安全话题但为登录会话设计"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "用户反馈账号老是被别人恶意输错密码锁住，我们的锁定策略是不是有问题？",
+      "expected_behavior": "不应激活 caudit-password-reset-three-stages, 应激活 caudit-rate-limit-dual-edge (考点是锁定策略的滥用端推演/锁号DoS)",
+      "notes": "跨skill混淆诱饵: 账号口令话题, 但归限频双端推演"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "注册时发的邮箱激活链接和找回密码是一个性质吗？能按同一套方法审吗？",
+      "expected_behavior": "应激活 caudit-password-reset-three-stages: 激活链接同属凭证重发域(凭证生成/绑定/时效), 三阶段拆解同样适用",
+      "notes": "边界: 功能名义不同但同为凭证邮件流程, 归本技能"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

@@ -1,0 +1,52 @@
+{
+  "skill": "stallings-protocol-migration-governance",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "WEP 型的存量设备一大堆，核心机制重写的同时怎么给老设备安排过渡方案？",
+      "expected_behavior": "应激活 stallings-protocol-migration-governance, 并做双清单分账+兼容层带退役表的过渡设计",
+      "notes": "正面场景: 存量过渡治理, A2 案例 1"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "邮件的 STARTTLS 是机会性升级，中间人一破坏升级宣传就回退明文，怎么封死？",
+      "expected_behavior": "应激活 stallings-protocol-migration-governance, 并用带签名的强制策略封死可协商降级通道",
+      "notes": "正面场景: STARTTLS stripping, 语言信号明列"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "下个大版本升级是不是砍 legacy 支持的正当窗口？这个决策怎么做？",
+      "expected_behavior": "应激活 stallings-protocol-migration-governance, 并按'版本升级是砍 legacy 的正当窗口'做治理决策",
+      "notes": "正面场景: 砍 legacy 窗口, 语言信号明列"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "全新绿地系统直接按目标协议设计就行了吧？还需要兼容过渡方案吗？",
+      "expected_behavior": "不应激活本 skill, 因为 desc 明确排除'绿地新系统(直接用目标机制)'; 预期不激活 (expected: none)",
+      "notes": "诱饵: 协议演进话语, 但落在绿地排除域"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "SHA-1、3DES 这些算法的退役时间表按算力外推怎么排？",
+      "expected_behavior": "不应激活本 skill, 应激活 stallings-algorithm-retirement-crypto-agility (算法种群退役链, 本 skill 管协议/算法升级的过渡治理)",
+      "notes": "跨 skill 混淆诱饵: A2 明列两者互为输入与执行"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "3DES EDE 中间那步为什么是解密不是加密？K1=K2 的配置又是干嘛的？",
+      "expected_behavior": "应激活 stallings-protocol-migration-governance, 因为 EDE 兼容开关+退化配置必须封堵正是 A2 案例 2 (expected: stallings-protocol-migration-governance)",
+      "notes": "边界: 像算法史实题, 实为兼容层治理案例"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试用例。至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case；should-not-trigger-02 为同书兄弟技能抢调诱饵（expected_behavior 写明应激活的 sibling slug）；全部 should_not_trigger 诱饵容错为 0。书级盲测见 books/stallings-7e/test-blind-prompts.json，判卷答案见 test-manifest.json。"
+}

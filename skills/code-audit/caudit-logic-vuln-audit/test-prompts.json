@@ -1,0 +1,52 @@
+{
+  "skill": "caudit-logic-vuln-audit",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "扫描器全绿，业务还是被薅了羊毛，越权、支付绕过这类业务逻辑漏洞到底怎么挖？",
+      "expected_behavior": "应激活 caudit-logic-vuln-audit, 先建应然模型(状态机/不变量)再通读功能点源码做应然/实然对照",
+      "notes": "正面场景: 扫不出的逻辑漏洞"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "审计委托明确要求覆盖越权和找回密码的业务逻辑，有没有一套可执行的方法？别只跟我说'多注意'。",
+      "expected_behavior": "应激活 caudit-logic-vuln-audit, 输出应然模型构建+状态机对照表的可执行流程",
+      "notes": "正面场景: 委托要求可执行方法"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "评审我们订单审批流程的代码，怎么先建一个应然的状态机，再拿实现逐项对照找偏差？",
+      "expected_behavior": "应激活 caudit-logic-vuln-audit, 状态机对照法审查流程代码",
+      "notes": "正面场景: 应然/实然对照操作"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "产品经理让我把审批流程的需求文档写清楚点，状态流转图画成什么样比较规范？",
+      "expected_behavior": "不应激活任何本册技能, 需求文档写作, 没有审计对象",
+      "notes": "诱饵: 同提'状态机/流程'但为文档规范"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "帮我在这套代码里查一下有没有命令注入，搜索关键字给我列一份。",
+      "expected_behavior": "不应激活 caudit-logic-vuln-audit, 应激活 caudit-mechanism-to-search-terms (命令注入有明确 sink, 走机理→搜索词三步法)",
+      "notes": "跨skill混淆诱饵: 有 sink 的技术型漏洞归机理搜索"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "文件上传漏洞算不算逻辑漏洞？我想审上传功能，该用哪套方法合适？",
+      "expected_behavior": "边界判定: 应激活 caudit-mechanism-to-search-terms。上传是有明确 sink 的技术型漏洞, 走机理→搜索词→回溯, 不是无关键字的逻辑对照",
+      "notes": "边界: 漏洞归类模糊, 按'有无 sink 关键字'分水岭裁决"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "阶段4压力测试题。至少 3 should_trigger + 2 should_not_trigger(其中 should-not-trigger-02 为同书兄弟技能抢调诱饵, expected_behavior 写明应激活的 sibling slug) + 1 edge_case。全部诱饵容错为 0。"
+}

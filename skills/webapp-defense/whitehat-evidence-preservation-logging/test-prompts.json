@@ -1,0 +1,52 @@
+{
+  "skill": "whitehat-evidence-preservation-logging",
+  "version": "0.1.0",
+  "source_book": "Information-Security-Audit-Skill",
+  "darwin_compatible": true,
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "新平台的日志架构要定方案了，目前打算存本地磁盘按天切分保留 30 天，这样设计有什么讲究？",
+      "expected_behavior": "应激活 whitehat-evidence-preservation-logging, 按取证纪律改造：日志实时外送、与被攻系统隔离生命周期、只追加、限制删除权限",
+      "notes": "正面: 日志架构的取证设计"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "服务全要搬进 K8s，Pod 一销毁日志就没了，从取证角度这怎么办？",
+      "expected_behavior": "应激活 whitehat-evidence-preservation-logging, 为易失基础设施设计日志外送与集群外持久化存储，保证实例销毁后证据仍在",
+      "notes": "正面: 易失基础设施的取证能力"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "如果明天一早发现被入侵了，应急响应的第一步做什么才不会把证据毁掉？",
+      "expected_behavior": "应激活 whitehat-evidence-preservation-logging, 按'先保全现场再处置'编排：快照/镜像/日志封存优先于重启和清理",
+      "notes": "正面: 响应次序中的证据保全"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "SIEM 平台告警误报太多，值班同学看不过来，检测规则怎么调优？",
+      "expected_behavior": "不应激活本 skill, 因为这是 SIEM 检测规则运营（消费日志做检测），不是日志本身的取证保全; 属检测运营, 无需调用书中任何技能",
+      "notes": "诱饵: 日志相关但属检测规则调优"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "红队假设攻击者已经拿到 webshell，我想让他提不了权、摸不到内网核心系统。",
+      "expected_behavior": "不应激活本 skill, 应激活 whitehat-attack-chain-pruning (要的是失陷后限制攻击链上每一跳的能力，属权限裁剪而非证据保全)",
+      "notes": "跨 skill 混淆诱饵 (硬性要求): 应激活同书兄弟技能 whitehat-attack-chain-pruning, 防止互相抢调用"
+    },
+    {
+      "id": "edge-01",
+      "type": "edge_case",
+      "prompt": "法规要求登录日志留存半年，我们直接存在应用同一台数据库服务器上，合规没问题是不是就行？",
+      "expected_behavior": "边界场景: 日志与被攻对象同生命周期则同归于尽——入侵者拿到机器权限即可删日志，应激活本 skill 做外送与生命周期隔离 (期望激活: whitehat-evidence-preservation-logging)",
+      "notes": "边界: 合规达标不等于取证可用"
+    }
+  ],
+  "minimum_pass_rate": 0.8,
+  "notes": "至少 3 条 should_trigger + 2 条 should_not_trigger + 1 条 edge_case。全部 should_not_trigger 必须通过 (诱饵容错为 0), 且其中至少 1 条是同书兄弟 skill 的场景 (跨 skill 混淆测试)。"
+}
